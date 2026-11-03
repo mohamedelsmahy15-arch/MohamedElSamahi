@@ -144,7 +144,7 @@ export const EditGoalModal: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setEditingGoal(null)}
-                className="rounded-lg border border-[var(--border-color)] px-3 py-1.5 text-xs text-[var(--text-muted)] hover:text-white"
+                className="rounded-lg border border-[var(--border-color)] px-3 py-1.5 text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)]"
               >
                 إلغاء
               </button>

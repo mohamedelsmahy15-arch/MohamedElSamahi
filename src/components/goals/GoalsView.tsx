@@ -430,7 +430,7 @@ export const GoalsView: React.FC = () => {
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => handleProgressChange(goal, -10)}
-                        className="h-6 w-6 rounded border border-[var(--border-color)] bg-[var(--bg-secondary)] text-xs text-[var(--text-muted)] hover:text-white flex items-center justify-center font-mono"
+                        className="h-6 w-6 rounded border border-[var(--border-color)] bg-[var(--bg-secondary)] text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] flex items-center justify-center font-mono"
                       >
                         -
                       </button>
@@ -439,7 +439,7 @@ export const GoalsView: React.FC = () => {
                       </span>
                       <button
                         onClick={() => handleProgressChange(goal, 10)}
-                        className="h-6 w-6 rounded border border-[var(--border-color)] bg-[var(--bg-secondary)] text-xs text-[var(--text-muted)] hover:text-white flex items-center justify-center font-mono"
+                        className="h-6 w-6 rounded border border-[var(--border-color)] bg-[var(--bg-secondary)] text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] flex items-center justify-center font-mono"
                       >
                         +
                       </button>
@@ -586,7 +586,7 @@ export const GoalsView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsAddModalOpen(false)}
-                  className="rounded-lg border border-[var(--border-color)] px-4 py-2 text-xs text-[var(--text-muted)] hover:text-white"
+                  className="rounded-lg border border-[var(--border-color)] px-4 py-2 text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)]"
                 >
                   إلغاء
                 </button>

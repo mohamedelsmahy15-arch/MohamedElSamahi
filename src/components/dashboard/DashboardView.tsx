@@ -99,7 +99,7 @@ export const DashboardView: React.FC = () => {
           </div>
           <button
             onClick={dismissDistractionAlert}
-            className="text-amber-300 hover:text-white mr-2 underline text-xs whitespace-nowrap"
+            className="text-amber-300 hover:text-[var(--text-primary)] mr-2 underline text-xs whitespace-nowrap"
           >
             إغلاق
           </button>

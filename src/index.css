@@ -7,7 +7,7 @@
     --font-sans: 'IBM Plex Sans Arabic', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
 
-    /* Dark Mode Design Tokens (Cyber-Executive AI Obsidian & Gold/Cyan Glow) */
+    /* Dark Mode Design Tokens (Cyber-Executive AI Obsidian & Gold Glow) */
     --bg-primary: #07090E;
     --bg-secondary: #0D111A;
     --bg-surface: #121824;
@@ -28,24 +28,24 @@
   }
 
   html.light {
-    /* Light Mode Design Tokens (Executive Zen · Crisp, Eye-Comforting Paper & Pure Clarity) */
-    --bg-primary: #F8FAFC;
+    /* Light Mode Design Tokens (Executive Zen · Eye-Comfort Warm Canvas, Crisp Slate & High-Contrast Amber) */
+    --bg-primary: #F1F5F9;
     --bg-secondary: #FFFFFF;
     --bg-surface: #FFFFFF;
-    --bg-elevated: #F1F5F9;
+    --bg-elevated: #F8FAFC;
     --text-primary: #0F172A;
-    --text-secondary: #475569;
+    --text-secondary: #334155;
     --text-muted: #64748B;
-    --accent-gold: #B48B1E;
-    --accent-gold-hover: #996F08;
-    --accent-gold-muted: rgba(180, 139, 30, 0.12);
+    --accent-gold: #B45309;
+    --accent-gold-hover: #92400E;
+    --accent-gold-muted: rgba(180, 83, 9, 0.12);
     --accent-blue: #0284C7;
     --accent-indigo: #4F46E5;
     --accent-emerald: #059669;
-    --border-color: rgba(15, 23, 42, 0.08);
-    --border-subtle: rgba(15, 23, 42, 0.04);
-    --card-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.03);
-    --glow-ambient: radial-gradient(circle at 50% -10%, rgba(2, 132, 199, 0.04), rgba(180, 139, 30, 0.03) 40%, transparent 80%);
+    --border-color: #CBD5E1;
+    --border-subtle: #E2E8F0;
+    --card-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.08), 0 4px 12px -2px rgba(15, 23, 42, 0.05);
+    --glow-ambient: none;
   }
 
   body {
@@ -57,6 +57,52 @@
     background-attachment: fixed;
     transition: background-color 0.25s ease, color 0.25s ease;
   }
+}
+
+/* Light Mode Specific Enhancements for Eye Comfort and Visual Clarity */
+html.light input,
+html.light textarea,
+html.light select {
+  border-color: #CBD5E1;
+  color: #0F172A;
+}
+
+html.light input::placeholder,
+html.light textarea::placeholder {
+  color: #94A3B8;
+}
+
+html.light .text-sky-400 {
+  color: #0284C7;
+}
+
+html.light .hover\:text-sky-300:hover {
+  color: #0369A1;
+}
+
+html.light .text-amber-400 {
+  color: #B45309;
+}
+
+html.light .text-emerald-400 {
+  color: #059669;
+}
+
+html.light .border-amber-400\/30 {
+  border-color: rgba(180, 83, 9, 0.25);
+}
+
+html.light .bg-amber-400\/10 {
+  background-color: rgba(180, 83, 9, 0.08);
+}
+
+html.light .bg-emerald-500\/10 {
+  background-color: rgba(5, 150, 105, 0.08);
+}
+
+html.light .border-emerald-500\/20,
+html.light .border-emerald-500\/30 {
+  border-color: rgba(5, 150, 105, 0.25);
 }
 
 /* Custom scrollbars for clean minimal world-class look */
@@ -72,7 +118,7 @@
   border-radius: 6px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(212, 175, 55, 0.5);
+  background: var(--accent-gold);
 }
 
 /* Subtle card ambient glow utilities */

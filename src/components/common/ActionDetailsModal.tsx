@@ -166,7 +166,7 @@ export const ActionDetailsModal: React.FC = () => {
               <RotateCcw className="h-4 w-4 shrink-0 text-amber-400" />
               <div>
                 <span className="font-bold">تم التراجع عن هذه الخطوة مسبقاً!</span>
-                <p className="text-[#cccccc] text-[11px] mt-0.5">
+                <p className="text-[var(--text-secondary)] text-[11px] mt-0.5">
                   تم استرجاع العنصر بنجاح إلى مكانه الأصلي وإلغاء هذا التغيير في: {action.undoneAt ? formatTimestamp(action.undoneAt) : 'سجل سابق'}.
                 </p>
               </div>
@@ -179,7 +179,7 @@ export const ActionDetailsModal: React.FC = () => {
             <div className="mt-1 text-lg font-bold text-[var(--text-primary)] font-sans">
               {action.itemTitle}
             </div>
-            <div className="mt-2 text-xs leading-relaxed text-[#aaaaaa]">
+            <div className="mt-2 text-xs leading-relaxed text-[var(--text-secondary)]">
               {action.description}
             </div>
 
@@ -315,7 +315,7 @@ export const ActionDetailsModal: React.FC = () => {
           <div className="flex items-center gap-2.5 w-full sm:w-auto justify-end">
             <button
               onClick={handleClose}
-              className="rounded-lg border border-[#2e2e2e] bg-[#1c1c1c] px-4 py-2 text-xs font-medium text-[#cccccc] hover:bg-[#282828] hover:text-white transition-colors"
+              className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] px-4 py-2 text-xs font-medium text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)] transition-colors"
             >
               إغلاق النافذة
             </button>

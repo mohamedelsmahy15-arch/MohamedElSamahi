@@ -101,7 +101,7 @@ export const WeeklyReviewView: React.FC = () => {
 
       {/* معالج كتابة المراجعة بأسئلتها الثمانية */}
       {isWizardOpen && (
-        <div className="rounded-xl border border-[var(--accent-gold)]/40 bg-[#0e0e0a] p-6 space-y-5">
+        <div className="rounded-xl border border-[var(--accent-gold)]/40 bg-[var(--bg-surface)] p-6 space-y-5">
           <div className="flex items-center justify-between border-b border-[#22221b] pb-3">
             <div>
               <h2 className="text-base font-bold text-[var(--text-primary)]">
@@ -113,7 +113,7 @@ export const WeeklyReviewView: React.FC = () => {
             </div>
             <button
               onClick={() => setIsWizardOpen(false)}
-              className="text-xs text-[var(--text-muted)] hover:text-white"
+              className="text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)]"
             >
               إلغاء
             </button>
@@ -269,7 +269,7 @@ export const WeeklyReviewView: React.FC = () => {
                 onClick={() => setSelectedReport(report)}
                 className={`rounded-xl border p-4 cursor-pointer transition-all ${
                   selectedReport?.id === report.id
-                    ? 'border-[var(--accent-gold)] bg-[#14120a]'
+                    ? 'border-[var(--accent-gold)] bg-[var(--accent-gold)]/10'
                     : 'border-[var(--border-color)] bg-[var(--bg-surface)] hover:border-[var(--border-color)]'
                 }`}
               >
@@ -281,7 +281,7 @@ export const WeeklyReviewView: React.FC = () => {
                     {report.startDate} ← {report.endDate}
                   </span>
                 </div>
-                <p className="text-xs text-[#cccccc] line-clamp-1 mt-2">
+                <p className="text-xs text-[var(--text-secondary)] line-clamp-1 mt-2">
                   {report.q1_biggestAchievement}
                 </p>
                 <div className="mt-2 text-[10px] text-[var(--text-muted)] flex items-center justify-between">
@@ -334,40 +334,40 @@ export const WeeklyReviewView: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div className="rounded-lg bg-[var(--bg-elevated)] p-3 border border-[var(--border-color)]">
                     <div className="font-semibold text-[var(--text-secondary)] mb-1">2. ما لم ينجز:</div>
-                    <p className="text-[#cccccc]">{selectedReport.q2_missedThings}</p>
+                    <p className="text-[var(--text-secondary)]">{selectedReport.q2_missedThings}</p>
                   </div>
 
                   <div className="rounded-lg bg-[var(--bg-elevated)] p-3 border border-[var(--border-color)]">
                     <div className="font-semibold text-[var(--text-secondary)] mb-1">3. السبب الحقيقي:</div>
-                    <p className="text-[#cccccc]">{selectedReport.q3_reasonForMissed}</p>
+                    <p className="text-[var(--text-secondary)]">{selectedReport.q3_reasonForMissed}</p>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div className="rounded-lg bg-[var(--bg-elevated)] p-3 border border-[var(--border-color)]">
                     <div className="font-semibold text-[var(--text-secondary)] mb-1">4. أكبر مضيعة للوقت:</div>
-                    <p className="text-[#cccccc]">{selectedReport.q4_biggestTimeWaster}</p>
+                    <p className="text-[var(--text-secondary)]">{selectedReport.q4_biggestTimeWaster}</p>
                   </div>
 
                   <div className="rounded-lg bg-[var(--bg-elevated)] p-3 border border-[var(--border-color)]">
                     <div className="font-semibold text-[var(--text-secondary)] mb-1">5. ما جلب النتيجة:</div>
-                    <p className="text-[#cccccc]">{selectedReport.q5_whatBroughtResults}</p>
+                    <p className="text-[var(--text-secondary)]">{selectedReport.q5_whatBroughtResults}</p>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div className="rounded-lg bg-[var(--bg-elevated)] p-3 border border-[var(--border-color)]">
                     <div className="font-semibold text-[var(--text-secondary)] mb-1">6. القرب من مصدر الدخل:</div>
-                    <p className="text-[#cccccc]">{selectedReport.q6_incomeProximity}</p>
+                    <p className="text-[var(--text-secondary)]">{selectedReport.q6_incomeProximity}</p>
                   </div>
 
                   <div className="rounded-lg bg-[var(--bg-elevated)] p-3 border border-[var(--border-color)]">
                     <div className="font-semibold text-[var(--text-secondary)] mb-1">7. تعلم أم تطبيق؟</div>
-                    <p className="text-[#cccccc]">{selectedReport.q7_learnedOrApplied}</p>
+                    <p className="text-[var(--text-secondary)]">{selectedReport.q7_learnedOrApplied}</p>
                   </div>
                 </div>
 
-                <div className="rounded-lg bg-[#14120a] p-3.5 border border-[var(--accent-gold)]/30">
+                <div className="rounded-lg bg-[var(--accent-gold)]/10 p-3.5 border border-[var(--accent-gold)]/30">
                   <div className="font-semibold text-[var(--accent-gold)] mb-1">
                     8. أهم 3 نتائج للأسبوع التالي:
                   </div>

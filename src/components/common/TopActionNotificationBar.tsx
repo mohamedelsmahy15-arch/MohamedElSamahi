@@ -156,7 +156,7 @@ export const TopActionNotificationBar: React.FC = () => {
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           {/* الجانب الأيمن: الأيقونة وشرح ما تم إنجازه */}
           <div className="flex items-start gap-3 min-w-0 flex-1">
-            <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#1c1c1c] border border-[var(--border-color)] shadow-inner">
+            <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[var(--bg-elevated)] border border-[var(--border-color)] shadow-inner">
               {getActionIcon()}
             </div>
 
@@ -225,7 +225,7 @@ export const TopActionNotificationBar: React.FC = () => {
             {/* زر إغلاق */}
             <button
               onClick={dismissLatestAction}
-              className="flex items-center gap-1 rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] hover:bg-[var(--bg-elevated)] hover:text-white px-2.5 py-1.5 text-xs font-medium text-[var(--text-muted)] transition-colors"
+              className="flex items-center gap-1 rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)] px-2.5 py-1.5 text-xs font-medium text-[var(--text-muted)] transition-colors"
               aria-label="إغلاق الإشعار"
               title="إغلاق الإشعار"
             >

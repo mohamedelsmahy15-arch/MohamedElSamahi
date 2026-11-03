@@ -861,7 +861,7 @@ export const AssistantView: React.FC = () => {
                       </button>
                       <button
                         onClick={() => handleCancelAction(msg.id)}
-                        className="rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-primary)] px-3 py-1.5 text-[var(--text-secondary)] hover:text-white transition"
+                        className="rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-primary)] px-3 py-1.5 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition"
                       >
                         إلغاء
                       </button>

@@ -167,7 +167,7 @@ export const MoneyView: React.FC = () => {
               className={`px-3 py-1 rounded transition-colors ${
                 filterType === 'all'
                   ? 'bg-[var(--bg-elevated)] text-[var(--text-primary)]'
-                  : 'text-[var(--text-muted)] hover:text-white'
+                  : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
               }`}
             >
               الكل
@@ -177,7 +177,7 @@ export const MoneyView: React.FC = () => {
               className={`px-3 py-1 rounded transition-colors ${
                 filterType === 'income'
                   ? 'bg-[var(--bg-elevated)] text-emerald-400'
-                  : 'text-[var(--text-muted)] hover:text-white'
+                  : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
               }`}
             >
               دخل (+)
@@ -187,7 +187,7 @@ export const MoneyView: React.FC = () => {
               className={`px-3 py-1 rounded transition-colors ${
                 filterType === 'expense'
                   ? 'bg-[var(--bg-elevated)] text-red-400'
-                  : 'text-[var(--text-muted)] hover:text-white'
+                  : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
               }`}
             >
               مصروف (-)
@@ -197,7 +197,7 @@ export const MoneyView: React.FC = () => {
               className={`px-3 py-1 rounded transition-colors ${
                 filterType === 'savings'
                   ? 'bg-[var(--bg-elevated)] text-blue-400'
-                  : 'text-[var(--text-muted)] hover:text-white'
+                  : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
               }`}
             >
               ادخار
@@ -349,7 +349,7 @@ export const MoneyView: React.FC = () => {
               </div>
 
               <div className="pt-1">
-                <label className="flex items-center gap-2 text-xs text-[#cccccc] cursor-pointer">
+                <label className="flex items-center gap-2 text-xs text-[var(--text-secondary)] cursor-pointer">
                   <input
                     type="checkbox"
                     checked={isBusiness}
@@ -364,7 +364,7 @@ export const MoneyView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsAddModalOpen(false)}
-                  className="rounded-lg border border-[var(--border-color)] px-3 py-1.5 text-xs text-[var(--text-muted)] hover:text-white"
+                  className="rounded-lg border border-[var(--border-color)] px-3 py-1.5 text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)]"
                 >
                   إلغاء
                 </button>

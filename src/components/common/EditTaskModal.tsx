@@ -196,7 +196,7 @@ export const EditTaskModal: React.FC = () => {
           </div>
 
           <div className="pt-1">
-            <label className="flex items-center gap-2 text-xs text-[#cccccc] cursor-pointer">
+            <label className="flex items-center gap-2 text-xs text-[var(--text-secondary)] cursor-pointer">
               <input
                 type="checkbox"
                 checked={isTodayFocus}
@@ -221,7 +221,7 @@ export const EditTaskModal: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setEditingTask(null)}
-                className="rounded-lg border border-[var(--border-color)] px-3 py-1.5 text-xs text-[var(--text-muted)] hover:text-white"
+                className="rounded-lg border border-[var(--border-color)] px-3 py-1.5 text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)]"
               >
                 إلغاء
               </button>

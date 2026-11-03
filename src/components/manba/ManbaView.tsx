@@ -192,7 +192,7 @@ export const ManbaView: React.FC = () => {
           <div className="flex items-center gap-2.5 flex-wrap">
             <button
               onClick={exportManbaLog}
-              className="flex items-center gap-1.5 rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)] px-3.5 py-2 text-xs font-medium text-[#aaaaaa] transition-colors"
+              className="flex items-center gap-1.5 rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)] px-3.5 py-2 text-xs font-medium text-[var(--text-secondary)] transition-colors"
               title="تصدير سجل الأنشطة كملف بيانات"
             >
               <Download className="h-3.5 w-3.5" />
@@ -217,7 +217,7 @@ export const ManbaView: React.FC = () => {
         </div>
 
         {/* بطاقات الإحصائيات الأربعة */}
-        <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4 border-t border-[#1c1c1c] pt-5">
+        <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4 border-t border-[var(--border-color)] pt-5">
           <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-elevated)]/80 p-3.5">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-mono text-[var(--text-muted)]">إجمالي الخطوات</span>
@@ -294,7 +294,7 @@ export const ManbaView: React.FC = () => {
               className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
                 selectedStatus === 'all'
                   ? 'bg-[var(--bg-elevated)] text-[var(--text-primary)] shadow-sm'
-                  : 'text-[var(--text-muted)] hover:text-[#cccccc]'
+                  : 'text-[var(--text-muted)] hover:text-[var(--text-secondary)]'
               }`}
             >
               الكل ({totalCount})
@@ -328,8 +328,8 @@ export const ManbaView: React.FC = () => {
             onClick={() => setSelectedCategory('all')}
             className={`px-3 py-1.5 rounded-lg border font-medium whitespace-nowrap transition-all ${
               selectedCategory === 'all'
-                ? 'bg-[#1c1c1c] text-[var(--accent-gold)] border-[var(--accent-gold)]/40 shadow-sm'
-                : 'bg-[#101010] text-[var(--text-muted)] border-[var(--border-color)] hover:text-[#bbbbbb] hover:border-[var(--border-color)]'
+                ? 'bg-[var(--bg-elevated)] text-[var(--accent-gold)] border-[var(--accent-gold)]/40 shadow-sm'
+                : 'bg-[var(--bg-elevated)] text-[var(--text-muted)] border-[var(--border-color)] hover:text-[var(--text-primary)] hover:border-[var(--border-color)]'
             }`}
           >
             كافة الأنشطة
@@ -338,8 +338,8 @@ export const ManbaView: React.FC = () => {
             onClick={() => setSelectedCategory('task')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border font-medium whitespace-nowrap transition-all ${
               selectedCategory === 'task'
-                ? 'bg-[#1c1c1c] text-emerald-400 border-emerald-500/40 shadow-sm'
-                : 'bg-[#101010] text-[var(--text-muted)] border-[var(--border-color)] hover:text-[#bbbbbb] hover:border-[var(--border-color)]'
+                ? 'bg-[var(--bg-elevated)] text-emerald-400 border-emerald-500/40 shadow-sm'
+                : 'bg-[var(--bg-elevated)] text-[var(--text-muted)] border-[var(--border-color)] hover:text-[var(--text-primary)] hover:border-[var(--border-color)]'
             }`}
           >
             <CheckCircle2 className="h-3.5 w-3.5" />
@@ -349,8 +349,8 @@ export const ManbaView: React.FC = () => {
             onClick={() => setSelectedCategory('habit')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border font-medium whitespace-nowrap transition-all ${
               selectedCategory === 'habit'
-                ? 'bg-[#1c1c1c] text-orange-400 border-orange-500/40 shadow-sm'
-                : 'bg-[#101010] text-[var(--text-muted)] border-[var(--border-color)] hover:text-[#bbbbbb] hover:border-[var(--border-color)]'
+                ? 'bg-[var(--bg-elevated)] text-orange-400 border-orange-500/40 shadow-sm'
+                : 'bg-[var(--bg-elevated)] text-[var(--text-muted)] border-[var(--border-color)] hover:text-[var(--text-primary)] hover:border-[var(--border-color)]'
             }`}
           >
             <Flame className="h-3.5 w-3.5" />
@@ -360,8 +360,8 @@ export const ManbaView: React.FC = () => {
             onClick={() => setSelectedCategory('project')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border font-medium whitespace-nowrap transition-all ${
               selectedCategory === 'project'
-                ? 'bg-[#1c1c1c] text-sky-400 border-sky-500/40 shadow-sm'
-                : 'bg-[#101010] text-[var(--text-muted)] border-[var(--border-color)] hover:text-[#bbbbbb] hover:border-[var(--border-color)]'
+                ? 'bg-[var(--bg-elevated)] text-sky-400 border-sky-500/40 shadow-sm'
+                : 'bg-[var(--bg-elevated)] text-[var(--text-muted)] border-[var(--border-color)] hover:text-[var(--text-primary)] hover:border-[var(--border-color)]'
             }`}
           >
             <FolderGit2 className="h-3.5 w-3.5" />
@@ -371,8 +371,8 @@ export const ManbaView: React.FC = () => {
             onClick={() => setSelectedCategory('goal')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border font-medium whitespace-nowrap transition-all ${
               selectedCategory === 'goal'
-                ? 'bg-[#1c1c1c] text-[var(--accent-gold)] border-[var(--accent-gold)]/40 shadow-sm'
-                : 'bg-[#101010] text-[var(--text-muted)] border-[var(--border-color)] hover:text-[#bbbbbb] hover:border-[var(--border-color)]'
+                ? 'bg-[var(--bg-elevated)] text-[var(--accent-gold)] border-[var(--accent-gold)]/40 shadow-sm'
+                : 'bg-[var(--bg-elevated)] text-[var(--text-muted)] border-[var(--border-color)] hover:text-[var(--text-primary)] hover:border-[var(--border-color)]'
             }`}
           >
             <Target className="h-3.5 w-3.5" />
@@ -382,8 +382,8 @@ export const ManbaView: React.FC = () => {
             onClick={() => setSelectedCategory('transaction')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border font-medium whitespace-nowrap transition-all ${
               selectedCategory === 'transaction'
-                ? 'bg-[#1c1c1c] text-emerald-400 border-emerald-500/40 shadow-sm'
-                : 'bg-[#101010] text-[var(--text-muted)] border-[var(--border-color)] hover:text-[#bbbbbb] hover:border-[var(--border-color)]'
+                ? 'bg-[var(--bg-elevated)] text-emerald-400 border-emerald-500/40 shadow-sm'
+                : 'bg-[var(--bg-elevated)] text-[var(--text-muted)] border-[var(--border-color)] hover:text-[var(--text-primary)] hover:border-[var(--border-color)]'
             }`}
           >
             <DollarSign className="h-3.5 w-3.5" />
@@ -393,8 +393,8 @@ export const ManbaView: React.FC = () => {
             onClick={() => setSelectedCategory('timeLog')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border font-medium whitespace-nowrap transition-all ${
               selectedCategory === 'timeLog'
-                ? 'bg-[#1c1c1c] text-cyan-400 border-cyan-500/40 shadow-sm'
-                : 'bg-[#101010] text-[var(--text-muted)] border-[var(--border-color)] hover:text-[#bbbbbb] hover:border-[var(--border-color)]'
+                ? 'bg-[var(--bg-elevated)] text-cyan-400 border-cyan-500/40 shadow-sm'
+                : 'bg-[var(--bg-elevated)] text-[var(--text-muted)] border-[var(--border-color)] hover:text-[var(--text-primary)] hover:border-[var(--border-color)]'
             }`}
           >
             <Clock className="h-3.5 w-3.5" />
@@ -404,8 +404,8 @@ export const ManbaView: React.FC = () => {
             onClick={() => setSelectedCategory('idea')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border font-medium whitespace-nowrap transition-all ${
               selectedCategory === 'idea'
-                ? 'bg-[#1c1c1c] text-purple-400 border-purple-500/40 shadow-sm'
-                : 'bg-[#101010] text-[var(--text-muted)] border-[var(--border-color)] hover:text-[#bbbbbb] hover:border-[var(--border-color)]'
+                ? 'bg-[var(--bg-elevated)] text-purple-400 border-purple-500/40 shadow-sm'
+                : 'bg-[var(--bg-elevated)] text-[var(--text-muted)] border-[var(--border-color)] hover:text-[var(--text-primary)] hover:border-[var(--border-color)]'
             }`}
           >
             <Lightbulb className="h-3.5 w-3.5" />
@@ -418,7 +418,7 @@ export const ManbaView: React.FC = () => {
       <div className="space-y-3">
         {filteredActions.length === 0 ? (
           <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-[var(--border-color)] bg-[var(--bg-surface)] py-16 text-center">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#191919] text-[var(--text-muted)]">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--bg-elevated)] text-[var(--text-muted)]">
               <Sparkles className="h-6 w-6" />
             </div>
             <h3 className="mt-4 text-sm font-semibold text-[var(--text-primary)]">لا توجد عمليات تطابق البحث في المنبع</h3>
@@ -450,11 +450,11 @@ export const ManbaView: React.FC = () => {
                         <span className="text-xs font-semibold text-[var(--text-primary)] font-sans">
                           {item.title}
                         </span>
-                        <span aria-hidden="true" className="text-[#444444]">·</span>
+                        <span aria-hidden="true" className="text-[var(--text-muted)]">·</span>
                         <span className="text-[11px] font-mono text-[var(--accent-gold)]">
                           {getCategoryLabel(item.category)}
                         </span>
-                        <span aria-hidden="true" className="text-[#444444]">·</span>
+                        <span aria-hidden="true" className="text-[var(--text-muted)]">·</span>
                         <span className="text-[11px] font-mono text-[var(--text-muted)]">
                           {timeInfo.full}
                         </span>
@@ -491,11 +491,11 @@ export const ManbaView: React.FC = () => {
                   </div>
 
                   {/* أزرار الإجراءات على الخطوة */}
-                  <div className="flex items-center gap-2 self-end md:self-auto shrink-0 pt-2 md:pt-0 border-t border-[#1c1c1c] md:border-none w-full md:w-auto justify-end">
+                  <div className="flex items-center gap-2 self-end md:self-auto shrink-0 pt-2 md:pt-0 border-t border-[var(--border-color)] md:border-none w-full md:w-auto justify-end">
                     {/* زر فحص التفاصيل والمقارنة */}
                     <button
                       onClick={() => setSelectedActionDetails(item)}
-                      className="flex items-center gap-1.5 rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] hover:bg-[#202020] hover:border-[var(--border-color)] px-3 py-1.5 text-xs font-medium text-[#cccccc] hover:text-[var(--text-primary)] transition-colors"
+                      className="flex items-center gap-1.5 rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] hover:bg-[var(--bg-elevated)] hover:border-[var(--border-color)] px-3 py-1.5 text-xs font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
                       title="عرض كامل التفاصيل قبل وبعد"
                     >
                       <Eye className="h-3.5 w-3.5 text-sky-400" />

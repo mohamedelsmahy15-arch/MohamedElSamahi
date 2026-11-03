@@ -160,7 +160,7 @@ export const RoadmapPlaceholderView: React.FC<RoadmapPlaceholderProps> = ({ tabI
 
         <button
           onClick={() => setActiveTab('dashboard')}
-          className="flex items-center gap-1.5 rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] px-3.5 py-1.5 text-xs text-[#cccccc] hover:border-[var(--accent-gold)]/50 hover:text-[var(--accent-gold)] transition-colors"
+          className="flex items-center gap-1.5 rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] px-3.5 py-1.5 text-xs text-[var(--text-secondary)] hover:border-[var(--accent-gold)]/50 hover:text-[var(--accent-gold)] transition-colors"
         >
           <span>العودة للوحة التحكم</span>
           <ArrowRight className="h-3.5 w-3.5" />
@@ -168,11 +168,11 @@ export const RoadmapPlaceholderView: React.FC<RoadmapPlaceholderProps> = ({ tabI
       </div>
 
       <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-6 space-y-5">
-        <div className="rounded-lg bg-[#14120a] border border-[var(--accent-gold)]/20 p-4">
+        <div className="rounded-lg bg-[var(--accent-gold)]/10 border border-[var(--accent-gold)]/20 p-4">
           <div className="text-xs font-bold text-[var(--accent-gold)] mb-1">
             لماذا لم نقم ببناء هذا القسم دفعة واحدة؟
           </div>
-          <p className="text-xs text-[#cccccc] leading-relaxed">
+          <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
             وفقاً لتعليماتك الصارمة: <span className="text-[var(--accent-gold)] font-semibold">"ابدأ بـ Version 0.1 فقط (Dashboard + Goals + Today + Projects + LocalStorage)، ثم اجعل التطبيق يعمل فعلاً، وبعد ذلك نطور نسخة وراء نسخة."</span> هذه المعمارية مهيأة بالكامل لاستقبال هذا الموديول في المرحلة القادمة فور اختبار واستقرار الـ MVP.
           </p>
         </div>

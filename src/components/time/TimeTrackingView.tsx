@@ -147,7 +147,7 @@ export const TimeTrackingView: React.FC = () => {
                     className={`px-3 py-1 rounded text-xs font-mono transition-colors ${
                       selectedCategory === cat
                         ? 'bg-[var(--accent-gold)] text-black font-semibold'
-                        : 'bg-[var(--bg-secondary)] text-[var(--text-muted)] border border-[var(--border-color)] hover:text-white'
+                        : 'bg-[var(--bg-secondary)] text-[var(--text-muted)] border border-[var(--border-color)] hover:text-[var(--text-primary)]'
                     }`}
                   >
                     {cat}
@@ -187,7 +187,7 @@ export const TimeTrackingView: React.FC = () => {
           {activeTimer.elapsedSeconds > 0 && !activeTimer.isRunning && (
             <button
               onClick={resetTimer}
-              className="flex items-center gap-1.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] px-4 py-3 text-xs text-[var(--text-muted)] hover:text-white"
+              className="flex items-center gap-1.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] px-4 py-3 text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)]"
             >
               <RotateCcw className="h-4 w-4" />
               <span>تصفير</span>
@@ -330,7 +330,7 @@ export const TimeTrackingView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsManualModalOpen(false)}
-                  className="rounded-lg border border-[var(--border-color)] px-3 py-1.5 text-xs text-[var(--text-muted)] hover:text-white"
+                  className="rounded-lg border border-[var(--border-color)] px-3 py-1.5 text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)]"
                 >
                   إلغاء
                 </button>

@@ -102,7 +102,7 @@ export const TrashView: React.FC = () => {
       case 'transaction':
         return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
       default:
-        return 'bg-[var(--bg-elevated)] text-[#cccccc] border-[var(--border-color)]';
+        return 'bg-[var(--bg-elevated)] text-[var(--text-secondary)] border-[var(--border-color)]';
     }
   };
 
@@ -207,7 +207,7 @@ export const TrashView: React.FC = () => {
           <select
             value={selectedReason}
             onChange={(e) => setSelectedReason(e.target.value as any)}
-            className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] px-3 py-2 text-[#cccccc] focus:border-[var(--accent-gold)] focus:outline-none"
+            className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] px-3 py-2 text-[var(--text-secondary)] focus:border-[var(--accent-gold)] focus:outline-none"
           >
             <option value="all">كل الحالات (محذوف + نسخ سابقة)</option>
             <option value="deleted">محذوفات فقط</option>
@@ -218,7 +218,7 @@ export const TrashView: React.FC = () => {
           <select
             value={selectedType}
             onChange={(e) => setSelectedType(e.target.value as any)}
-            className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] px-3 py-2 text-[#cccccc] focus:border-[var(--accent-gold)] focus:outline-none"
+            className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] px-3 py-2 text-[var(--text-secondary)] focus:border-[var(--accent-gold)] focus:outline-none"
           >
             <option value="all">كل الأنواع</option>
             <option value="task">المهام</option>
@@ -236,9 +236,9 @@ export const TrashView: React.FC = () => {
       {/* قائمة العناصر في سلة المهملات */}
       <div className="space-y-3">
         {filteredItems.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-[var(--border-color)] bg-[#090909] p-12 text-center text-xs text-[var(--text-muted)] space-y-2">
+          <div className="rounded-xl border border-dashed border-[var(--border-color)] bg-[var(--bg-surface)] p-12 text-center text-xs text-[var(--text-muted)] space-y-2">
             <CheckCircle2 className="h-8 w-8 text-emerald-500/40 mx-auto mb-2" />
-            <p className="text-sm font-semibold text-[#aaaaaa]">سلة المهملات فارغة</p>
+            <p className="text-sm font-semibold text-[var(--text-secondary)]">سلة المهملات فارغة</p>
             <p className="text-[var(--text-muted)]">
               {searchQuery || selectedType !== 'all' || selectedReason !== 'all'
                 ? 'لا توجد عناصر تطابق معايير البحث الحالية.'
@@ -250,7 +250,7 @@ export const TrashView: React.FC = () => {
             return (
               <div
                 key={item.id}
-                className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-[#202020] bg-[var(--bg-surface)] p-4 hover:border-[#2f2f2f] transition-all"
+                className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-[#202020] bg-[var(--bg-surface)] p-4 hover:border-[var(--border-color)] transition-all"
               >
                 <div className="space-y-1.5 flex-1 min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
@@ -293,7 +293,7 @@ export const TrashView: React.FC = () => {
                 <div className="flex items-center gap-2 self-end sm:self-center shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-[var(--border-color)] w-full sm:w-auto justify-end">
                   <button
                     onClick={() => setPreviewItem(item)}
-                    className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] px-3 py-1.5 text-xs text-[var(--text-muted)] hover:text-white transition-colors"
+                    className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] px-3 py-1.5 text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
                   >
                     معاينة البيانات
                   </button>
@@ -328,7 +328,7 @@ export const TrashView: React.FC = () => {
       {/* نافذة معاينة بيانات العنصر قبل الاسترجاع */}
       {previewItem && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="w-full max-w-lg rounded-xl border border-[var(--border-color)] bg-[#0e0e0e] p-6 space-y-4 shadow-2xl">
+          <div className="w-full max-w-lg rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-6 space-y-4 shadow-2xl">
             <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-3">
               <div>
                 <span className="text-[10px] font-mono text-[var(--accent-gold)]">
@@ -360,7 +360,7 @@ export const TrashView: React.FC = () => {
                 </div>
                 <div className="flex justify-between text-[var(--text-muted)]">
                   <span>وقت الحفظ في السلة:</span>
-                  <span className="font-mono text-[#cccccc]">{formatDate(previewItem.deletedAt)}</span>
+                  <span className="font-mono text-[var(--text-secondary)]">{formatDate(previewItem.deletedAt)}</span>
                 </div>
               </div>
 
@@ -368,7 +368,7 @@ export const TrashView: React.FC = () => {
                 <label className="block text-[11px] text-[var(--text-muted)] mb-1 font-mono">
                   البيانات الكاملة بصيغة JSON الأصلية:
                 </label>
-                <pre className="max-h-48 overflow-y-auto rounded-lg bg-[#090909] p-3 text-[11px] font-mono text-[#a0a0a0] border border-[var(--border-color)] dir-ltr text-left">
+                <pre className="max-h-48 overflow-y-auto rounded-lg bg-[var(--bg-surface)] p-3 text-[11px] font-mono text-[#a0a0a0] border border-[var(--border-color)] dir-ltr text-left">
                   {JSON.stringify(previewItem.originalData, null, 2)}
                 </pre>
               </div>
@@ -378,7 +378,7 @@ export const TrashView: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setPreviewItem(null)}
-                className="rounded-lg border border-[var(--border-color)] px-3 py-1.5 text-xs text-[var(--text-muted)] hover:text-white"
+                className="rounded-lg border border-[var(--border-color)] px-3 py-1.5 text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)]"
               >
                 إغلاق
               </button>

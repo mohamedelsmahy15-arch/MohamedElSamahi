@@ -67,7 +67,7 @@ export const CalendarView: React.FC = () => {
               onClick={() => toggleTimeBlock(block.id)}
               className={`flex items-center justify-between rounded-xl border p-4 cursor-pointer transition-all ${
                 block.completed
-                  ? 'border-[#1b261e] bg-[#0b130e] opacity-75'
+                  ? 'border-emerald-500/30 bg-emerald-500/10 opacity-75'
                   : 'border-[var(--border-color)] bg-[var(--bg-elevated)] hover:border-[var(--border-color)]'
               }`}
             >

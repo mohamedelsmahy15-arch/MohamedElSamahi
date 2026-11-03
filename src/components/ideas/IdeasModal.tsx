@@ -132,7 +132,7 @@ export const IdeasModal: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsIdeaModalOpen(false)}
-              className="rounded-lg border border-[var(--border-color)] px-3 py-1.5 text-xs text-[var(--text-muted)] hover:text-white"
+              className="rounded-lg border border-[var(--border-color)] px-3 py-1.5 text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)]"
             >
               إلغاء
             </button>

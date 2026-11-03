@@ -171,7 +171,7 @@ export const ProjectsView: React.FC = () => {
             className={`px-3 py-1 rounded transition-colors ${
               activeFilter === 'active'
                 ? 'bg-[var(--bg-elevated)] text-[var(--accent-gold)] font-semibold'
-                : 'text-[var(--text-muted)] hover:text-white'
+                : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
             }`}
           >
             النشطة ({state.projects.filter((p) => p.status === 'active').length})
@@ -181,7 +181,7 @@ export const ProjectsView: React.FC = () => {
             className={`px-3 py-1 rounded transition-colors ${
               activeFilter === 'next'
                 ? 'bg-[var(--bg-elevated)] text-[var(--text-primary)]'
-                : 'text-[var(--text-muted)] hover:text-white'
+                : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
             }`}
           >
             القادمة Next ({state.projects.filter((p) => p.status === 'next').length})
@@ -191,7 +191,7 @@ export const ProjectsView: React.FC = () => {
             className={`px-3 py-1 rounded transition-colors ${
               activeFilter === 'parking_lot'
                 ? 'bg-[var(--bg-elevated)] text-[var(--text-primary)]'
-                : 'text-[var(--text-muted)] hover:text-white'
+                : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
             }`}
           >
             المؤجلة Parking Lot ({state.projects.filter((p) => p.status === 'parking_lot').length})
@@ -201,7 +201,7 @@ export const ProjectsView: React.FC = () => {
             className={`px-3 py-1 rounded transition-colors ${
               activeFilter === 'completed'
                 ? 'bg-[var(--bg-elevated)] text-emerald-400'
-                : 'text-[var(--text-muted)] hover:text-white'
+                : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
             }`}
           >
             المكتملة ({state.projects.filter((p) => p.status === 'completed').length})
@@ -211,7 +211,7 @@ export const ProjectsView: React.FC = () => {
             className={`px-3 py-1 rounded transition-colors ${
               activeFilter === 'all'
                 ? 'bg-[var(--bg-elevated)] text-white'
-                : 'text-[var(--text-muted)] hover:text-white'
+                : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
             }`}
           >
             الكل ({state.projects.length})
@@ -225,7 +225,7 @@ export const ProjectsView: React.FC = () => {
             className={`flex items-center gap-1 px-2.5 py-1 rounded transition-colors ${
               layoutMode === 'grid'
                 ? 'bg-[var(--accent-gold)] text-black font-semibold'
-                : 'text-[var(--text-muted)] hover:text-white'
+                : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
             }`}
             title="عرض شبكي (Grid View)"
           >
@@ -237,7 +237,7 @@ export const ProjectsView: React.FC = () => {
             className={`flex items-center gap-1 px-2.5 py-1 rounded transition-colors ${
               layoutMode === 'list'
                 ? 'bg-[var(--accent-gold)] text-black font-semibold'
-                : 'text-[var(--text-muted)] hover:text-white'
+                : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
             }`}
             title="عرض قائمة (List View)"
           >
@@ -269,11 +269,11 @@ export const ProjectsView: React.FC = () => {
                       <span className="font-mono text-[var(--accent-gold)] font-semibold text-[11px]">
                         {project.status.toUpperCase()}
                       </span>
-                      <span className="text-[#444444]">·</span>
+                      <span className="text-[var(--text-muted)]">·</span>
                       <span className="text-[var(--text-muted)]">{project.lifeArea}</span>
                       {project.targetDate && (
                         <>
-                          <span className="text-[#444444]">·</span>
+                          <span className="text-[var(--text-muted)]">·</span>
                           <span className="text-[var(--text-muted)] font-mono text-[11px]">
                             التسليم: {project.targetDate}
                           </span>
@@ -311,7 +311,7 @@ export const ProjectsView: React.FC = () => {
                     <div className="flex items-center gap-1.5">
                       <button
                         onClick={() => setEditingProject(project)}
-                        className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] p-2 text-[#cccccc] hover:text-white hover:border-[var(--accent-gold)]/40"
+                        className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] p-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--accent-gold)]/40"
                         title="تعديل المشروع"
                       >
                         <Edit3 className="h-3.5 w-3.5" />
@@ -338,7 +338,7 @@ export const ProjectsView: React.FC = () => {
       {layoutMode === 'grid' && (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {filteredProjects.length === 0 ? (
-          <div className="col-span-2 rounded-xl border border-dashed border-[var(--border-color)] bg-[#090909] p-12 text-center text-xs text-[var(--text-muted)]">
+          <div className="col-span-2 rounded-xl border border-dashed border-[var(--border-color)] bg-[var(--bg-surface)] p-12 text-center text-xs text-[var(--text-muted)]">
             لا توجد مشاريع في هذا القسم حالياً.
           </div>
         ) : (
@@ -348,7 +348,7 @@ export const ProjectsView: React.FC = () => {
             return (
               <div
                 key={project.id}
-                className="flex flex-col justify-between rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-5 space-y-4 hover:border-[#2f2f2f] transition-colors"
+                className="flex flex-col justify-between rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-5 space-y-4 hover:border-[var(--border-color)] transition-colors"
               >
                 <div className="space-y-3">
                   <div className="flex items-start justify-between gap-3">
@@ -357,7 +357,7 @@ export const ProjectsView: React.FC = () => {
                         <span className="font-mono text-[var(--accent-gold)] font-semibold">
                           {project.status.toUpperCase()}
                         </span>
-                        <span aria-hidden="true" className="text-[#444444]">·</span>
+                        <span aria-hidden="true" className="text-[var(--text-muted)]">·</span>
                         <span className="text-[var(--text-muted)]">{project.lifeArea}</span>
                       </div>
                       <h3 className="text-base font-bold text-[var(--text-primary)] mt-1">
@@ -419,7 +419,7 @@ export const ProjectsView: React.FC = () => {
                         <button
                           key={m.id}
                           onClick={() => toggleProjectMilestone(project.id, m.id)}
-                          className="flex w-full items-center gap-2.5 rounded-lg bg-[var(--bg-elevated)] p-2 text-right text-xs text-[#cccccc] hover:text-[var(--text-primary)] transition-colors"
+                          className="flex w-full items-center gap-2.5 rounded-lg bg-[var(--bg-elevated)] p-2 text-right text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
                         >
                           {m.completed ? (
                             <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
@@ -471,8 +471,8 @@ export const ProjectsView: React.FC = () => {
                           onClick={() => handleStatusChange(project, st)}
                           className={`px-2 py-0.5 rounded text-[11px] transition-colors ${
                             project.status === st
-                              ? 'bg-[#242424] text-[var(--accent-gold)] font-semibold'
-                              : 'text-[var(--text-muted)] hover:text-[#cccccc]'
+                              ? 'bg-[var(--bg-elevated)] text-[var(--accent-gold)] font-semibold'
+                              : 'text-[var(--text-muted)] hover:text-[var(--text-secondary)]'
                           }`}
                         >
                           {st === 'active'
@@ -497,7 +497,7 @@ export const ProjectsView: React.FC = () => {
       {/* نافذة إنشاء مشروع جديد */}
       {isCreateModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="w-full max-w-lg rounded-xl border border-[var(--border-color)] bg-[#0e0e0e] p-6 space-y-4">
+          <div className="w-full max-w-lg rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-6 space-y-4">
             <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-3">
               <h2 className="text-base font-bold text-[var(--text-primary)]">
                 إنشاء مشروع جديد
@@ -578,7 +578,7 @@ export const ProjectsView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsCreateModalOpen(false)}
-                  className="rounded-lg border border-[var(--border-color)] px-4 py-2 text-xs text-[var(--text-muted)] hover:text-white"
+                  className="rounded-lg border border-[var(--border-color)] px-4 py-2 text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)]"
                 >
                   إلغاء
                 </button>

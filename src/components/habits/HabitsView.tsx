@@ -139,8 +139,8 @@ export const HabitsView: React.FC = () => {
               key={habit.id}
               className={`flex flex-col justify-between rounded-xl border p-5 transition-all ${
                 isDoneToday
-                  ? 'border-[#1a291f] bg-[#0b140e]'
-                  : 'border-[var(--border-color)] bg-[var(--bg-surface)] hover:border-[#2f2f2f]'
+                  ? 'border-emerald-500/30 bg-emerald-500/10'
+                  : 'border-[var(--border-color)] bg-[var(--bg-surface)] hover:border-[var(--border-color)]'
               }`}
             >
               <div className="space-y-3">
@@ -301,7 +301,7 @@ export const HabitsView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsAddModalOpen(false)}
-                  className="rounded-lg border border-[var(--border-color)] px-3 py-1.5 text-xs text-[var(--text-muted)] hover:text-white"
+                  className="rounded-lg border border-[var(--border-color)] px-3 py-1.5 text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)]"
                 >
                   إلغاء
                 </button>
@@ -380,7 +380,7 @@ export const HabitsView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setEditingHabitLocal(null)}
-                  className="rounded-lg border border-[var(--border-color)] px-3 py-1.5 text-xs text-[var(--text-muted)] hover:text-white"
+                  className="rounded-lg border border-[var(--border-color)] px-3 py-1.5 text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)]"
                 >
                   إلغاء
                 </button>

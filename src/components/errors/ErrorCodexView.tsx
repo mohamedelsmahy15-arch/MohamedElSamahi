@@ -503,7 +503,7 @@ export const ErrorCodexView: React.FC = () => {
                   {editingItem ? 'تعديل توثيق الخطأ' : 'توثيق خطأ / مشكلة برمجية جديدة'}
                 </h3>
               </div>
-              <button onClick={closeModal} className="text-xs text-[var(--text-muted)] hover:text-white">
+              <button onClick={closeModal} className="text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)]">
                 إلغاء ✕
               </button>
             </div>
@@ -631,7 +631,7 @@ export const ErrorCodexView: React.FC = () => {
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] px-4 py-2.5 text-xs text-[var(--text-secondary)] hover:text-white"
+                  className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] px-4 py-2.5 text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                 >
                   إلغاء
                 </button>

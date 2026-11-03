@@ -263,7 +263,7 @@ export const DailyPlannedVsActualChart: React.FC<DailyPlannedVsActualChartProps>
   return (
     <section className="space-y-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-5 shadow-xl">
       {/* رأس القسم */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#1b1b1b] pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[var(--border-color)] pb-4">
         <div>
           <div className="flex items-center gap-2 text-xs font-mono text-[var(--accent-gold)]">
             <Clock className="h-3.5 w-3.5" />
@@ -286,7 +286,7 @@ export const DailyPlannedVsActualChart: React.FC<DailyPlannedVsActualChartProps>
             className={`flex items-center gap-1.5 rounded px-2.5 py-1 transition-all ${
               viewMode === 'categories'
                 ? 'bg-[var(--bg-elevated)] text-[var(--accent-gold)] font-semibold'
-                : 'text-[var(--text-muted)] hover:text-white'
+                : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
             }`}
           >
             <BarChart3 className="h-3 w-3" />
@@ -297,7 +297,7 @@ export const DailyPlannedVsActualChart: React.FC<DailyPlannedVsActualChartProps>
             className={`flex items-center gap-1.5 rounded px-2.5 py-1 transition-all ${
               viewMode === 'tasks'
                 ? 'bg-[var(--bg-elevated)] text-[var(--accent-gold)] font-semibold'
-                : 'text-[var(--text-muted)] hover:text-white'
+                : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
             }`}
           >
             <Layers className="h-3 w-3" />
@@ -308,7 +308,7 @@ export const DailyPlannedVsActualChart: React.FC<DailyPlannedVsActualChartProps>
             className={`flex items-center gap-1.5 rounded px-2.5 py-1 transition-all ${
               viewMode === 'distribution'
                 ? 'bg-[var(--bg-elevated)] text-[var(--accent-gold)] font-semibold'
-                : 'text-[var(--text-muted)] hover:text-white'
+                : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
             }`}
           >
             <PieIcon className="h-3 w-3" />
@@ -320,7 +320,7 @@ export const DailyPlannedVsActualChart: React.FC<DailyPlannedVsActualChartProps>
       {/* شريط الإحصاءات المقارنة السريعة */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {/* الوقت المخطط له */}
-        <div className="rounded-lg border border-[var(--border-color)] bg-[#101010] p-3">
+        <div className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] p-3">
           <div className="flex items-center justify-between text-[11px] text-[var(--text-muted)]">
             <span>إجمالي المخطط اليوم</span>
             <Clock className="h-3.5 w-3.5 text-[var(--accent-gold)]" />
@@ -334,7 +334,7 @@ export const DailyPlannedVsActualChart: React.FC<DailyPlannedVsActualChartProps>
         </div>
 
         {/* الوقت الفعلي المستغرق */}
-        <div className="rounded-lg border border-[var(--border-color)] bg-[#101010] p-3">
+        <div className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] p-3">
           <div className="flex items-center justify-between text-[11px] text-[var(--text-muted)]">
             <span>الفعلي المستغرق</span>
             <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
@@ -348,7 +348,7 @@ export const DailyPlannedVsActualChart: React.FC<DailyPlannedVsActualChartProps>
         </div>
 
         {/* دقة التقدير والتنفيذ */}
-        <div className="rounded-lg border border-[var(--border-color)] bg-[#101010] p-3">
+        <div className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] p-3">
           <div className="flex items-center justify-between text-[11px] text-[var(--text-muted)]">
             <span>دقة التقدير الزمني</span>
             <span className="h-2 w-2 rounded-full bg-[var(--accent-gold)]" />
@@ -362,7 +362,7 @@ export const DailyPlannedVsActualChart: React.FC<DailyPlannedVsActualChartProps>
         </div>
 
         {/* الفارق الزمني (الانحراف) */}
-        <div className="rounded-lg border border-[var(--border-color)] bg-[#101010] p-3">
+        <div className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] p-3">
           <div className="flex items-center justify-between text-[11px] text-[var(--text-muted)]">
             <span>الفارق الزمني (Variance)</span>
             {totals.diffMins <= 0 ? (
@@ -385,7 +385,7 @@ export const DailyPlannedVsActualChart: React.FC<DailyPlannedVsActualChartProps>
       </div>
 
       {/* منطقة الرسم البياني */}
-      <div className="rounded-xl border border-[#1c1c1c] bg-[#0e0e0e] p-4">
+      <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-4">
         {/* العرض 1: حسب مجالات الحياة (ساعات مخطط مقابل ساعات فعلي) */}
         {viewMode === 'categories' && (
           <div className="space-y-3">

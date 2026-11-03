@@ -89,7 +89,7 @@ export const SettingsView: React.FC = () => {
 
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="flex items-center gap-2 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border-color)] px-4 py-2 text-xs font-medium text-[var(--text-primary)] hover:border-[#2f2f2f] hover:text-white transition-colors"
+            className="flex items-center gap-2 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border-color)] px-4 py-2 text-xs font-medium text-[var(--text-primary)] hover:border-[var(--border-color)] hover:text-[var(--text-primary)] transition-colors"
           >
             <Upload className="h-4 w-4" />
             <span>استيراد بيانات من ملف JSON</span>
@@ -120,28 +120,28 @@ export const SettingsView: React.FC = () => {
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 text-xs leading-relaxed">
-          <div className="rounded-lg border border-[var(--border-color)] bg-[#101010] p-3.5 space-y-1">
+          <div className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] p-3.5 space-y-1">
             <div className="font-semibold text-[var(--accent-gold)]">1. لا تجمع أهدافاً، ابنِ نتائج.</div>
             <p className="text-[var(--text-muted)]">
               قائمة أهداف طويلة تعطي شعوراً زائفاً بالإنجاز. النتيجة الملموسة هي المقياس الحقيقي.
             </p>
           </div>
 
-          <div className="rounded-lg border border-[var(--border-color)] bg-[#101010] p-3.5 space-y-1">
+          <div className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] p-3.5 space-y-1">
             <div className="font-semibold text-[var(--accent-gold)]">2. لا تتعلم فقط، طبّق فوراً.</div>
             <p className="text-[var(--text-muted)]">
               أي مهارة برمجية أو تسويقية تتعلمها دون تطبيقها في مشروع أو خدمة، ستنساها خلال أسبوع.
             </p>
           </div>
 
-          <div className="rounded-lg border border-[var(--border-color)] bg-[#101010] p-3.5 space-y-1">
+          <div className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] p-3.5 space-y-1">
             <div className="font-semibold text-[var(--accent-gold)]">3. لا تبدأ 20 مشروعاً، أكمل الحالي.</div>
             <p className="text-[var(--text-muted)]">
               المشاريع غير المكتملة تستهلك طاقتك الذهنية. أغلق جبهات العمل قبل فتح جبهات جديدة.
             </p>
           </div>
 
-          <div className="rounded-lg border border-[var(--border-color)] bg-[#101010] p-3.5 space-y-1">
+          <div className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] p-3.5 space-y-1">
             <div className="font-semibold text-[var(--accent-gold)]">4. اختبر مصادر دخل صغيرة وسريعة.</div>
             <p className="text-[var(--text-muted)]">
               لا تبحث عن مشروع مثالي بمليون جنيه من البداية. اختبر خدمة بسيطة تحقق أول 500 أو 1000 جنيه.
@@ -149,7 +149,7 @@ export const SettingsView: React.FC = () => {
           </div>
         </div>
 
-        <div className="rounded-lg bg-[#14120a] border border-[var(--accent-gold)]/20 p-4 text-center">
+        <div className="rounded-lg bg-[var(--accent-gold)]/10 border border-[var(--accent-gold)]/20 p-4 text-center">
           <div className="text-xs font-semibold text-[var(--accent-gold)]">
             "لا تعتمد على الحماس، اعتمد على النظام."
           </div>

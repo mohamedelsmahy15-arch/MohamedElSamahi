@@ -47,7 +47,7 @@ export const IdeasModal: React.FC = () => {
           </button>
         </div>
 
-        <div className="rounded-lg bg-[#14120a] border border-[var(--accent-gold)]/20 p-3 text-xs text-[#cccccc]">
+        <div className="rounded-lg bg-[var(--accent-gold)]/10 border border-[var(--accent-gold)]/20 p-3 text-xs text-[var(--text-secondary)]">
           💡 <span className="text-[var(--accent-gold)] font-semibold">مبدأ التركيز:</span> أي فكرة مشروع، أداة، أو دورة تخطر ببالك الآن، دوّنها هنا ولا تبدأ فيها حتى نهاية الأسبوع لتفادي التشتت.
         </div>
 
@@ -68,7 +68,7 @@ export const IdeasModal: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsIdeaModalOpen(false)}
-              className="rounded-lg border border-[var(--border-color)] px-3 py-1.5 text-xs text-[var(--text-muted)] hover:text-white"
+              className="rounded-lg border border-[var(--border-color)] px-3 py-1.5 text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)]"
             >
               إلغاء
             </button>

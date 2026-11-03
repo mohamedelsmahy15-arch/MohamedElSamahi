@@ -39,14 +39,14 @@ export const IdeasView: React.FC = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {state.ideas.length === 0 ? (
-          <div className="col-span-full rounded-xl border border-dashed border-[var(--border-color)] bg-[#090909] p-12 text-center text-xs text-[var(--text-muted)]">
+          <div className="col-span-full rounded-xl border border-dashed border-[var(--border-color)] bg-[var(--bg-surface)] p-12 text-center text-xs text-[var(--text-muted)]">
             الـ Parking Lot فارغ حالياً. أي فكرة تخطر ببالك، اضغط "+ فكرة" لتفريغ ذهنك والاستمرار في التنفيذ.
           </div>
         ) : (
           state.ideas.map((idea) => (
             <div
               key={idea.id}
-              className="flex flex-col justify-between rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-5 space-y-4 hover:border-[#2f2f2f] transition-colors"
+              className="flex flex-col justify-between rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-5 space-y-4 hover:border-[var(--border-color)] transition-colors"
             >
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-xs text-[var(--text-muted)]">
@@ -70,7 +70,7 @@ export const IdeasView: React.FC = () => {
                 </h3>
 
                 {idea.problem && (
-                  <p className="text-xs text-[#aaaaaa]">
+                  <p className="text-xs text-[var(--text-secondary)]">
                     <span className="text-[var(--text-muted)]">المشكلة: </span>
                     {idea.problem}
                   </p>
