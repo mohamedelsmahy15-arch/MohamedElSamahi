@@ -54,6 +54,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpenMobile, onCloseMobile })
     trashItems,
     learningSkills,
   } = useApp();
+  const { logout } = useAuth();
 
   const todayStr = new Date().toISOString().split('T')[0];
   const habitsDoneToday = state.habits.filter((h) => h.completedDates.includes(todayStr)).length;
