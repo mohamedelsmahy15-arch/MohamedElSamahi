@@ -234,6 +234,33 @@ const createIncomeExperimentDeclaration: FunctionDeclaration = {
   },
 };
 
+
+const logErrorLessonDeclaration: FunctionDeclaration = {
+  name: 'log_error_lesson',
+  description: 'توثيق خطأ أو مشكلة برمجية أو تقنية واجهت محمد، مع تسجيل السبب الجذري والحل والقاعدة الذهبية لعدم التكرار.',
+  parameters: {
+    type: Type.OBJECT,
+    properties: {
+      title: { type: Type.STRING, description: 'عنوان المشكلة أو الخطأ' },
+      category: {
+        type: Type.STRING,
+        description: 'التصنيف: برمجة وكود، بيئة وتشغيل، تصميم وواجهة، قواعد بيانات وتخزين، سيرفر وAPI، أخرى',
+      },
+      severity: { type: Type.STRING, description: 'الخطورة: low, medium, high, critical' },
+      symptoms: { type: Type.STRING, description: 'ماذا حدث أو رسالة الخطأ الظاهرة' },
+      rootCause: { type: Type.STRING, description: 'السبب الجذري للمشكلة تقنياً' },
+      solution: { type: Type.STRING, description: 'كيف تم الحل بالضبط' },
+      preventionRule: { type: Type.STRING, description: 'القاعدة الذهبية لعدم التكرار مستقبلاً' },
+      tags: {
+        type: Type.ARRAY,
+        items: { type: Type.STRING },
+        description: 'وسوم برمجية للبحث السريع مثل: react, vite, error',
+      },
+    },
+    required: ['title', 'symptoms'],
+  },
+};
+
 const linkItemsDeclaration: FunctionDeclaration = {
   name: 'link_items',
   description: 'ربط عنصر (مشروع، مهمة، عادة، أو مهارة) بهدف سنوي محدد لبناء هيكل متماسك وخريطة تنفيذ واضحة.',
@@ -278,6 +305,7 @@ const ALL_ASSISTANT_TOOLS = [{
     updateLearningSkillDeclaration,
     createIncomeExperimentDeclaration,
     linkItemsDeclaration,
+  logErrorLessonDeclaration,
     requestConfirmationDeclaration,
   ],
 }];
@@ -333,6 +361,11 @@ function buildSystemInstruction(context: AssistantContextSnapshot): string {
 4. للعمليات الخطرة مثل الحذف، استخدم أداة request_confirmation لطلب تأكيد صريح من محمد قبل إتلاف البيانات.
 5. تحدّث بالعربية الفصحى البسيطة والمطعمة بلهجة مصرية مهذبة وذكية ("أهلاً يا محمد"، "تمام يا غالي"، "نفذتلك كذا وربطته بالهدف...").
 6. كن مباشراً، محفزاً، وموجزاً؛ لا تطل في الكلام الإنشائي بل ركز على الخطوة العملية القادمة.
+7. أنت المستشار الذكي والمدرب الشخصي لمحمد:
+   - بعد أي مهمة ينجزها، اقترح عليه الخطوة المنطقية التالية التي تنقله من "التعلم السلبي" إلى "الإنتاج والتطبيق الفعلي".
+   - إذا سألك محمد عن أي مشكلة برمجية أو خطأ واجهه، ساعده في حله فوراً واقترح عليه توثيقه في "سجل الأخطاء والدروس" (log_error_lesson) ليكون مرجعه الذهبي.
+   - شجعه دائماً على التحضير قبل النوم بإضافة روابط مهام الصباح وإرشادات التنفيذ المباشرة.
+
 
 ---
 بيانات محمد الحالية في النظام (تاريخ اليوم: ${context.todayDate}):

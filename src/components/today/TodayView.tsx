@@ -288,6 +288,42 @@ export const TodayView: React.FC = () => {
                   </div>
                 </div>
 
+                
+                  {/* دليل التنفيذ الصباحي ورابط التعلم */}
+                  {(task.resourceLink || task.executionGuide) && (
+                    <div className="mt-2.5 p-2.5 rounded-xl border border-[var(--accent-gold)]/20 bg-[var(--accent-gold)]/5 space-y-1.5 text-xs">
+                      {task.executionGuide && (
+                        <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed">
+                          <span className="font-bold text-[var(--accent-gold)] block mb-0.5">💡 خطة التنفيذ المباشرة:</span>
+                          {task.executionGuide}
+                        </p>
+                      )}
+                      {task.resourceLink && (
+                        <a
+                          href={task.resourceLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-sky-400 hover:text-sky-300 hover:underline pt-0.5"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <ExternalLink className="h-3 w-3 shrink-0" />
+                          <span>فتح رابط التعلم أو المهمة ↗</span>
+                        </a>
+                      )}
+                    </div>
+                  )}
+
+                  {/* اقتراح الذكاء الاصطناعي للخطوة التالية إذا كانت منجزة */}
+                  {isDone && (
+                    <div className="mt-2 p-2 rounded-lg bg-sky-500/10 border border-sky-500/20 text-[11px] text-sky-300 flex items-start gap-1.5">
+                      <Bot className="h-3.5 w-3.5 shrink-0 mt-0.5 text-sky-400" />
+                      <div>
+                        <span className="font-bold block text-sky-200">الخطوة الذكية التالية:</span>
+                        <span>{task.aiNextSuggestion || 'أحسنت يا محمد! سجّل الآن ما تعلمته في معمل التعلم، أو وثّق أي خطأ واجهك في سجل الأخطاء.'}</span>
+                      </div>
+                    </div>
+                  )}
+
                 <div className="mt-4 pt-3 border-t border-[var(--border-color)] flex items-center justify-between">
                   <button
                     onClick={() => toggleTaskStatus(task.id)}
@@ -467,6 +503,29 @@ export const TodayView: React.FC = () => {
                             <span className="text-[var(--accent-gold)] font-medium">ضمن أهم 3 مهام</span>
                           </>
                         )}
+                      {/* روابط وإرشادات التعلم المباشرة */}
+                      {(task.resourceLink || task.executionGuide) && (
+                        <div className="flex flex-wrap items-center gap-2 pt-1">
+                          {task.resourceLink && (
+                            <a
+                              href={task.resourceLink}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 text-[11px] font-semibold text-sky-400 hover:underline"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <ExternalLink className="h-3 w-3" />
+                              <span>فتح الرابط ↗</span>
+                            </a>
+                          )}
+                          {task.executionGuide && (
+                            <span className="text-[11px] text-[var(--accent-gold)]">
+                              💡 {task.executionGuide}
+                            </span>
+                          )}
+                        </div>
+                      )}
+
                       </div>
                     </div>
                   </div>

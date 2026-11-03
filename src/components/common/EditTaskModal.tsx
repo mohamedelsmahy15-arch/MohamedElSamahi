@@ -19,6 +19,8 @@ export const EditTaskModal: React.FC = () => {
   const [status, setStatus] = useState<TaskStatus>('todo');
   const [linkedProjectId, setLinkedProjectId] = useState<string>('');
   const [isTodayFocus, setIsTodayFocus] = useState(false);
+  const [resourceLink, setResourceLink] = useState('');
+  const [executionGuide, setExecutionGuide] = useState('');
 
   useEffect(() => {
     if (editingTask) {
@@ -30,6 +32,8 @@ export const EditTaskModal: React.FC = () => {
       setStatus(editingTask.status);
       setLinkedProjectId(editingTask.linkedProjectId || '');
       setIsTodayFocus(editingTask.isTodayFocus);
+      setResourceLink(editingTask.resourceLink || '');
+      setExecutionGuide(editingTask.executionGuide || '');
     }
   }, [editingTask]);
 
@@ -49,6 +53,8 @@ export const EditTaskModal: React.FC = () => {
       status,
       linkedProjectId: linkedProjectId || undefined,
       isTodayFocus,
+      resourceLink: resourceLink.trim() || undefined,
+      executionGuide: executionGuide.trim() || undefined,
     });
 
     setEditingTask(null);

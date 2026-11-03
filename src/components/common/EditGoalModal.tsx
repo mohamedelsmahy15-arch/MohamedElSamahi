@@ -16,6 +16,8 @@ export const EditGoalModal: React.FC = () => {
   const [quarter, setQuarter] = useState<GoalQuarter>('Q1');
   const [lifeArea, setLifeArea] = useState<LifeArea>('البرمجة');
   const [progress, setProgress] = useState(0);
+  const [resourceLink, setResourceLink] = useState('');
+  const [actionPlanNotes, setActionPlanNotes] = useState('');
 
   useEffect(() => {
     if (editingGoal) {
@@ -24,6 +26,8 @@ export const EditGoalModal: React.FC = () => {
       setQuarter(editingGoal.quarter);
       setLifeArea(editingGoal.lifeArea);
       setProgress(editingGoal.progress);
+      setResourceLink(editingGoal.resourceLink || '');
+      setActionPlanNotes(editingGoal.actionPlanNotes || '');
     }
   }, [editingGoal]);
 
@@ -48,6 +52,8 @@ export const EditGoalModal: React.FC = () => {
       quarterTheme: quarterThemes[quarter],
       lifeArea,
       progress: Number(progress) || 0,
+      resourceLink: resourceLink.trim() || undefined,
+      actionPlanNotes: actionPlanNotes.trim() || undefined,
     });
 
     setEditingGoal(null);

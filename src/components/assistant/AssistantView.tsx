@@ -493,6 +493,30 @@ export const AssistantView: React.FC = () => {
             break;
           }
 
+
+          case 'log_error_lesson': {
+            addErrorLog({
+              title: args.title,
+              category: args.category || 'برمجة وكود',
+              severity: args.severity || 'medium',
+              date: new Date().toISOString().split('T')[0],
+              symptoms: args.symptoms || 'غير محددة',
+              rootCause: args.rootCause || 'قيد التحليل',
+              solution: args.solution || 'تم التوثيق عبر المساعد الذكي',
+              preventionRule: args.preventionRule || 'مراجعة الكود والتوثيق قبل التشغيل',
+              tags: Array.isArray(args.tags) ? args.tags : ['ai-logged'],
+              isResolved: true,
+            });
+            executedActions.push({
+              type: 'task',
+              action: 'create',
+              title: args.title,
+              details: 'تم توثيق المشكلة في سجل الأخطاء والدروس المستفادة 🛡️',
+              data: { tab: 'errors' },
+            });
+            break;
+          }
+
           case 'link_items': {
             const { sourceType, sourceId, targetType, targetId } = args;
             if (sourceType === 'project' && targetType === 'goal') {

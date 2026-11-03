@@ -23,6 +23,8 @@ export const QuickTaskModal: React.FC = () => {
   const [priority, setPriority] = useState<TaskPriority>('high');
   const [linkedProjectId, setLinkedProjectId] = useState<string>('');
   const [isTodayFocus, setIsTodayFocus] = useState<boolean>(todayFocusTasks.length < 3);
+  const [resourceLink, setResourceLink] = useState('');
+  const [executionGuide, setExecutionGuide] = useState('');
 
   if (!isQuickTaskModalOpen) return null;
 
@@ -38,6 +40,8 @@ export const QuickTaskModal: React.FC = () => {
       linkedProjectId: linkedProjectId || undefined,
       status: 'todo',
       isTodayFocus,
+      resourceLink: resourceLink.trim() || undefined,
+      executionGuide: executionGuide.trim() || undefined,
     });
 
     setTitle('');
