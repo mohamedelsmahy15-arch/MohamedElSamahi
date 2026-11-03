@@ -1,11 +1,13 @@
 /**
  * App.tsx
  * نقطة الدخول الرئيسية لنظام "السماحي OS"
- * يربط بين جميع الموديولات التنفيذية والنوافذ المنبثقة للتعديل السريع
+ * يربط بين جميع الموديولات التنفيذية والنوافذ المنبثقة للتعديل السريع مع نظام القفل الأمني
  */
 
 import React, { useState } from 'react';
 import { AppProvider, useApp } from './context/AppContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import { LoginLockScreen } from './components/auth/LoginLockScreen';
 import { Sidebar } from './components/layout/Sidebar';
 import { Header } from './components/layout/Header';
 import { DashboardView } from './components/dashboard/DashboardView';
@@ -34,7 +36,13 @@ import { EditGoalModal } from './components/common/EditGoalModal';
 
 const AppContent: React.FC = () => {
   const { activeTab } = useApp();
+  const { isAuthenticated } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // إذا لم يكن مسجل الدخول، يتم عرض لوحة تسجيل الدخول والقفل الأمني
+  if (!isAuthenticated) {
+    return <LoginLockScreen />;
+  }
 
   const renderActiveView = () => {
     switch (activeTab) {
@@ -111,9 +119,11 @@ const AppContent: React.FC = () => {
 
 export function App() {
   return (
-    <AppProvider>
-      <AppContent />
-    </AppProvider>
+    <AuthProvider>
+      <AppProvider>
+        <AppContent />
+      </AppProvider>
+    </AuthProvider>
   );
 }
 

@@ -7,6 +7,7 @@
 
 import React from 'react';
 import { useApp } from '../../context/AppContext';
+import { useAuth } from '../../context/AuthContext';
 import {
   LayoutDashboard,
   Bot,
@@ -20,6 +21,7 @@ import {
   GraduationCap,
   FileCheck2,
   Settings,
+  Lock,
   Trash2,
   Sparkles,
   Flame,
@@ -301,6 +303,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpenMobile, onCloseMobile })
         <div className="text-[10px] font-mono text-[var(--text-muted)]">
           Build · Learn · Earn
         </div>
+        <button
+          onClick={logout}
+          className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] py-1.5 text-xs text-[var(--text-muted)] hover:text-amber-400 hover:border-amber-400/30 transition-colors"
+        >
+          <Lock className="h-3.5 w-3.5" />
+          <span>قفل النظام</span>
+        </button>
       </div>
     </div>
   );

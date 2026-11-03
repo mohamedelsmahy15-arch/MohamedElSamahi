@@ -6,6 +6,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { useApp } from '../../context/AppContext';
+import { useAuth } from '../../context/AuthContext';
 import {
   Plus,
   Search,
@@ -20,6 +21,7 @@ import {
   FolderGit2,
   Target,
   Lightbulb,
+  Lock,
 } from 'lucide-react';
 
 interface HeaderProps {
@@ -38,6 +40,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileNav, isMobileNavOp
     actionHistory,
     state,
   } = useApp();
+  const { logout } = useAuth();
 
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -270,7 +273,16 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileNav, isMobileNavOp
             )}
           </div>
 
-          {/* User Profile Avatar */}
+                    {/* Lock Screen Button */}
+          <button
+            onClick={logout}
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:text-[var(--accent-gold)] hover:border-[var(--accent-gold)]/40 transition-colors"
+            title="قفل النظام"
+          >
+            <Lock className="h-4 w-4 text-[var(--accent-gold)]" />
+          </button>
+
+{/* User Profile Avatar */}
           <div
             onClick={() => setActiveTab('settings')}
             className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] text-[var(--text-primary)] hover:border-[var(--accent-gold)]/60 transition-colors"
