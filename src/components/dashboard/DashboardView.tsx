@@ -29,6 +29,7 @@ import {
 } from 'lucide-react';
 import { WeeklyProductivityCharts } from './WeeklyProductivityCharts';
 import { DailyProductivityAudit } from './DailyProductivityAudit';
+import { NeuralBrainHub } from './NeuralBrainHub';
 
 export const DashboardView: React.FC = () => {
   const {
@@ -156,6 +157,9 @@ export const DashboardView: React.FC = () => {
           </button>
         </div>
       </div>
+
+      {/* العقل التنفيذي الموحد (Neural Executive Brain Hub) */}
+      <NeuralBrainHub />
 
       {/* 2. Main Focus Area — Today's Focus (Top 3 Priority Tasks Only) */}
       <section className="rounded-2xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-5 md:p-6 space-y-4 shadow-lg shadow-black/5 relative overflow-hidden">

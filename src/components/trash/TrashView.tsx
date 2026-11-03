@@ -102,7 +102,7 @@ export const TrashView: React.FC = () => {
       case 'transaction':
         return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
       default:
-        return 'bg-[#222222] text-[#cccccc] border-[#333333]';
+        return 'bg-[var(--bg-elevated)] text-[#cccccc] border-[var(--border-color)]';
     }
   };
 
@@ -129,18 +129,18 @@ export const TrashView: React.FC = () => {
   return (
     <div className="space-y-6 pb-12">
       {/* رأس الصفحة */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#1f1f1f] pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--border-color)] pb-4">
         <div>
-          <div className="flex items-center gap-2 text-xs font-mono text-[#D4AF37]">
+          <div className="flex items-center gap-2 text-xs font-mono text-[var(--accent-gold)]">
             <ShieldCheck className="h-3.5 w-3.5" />
             <span>نظام الأمان واسترجاع البيانات</span>
             <span>·</span>
             <span>Recycle Bin & Revisions</span>
           </div>
-          <h1 className="text-xl md:text-2xl font-bold tracking-tight text-[#F5F5F5] mt-1">
+          <h1 className="text-xl md:text-2xl font-bold tracking-tight text-[var(--text-primary)] mt-1">
             سلة المهملات وسجل التعديلات
           </h1>
-          <p className="text-xs text-[#999999] mt-0.5">
+          <p className="text-xs text-[var(--text-secondary)] mt-0.5">
             كل عنصر تم حذفه أو تعديله يُحفظ هنا بأمان؛ يمكنك استرجاعه لمكانه فوراً أو مسحه نهائياً.
           </p>
         </div>
@@ -158,19 +158,19 @@ export const TrashView: React.FC = () => {
 
       {/* شريط الإحصاءات */}
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-        <div className="rounded-xl border border-[#222222] bg-[#0c0c0c] p-4">
-          <div className="text-[11px] text-[#888888]">إجمالي المحفوظات في السلة</div>
-          <div className="mt-1 font-mono text-xl font-bold text-[#D4AF37] tabular-nums">
+        <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-4">
+          <div className="text-[11px] text-[var(--text-muted)]">إجمالي المحفوظات في السلة</div>
+          <div className="mt-1 font-mono text-xl font-bold text-[var(--accent-gold)] tabular-nums">
             {totalCount}
           </div>
-          <div className="text-[10px] text-[#666666] mt-0.5 font-mono">
+          <div className="text-[10px] text-[var(--text-muted)] mt-0.5 font-mono">
             محمية من الفقدان العشوائي
           </div>
         </div>
 
-        <div className="rounded-xl border border-[#222222] bg-[#0c0c0c] p-4">
-          <div className="text-[11px] text-[#888888]">عناصر محذوفة (يمكن استرجاعها)</div>
-          <div className="mt-1 font-mono text-xl font-bold text-[#F5F5F5] tabular-nums">
+        <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-4">
+          <div className="text-[11px] text-[var(--text-muted)]">عناصر محذوفة (يمكن استرجاعها)</div>
+          <div className="mt-1 font-mono text-xl font-bold text-[var(--text-primary)] tabular-nums">
             {deletedCount}
           </div>
           <div className="text-[10px] text-emerald-400 mt-0.5">
@@ -178,27 +178,27 @@ export const TrashView: React.FC = () => {
           </div>
         </div>
 
-        <div className="rounded-xl border border-[#222222] bg-[#0c0c0c] p-4 col-span-2 sm:col-span-1">
-          <div className="text-[11px] text-[#888888]">نسخ سابقة من التعديلات</div>
+        <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-4 col-span-2 sm:col-span-1">
+          <div className="text-[11px] text-[var(--text-muted)]">نسخ سابقة من التعديلات</div>
           <div className="mt-1 font-mono text-xl font-bold text-[#38bdf8] tabular-nums">
             {revisionsCount}
           </div>
-          <div className="text-[10px] text-[#666666] mt-0.5 font-mono">
+          <div className="text-[10px] text-[var(--text-muted)] mt-0.5 font-mono">
             تاريخ التعديلات السابقة
           </div>
         </div>
       </div>
 
       {/* شريط البحث والفلاتر */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 bg-[#0d0d0d] p-3 rounded-xl border border-[#202020]">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 bg-[var(--bg-surface)] p-3 rounded-xl border border-[#202020]">
         <div className="relative flex-1">
-          <Search className="absolute right-3 top-2.5 h-4 w-4 text-[#666666]" />
+          <Search className="absolute right-3 top-2.5 h-4 w-4 text-[var(--text-muted)]" />
           <input
             type="text"
             placeholder="ابحث في سلة المهملات بالاسم أو المجال..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-lg border border-[#262626] bg-[#141414] pr-9 pl-3 py-2 text-xs text-[#F5F5F5] focus:border-[#D4AF37] focus:outline-none"
+            className="w-full rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] pr-9 pl-3 py-2 text-xs text-[var(--text-primary)] focus:border-[var(--accent-gold)] focus:outline-none"
           />
         </div>
 
@@ -207,7 +207,7 @@ export const TrashView: React.FC = () => {
           <select
             value={selectedReason}
             onChange={(e) => setSelectedReason(e.target.value as any)}
-            className="rounded-lg border border-[#262626] bg-[#141414] px-3 py-2 text-[#cccccc] focus:border-[#D4AF37] focus:outline-none"
+            className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] px-3 py-2 text-[#cccccc] focus:border-[var(--accent-gold)] focus:outline-none"
           >
             <option value="all">كل الحالات (محذوف + نسخ سابقة)</option>
             <option value="deleted">محذوفات فقط</option>
@@ -218,7 +218,7 @@ export const TrashView: React.FC = () => {
           <select
             value={selectedType}
             onChange={(e) => setSelectedType(e.target.value as any)}
-            className="rounded-lg border border-[#262626] bg-[#141414] px-3 py-2 text-[#cccccc] focus:border-[#D4AF37] focus:outline-none"
+            className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] px-3 py-2 text-[#cccccc] focus:border-[var(--accent-gold)] focus:outline-none"
           >
             <option value="all">كل الأنواع</option>
             <option value="task">المهام</option>
@@ -236,10 +236,10 @@ export const TrashView: React.FC = () => {
       {/* قائمة العناصر في سلة المهملات */}
       <div className="space-y-3">
         {filteredItems.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-[#222222] bg-[#090909] p-12 text-center text-xs text-[#777777] space-y-2">
+          <div className="rounded-xl border border-dashed border-[var(--border-color)] bg-[#090909] p-12 text-center text-xs text-[var(--text-muted)] space-y-2">
             <CheckCircle2 className="h-8 w-8 text-emerald-500/40 mx-auto mb-2" />
             <p className="text-sm font-semibold text-[#aaaaaa]">سلة المهملات فارغة</p>
-            <p className="text-[#666666]">
+            <p className="text-[var(--text-muted)]">
               {searchQuery || selectedType !== 'all' || selectedReason !== 'all'
                 ? 'لا توجد عناصر تطابق معايير البحث الحالية.'
                 : 'كل بياناتك ومهامك ومشاريعك في مكانها الصحيح دون أي عناصر محذوفة.'}
@@ -250,7 +250,7 @@ export const TrashView: React.FC = () => {
             return (
               <div
                 key={item.id}
-                className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-[#202020] bg-[#0c0c0c] p-4 hover:border-[#2f2f2f] transition-all"
+                className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-[#202020] bg-[var(--bg-surface)] p-4 hover:border-[#2f2f2f] transition-all"
               >
                 <div className="space-y-1.5 flex-1 min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
@@ -273,34 +273,34 @@ export const TrashView: React.FC = () => {
                     )}
 
                     {item.categoryOrArea && (
-                      <span className="text-[11px] text-[#777777]">
+                      <span className="text-[11px] text-[var(--text-muted)]">
                         · {item.categoryOrArea}
                       </span>
                     )}
                   </div>
 
-                  <h3 className="text-sm font-semibold text-[#F5F5F5] truncate">
+                  <h3 className="text-sm font-semibold text-[var(--text-primary)] truncate">
                     {item.title}
                   </h3>
 
-                  <div className="flex items-center gap-2 text-[10px] text-[#666666] font-mono">
+                  <div className="flex items-center gap-2 text-[10px] text-[var(--text-muted)] font-mono">
                     <Clock className="h-3 w-3" />
                     <span>تاريخ الحفظ: {formatDate(item.deletedAt)}</span>
                   </div>
                 </div>
 
                 {/* أزرار الاسترجاع والحذف النهائي */}
-                <div className="flex items-center gap-2 self-end sm:self-center shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-[#1a1a1a] w-full sm:w-auto justify-end">
+                <div className="flex items-center gap-2 self-end sm:self-center shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-[var(--border-color)] w-full sm:w-auto justify-end">
                   <button
                     onClick={() => setPreviewItem(item)}
-                    className="rounded-lg border border-[#262626] bg-[#141414] px-3 py-1.5 text-xs text-[#888888] hover:text-white transition-colors"
+                    className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] px-3 py-1.5 text-xs text-[var(--text-muted)] hover:text-white transition-colors"
                   >
                     معاينة البيانات
                   </button>
 
                   <button
                     onClick={() => restoreFromTrash(item.id)}
-                    className="flex items-center gap-1.5 rounded-lg bg-[#D4AF37] px-3.5 py-1.5 text-xs font-semibold text-black hover:bg-[#e0bc45] transition-all"
+                    className="flex items-center gap-1.5 rounded-lg bg-[var(--accent-gold)] px-3.5 py-1.5 text-xs font-semibold text-black hover:bg-[#e0bc45] transition-all"
                     title="استرجاع العنصر إلى مكانه الأصلي"
                   >
                     <RotateCcw className="h-3.5 w-3.5 stroke-[2.5]" />
@@ -313,7 +313,7 @@ export const TrashView: React.FC = () => {
                         deletePermanently(item.id);
                       }
                     }}
-                    className="p-1.5 text-[#555555] hover:text-red-400 transition-colors"
+                    className="p-1.5 text-[var(--text-muted)] hover:text-red-400 transition-colors"
                     title="مسح نهائي لا رجعة فيه"
                   >
                     <Trash2 className="h-4 w-4" />
@@ -328,57 +328,57 @@ export const TrashView: React.FC = () => {
       {/* نافذة معاينة بيانات العنصر قبل الاسترجاع */}
       {previewItem && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="w-full max-w-lg rounded-xl border border-[#2a2a2a] bg-[#0e0e0e] p-6 space-y-4 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-[#222222] pb-3">
+          <div className="w-full max-w-lg rounded-xl border border-[var(--border-color)] bg-[#0e0e0e] p-6 space-y-4 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-3">
               <div>
-                <span className="text-[10px] font-mono text-[#D4AF37]">
+                <span className="text-[10px] font-mono text-[var(--accent-gold)]">
                   معاينة العنصر المحفوظ
                 </span>
-                <h2 className="text-base font-bold text-[#F5F5F5] mt-0.5">
+                <h2 className="text-base font-bold text-[var(--text-primary)] mt-0.5">
                   {previewItem.title}
                 </h2>
               </div>
               <button
                 onClick={() => setPreviewItem(null)}
-                className="text-[#777777] hover:text-[#F5F5F5]"
+                className="text-[var(--text-muted)] hover:text-[var(--text-primary)]"
               >
                 ✕
               </button>
             </div>
 
             <div className="space-y-3 text-xs">
-              <div className="rounded-lg bg-[#141414] p-3 border border-[#222222] space-y-1.5">
-                <div className="flex justify-between text-[#888888]">
+              <div className="rounded-lg bg-[var(--bg-secondary)] p-3 border border-[var(--border-color)] space-y-1.5">
+                <div className="flex justify-between text-[var(--text-muted)]">
                   <span>النوع:</span>
-                  <span className="text-[#F5F5F5] font-semibold">{getTypeLabel(previewItem.type)}</span>
+                  <span className="text-[var(--text-primary)] font-semibold">{getTypeLabel(previewItem.type)}</span>
                 </div>
-                <div className="flex justify-between text-[#888888]">
+                <div className="flex justify-between text-[var(--text-muted)]">
                   <span>الحالة:</span>
-                  <span className="text-[#D4AF37]">
+                  <span className="text-[var(--accent-gold)]">
                     {previewItem.reason === 'deleted' ? 'عنصر محذوف' : 'نسخة سابقة من التعديل'}
                   </span>
                 </div>
-                <div className="flex justify-between text-[#888888]">
+                <div className="flex justify-between text-[var(--text-muted)]">
                   <span>وقت الحفظ في السلة:</span>
                   <span className="font-mono text-[#cccccc]">{formatDate(previewItem.deletedAt)}</span>
                 </div>
               </div>
 
               <div>
-                <label className="block text-[11px] text-[#777777] mb-1 font-mono">
+                <label className="block text-[11px] text-[var(--text-muted)] mb-1 font-mono">
                   البيانات الكاملة بصيغة JSON الأصلية:
                 </label>
-                <pre className="max-h-48 overflow-y-auto rounded-lg bg-[#090909] p-3 text-[11px] font-mono text-[#a0a0a0] border border-[#1f1f1f] dir-ltr text-left">
+                <pre className="max-h-48 overflow-y-auto rounded-lg bg-[#090909] p-3 text-[11px] font-mono text-[#a0a0a0] border border-[var(--border-color)] dir-ltr text-left">
                   {JSON.stringify(previewItem.originalData, null, 2)}
                 </pre>
               </div>
             </div>
 
-            <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#222222]">
+            <div className="flex items-center justify-end gap-3 pt-3 border-t border-[var(--border-color)]">
               <button
                 type="button"
                 onClick={() => setPreviewItem(null)}
-                className="rounded-lg border border-[#333333] px-3 py-1.5 text-xs text-[#888888] hover:text-white"
+                className="rounded-lg border border-[var(--border-color)] px-3 py-1.5 text-xs text-[var(--text-muted)] hover:text-white"
               >
                 إغلاق
               </button>
@@ -389,7 +389,7 @@ export const TrashView: React.FC = () => {
                   restoreFromTrash(previewItem.id);
                   setPreviewItem(null);
                 }}
-                className="flex items-center gap-1.5 rounded-lg bg-[#D4AF37] px-4 py-1.5 text-xs font-semibold text-black hover:bg-[#e0bc45]"
+                className="flex items-center gap-1.5 rounded-lg bg-[var(--accent-gold)] px-4 py-1.5 text-xs font-semibold text-black hover:bg-[#e0bc45]"
               >
                 <RotateCcw className="h-3.5 w-3.5 stroke-[2.5]" />
                 <span>استرجاع الآن</span>

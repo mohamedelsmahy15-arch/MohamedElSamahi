@@ -113,24 +113,24 @@ export const ProjectsView: React.FC = () => {
   return (
     <div className="space-y-6 pb-12">
       {/* رأس الصفحة وقاعدة الـ 3 مشاريع */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#1f1f1f] pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--border-color)] pb-4">
         <div>
-          <div className="flex items-center gap-2 text-xs font-mono text-[#D4AF37]">
+          <div className="flex items-center gap-2 text-xs font-mono text-[var(--accent-gold)]">
             <span>التنفيذ والمحطات</span>
             <span>·</span>
             <span>Execution Engine</span>
           </div>
-          <h1 className="text-xl md:text-2xl font-bold tracking-tight text-[#F5F5F5] mt-1">
+          <h1 className="text-xl md:text-2xl font-bold tracking-tight text-[var(--text-primary)] mt-1">
             المشاريع النشطة والتجارب
           </h1>
-          <p className="text-xs text-[#999999] mt-0.5">
+          <p className="text-xs text-[var(--text-secondary)] mt-0.5">
             "لا تبدأ 20 مشروعاً. أنهِ المشروع الحالي وانتقل للتالي."
           </p>
         </div>
 
         <button
           onClick={() => setIsCreateModalOpen(true)}
-          className="flex items-center gap-2 rounded bg-[#D4AF37] px-4 py-2 text-xs font-semibold text-black hover:bg-[#e0bc45] transition-all self-start sm:self-auto"
+          className="flex items-center gap-2 rounded bg-[var(--accent-gold)] px-4 py-2 text-xs font-semibold text-black hover:bg-[#e0bc45] transition-all self-start sm:self-auto"
         >
           <Plus className="h-4 w-4 stroke-[3]" />
           <span>+ إنشاء مشروع جديد</span>
@@ -138,16 +138,16 @@ export const ProjectsView: React.FC = () => {
       </div>
 
       {/* شريط حالة المشاريع النشطة (مكافحة التشتت) */}
-      <div className="rounded-xl border border-[#222222] bg-[#0c0c0c] p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#141414] border border-[#262626] font-mono text-sm font-bold text-[#D4AF37]">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--bg-secondary)] border border-[var(--border-color)] font-mono text-sm font-bold text-[var(--accent-gold)]">
             {activeProjects.length}/3
           </div>
           <div>
-            <div className="text-xs font-semibold text-[#F5F5F5]">
+            <div className="text-xs font-semibold text-[var(--text-primary)]">
               المشاريع قيد التنفيذ الآن: {activeProjects.length} من أصل 3
             </div>
-            <div className="text-[11px] text-[#777777]">
+            <div className="text-[11px] text-[var(--text-muted)]">
               {activeProjects.length >= 3
                 ? 'وصلت للحد الأقصى المسموح لضمان الجودة وتركيز الطاقة.'
                 : `يمكنك تفعيل ${3 - activeProjects.length} مشروع إضافي.`}
@@ -165,13 +165,13 @@ export const ProjectsView: React.FC = () => {
 
       {/* فلاتر الحالات ونمط العرض (Grid / List) */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div className="flex items-center gap-1 bg-[#121212] p-1 rounded-lg border border-[#222222] self-start w-fit text-xs">
+        <div className="flex items-center gap-1 bg-[var(--bg-elevated)] p-1 rounded-lg border border-[var(--border-color)] self-start w-fit text-xs">
           <button
             onClick={() => setActiveFilter('active')}
             className={`px-3 py-1 rounded transition-colors ${
               activeFilter === 'active'
-                ? 'bg-[#222222] text-[#D4AF37] font-semibold'
-                : 'text-[#888888] hover:text-white'
+                ? 'bg-[var(--bg-elevated)] text-[var(--accent-gold)] font-semibold'
+                : 'text-[var(--text-muted)] hover:text-white'
             }`}
           >
             النشطة ({state.projects.filter((p) => p.status === 'active').length})
@@ -180,8 +180,8 @@ export const ProjectsView: React.FC = () => {
             onClick={() => setActiveFilter('next')}
             className={`px-3 py-1 rounded transition-colors ${
               activeFilter === 'next'
-                ? 'bg-[#222222] text-[#F5F5F5]'
-                : 'text-[#888888] hover:text-white'
+                ? 'bg-[var(--bg-elevated)] text-[var(--text-primary)]'
+                : 'text-[var(--text-muted)] hover:text-white'
             }`}
           >
             القادمة Next ({state.projects.filter((p) => p.status === 'next').length})
@@ -190,8 +190,8 @@ export const ProjectsView: React.FC = () => {
             onClick={() => setActiveFilter('parking_lot')}
             className={`px-3 py-1 rounded transition-colors ${
               activeFilter === 'parking_lot'
-                ? 'bg-[#222222] text-[#F5F5F5]'
-                : 'text-[#888888] hover:text-white'
+                ? 'bg-[var(--bg-elevated)] text-[var(--text-primary)]'
+                : 'text-[var(--text-muted)] hover:text-white'
             }`}
           >
             المؤجلة Parking Lot ({state.projects.filter((p) => p.status === 'parking_lot').length})
@@ -200,8 +200,8 @@ export const ProjectsView: React.FC = () => {
             onClick={() => setActiveFilter('completed')}
             className={`px-3 py-1 rounded transition-colors ${
               activeFilter === 'completed'
-                ? 'bg-[#222222] text-emerald-400'
-                : 'text-[#888888] hover:text-white'
+                ? 'bg-[var(--bg-elevated)] text-emerald-400'
+                : 'text-[var(--text-muted)] hover:text-white'
             }`}
           >
             المكتملة ({state.projects.filter((p) => p.status === 'completed').length})
@@ -210,8 +210,8 @@ export const ProjectsView: React.FC = () => {
             onClick={() => setActiveFilter('all')}
             className={`px-3 py-1 rounded transition-colors ${
               activeFilter === 'all'
-                ? 'bg-[#222222] text-white'
-                : 'text-[#888888] hover:text-white'
+                ? 'bg-[var(--bg-elevated)] text-white'
+                : 'text-[var(--text-muted)] hover:text-white'
             }`}
           >
             الكل ({state.projects.length})
@@ -219,13 +219,13 @@ export const ProjectsView: React.FC = () => {
         </div>
 
         {/* View Switcher: Grid vs List */}
-        <div className="flex items-center gap-1 bg-[#121212] p-1 rounded-lg border border-[#222222] self-start sm:self-auto text-xs">
+        <div className="flex items-center gap-1 bg-[var(--bg-elevated)] p-1 rounded-lg border border-[var(--border-color)] self-start sm:self-auto text-xs">
           <button
             onClick={() => setLayoutMode('grid')}
             className={`flex items-center gap-1 px-2.5 py-1 rounded transition-colors ${
               layoutMode === 'grid'
-                ? 'bg-[#D4AF37] text-black font-semibold'
-                : 'text-[#888888] hover:text-white'
+                ? 'bg-[var(--accent-gold)] text-black font-semibold'
+                : 'text-[var(--text-muted)] hover:text-white'
             }`}
             title="عرض شبكي (Grid View)"
           >
@@ -236,8 +236,8 @@ export const ProjectsView: React.FC = () => {
             onClick={() => setLayoutMode('list')}
             className={`flex items-center gap-1 px-2.5 py-1 rounded transition-colors ${
               layoutMode === 'list'
-                ? 'bg-[#D4AF37] text-black font-semibold'
-                : 'text-[#888888] hover:text-white'
+                ? 'bg-[var(--accent-gold)] text-black font-semibold'
+                : 'text-[var(--text-muted)] hover:text-white'
             }`}
             title="عرض قائمة (List View)"
           >
@@ -249,9 +249,9 @@ export const ProjectsView: React.FC = () => {
 
       {/* قائمة المشاريع في نمط القائمة (List View) */}
       {layoutMode === 'list' && (
-        <div className="rounded-xl border border-[#222222] bg-[#0c0c0c] overflow-hidden divide-y divide-[#1a1a1a]">
+        <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] overflow-hidden divide-y divide-[#1a1a1a]">
           {filteredProjects.length === 0 ? (
-            <div className="p-12 text-center text-xs text-[#777777]">
+            <div className="p-12 text-center text-xs text-[var(--text-muted)]">
               لا توجد مشاريع في هذا القسم حالياً.
             </div>
           ) : (
@@ -262,28 +262,28 @@ export const ProjectsView: React.FC = () => {
               return (
                 <div
                   key={project.id}
-                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 hover:bg-[#121212] transition-colors"
+                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 hover:bg-[var(--bg-elevated)] transition-colors"
                 >
                   <div className="space-y-1 min-w-0 max-w-md">
                     <div className="flex items-center gap-2 text-xs">
-                      <span className="font-mono text-[#D4AF37] font-semibold text-[11px]">
+                      <span className="font-mono text-[var(--accent-gold)] font-semibold text-[11px]">
                         {project.status.toUpperCase()}
                       </span>
                       <span className="text-[#444444]">·</span>
-                      <span className="text-[#888888]">{project.lifeArea}</span>
+                      <span className="text-[var(--text-muted)]">{project.lifeArea}</span>
                       {project.targetDate && (
                         <>
                           <span className="text-[#444444]">·</span>
-                          <span className="text-[#666666] font-mono text-[11px]">
+                          <span className="text-[var(--text-muted)] font-mono text-[11px]">
                             التسليم: {project.targetDate}
                           </span>
                         </>
                       )}
                     </div>
-                    <h3 className="text-sm font-bold text-[#F5F5F5] truncate">
+                    <h3 className="text-sm font-bold text-[var(--text-primary)] truncate">
                       {project.title}
                     </h3>
-                    <p className="text-xs text-[#777777] truncate">
+                    <p className="text-xs text-[var(--text-muted)] truncate">
                       {project.description}
                     </p>
                   </div>
@@ -292,26 +292,26 @@ export const ProjectsView: React.FC = () => {
                   <div className="flex items-center gap-6 text-xs">
                     <div className="w-36 space-y-1">
                       <div className="flex justify-between text-[11px] font-mono">
-                        <span className="text-[#777777]">المراحل: {completedCount}/{project.milestones.length}</span>
-                        <span className="text-[#D4AF37] font-bold tabular-nums">{project.progress}%</span>
+                        <span className="text-[var(--text-muted)]">المراحل: {completedCount}/{project.milestones.length}</span>
+                        <span className="text-[var(--accent-gold)] font-bold tabular-nums">{project.progress}%</span>
                       </div>
-                      <div className="h-1.5 w-full bg-[#181818] rounded-full overflow-hidden">
+                      <div className="h-1.5 w-full bg-[var(--bg-elevated)] rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-[#D4AF37] transition-all"
+                          className="h-full bg-[var(--accent-gold)] transition-all"
                           style={{ width: `${project.progress}%` }}
                         />
                       </div>
                     </div>
 
                     <div className="text-center font-mono text-xs">
-                      <div className="text-[10px] text-[#666666]">المتبقي</div>
-                      <div className="font-bold text-[#F5F5F5]">{remainingCount} مهام</div>
+                      <div className="text-[10px] text-[var(--text-muted)]">المتبقي</div>
+                      <div className="font-bold text-[var(--text-primary)]">{remainingCount} مهام</div>
                     </div>
 
                     <div className="flex items-center gap-1.5">
                       <button
                         onClick={() => setEditingProject(project)}
-                        className="rounded-lg border border-[#2a2a2a] bg-[#141414] p-2 text-[#cccccc] hover:text-white hover:border-[#D4AF37]/40"
+                        className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] p-2 text-[#cccccc] hover:text-white hover:border-[var(--accent-gold)]/40"
                         title="تعديل المشروع"
                       >
                         <Edit3 className="h-3.5 w-3.5" />
@@ -320,7 +320,7 @@ export const ProjectsView: React.FC = () => {
                         onClick={() => {
                           if (confirm('هل أنت متأكد من حذف هذا المشروع؟')) deleteProject(project.id);
                         }}
-                        className="rounded-lg border border-[#2a2a2a] bg-[#141414] p-2 text-[#777777] hover:text-red-400"
+                        className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] p-2 text-[var(--text-muted)] hover:text-red-400"
                         title="حذف المشروع"
                       >
                         <Trash2 className="h-3.5 w-3.5" />
@@ -338,7 +338,7 @@ export const ProjectsView: React.FC = () => {
       {layoutMode === 'grid' && (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {filteredProjects.length === 0 ? (
-          <div className="col-span-2 rounded-xl border border-dashed border-[#222222] bg-[#090909] p-12 text-center text-xs text-[#777777]">
+          <div className="col-span-2 rounded-xl border border-dashed border-[var(--border-color)] bg-[#090909] p-12 text-center text-xs text-[var(--text-muted)]">
             لا توجد مشاريع في هذا القسم حالياً.
           </div>
         ) : (
@@ -348,19 +348,19 @@ export const ProjectsView: React.FC = () => {
             return (
               <div
                 key={project.id}
-                className="flex flex-col justify-between rounded-xl border border-[#222222] bg-[#0c0c0c] p-5 space-y-4 hover:border-[#2f2f2f] transition-colors"
+                className="flex flex-col justify-between rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-5 space-y-4 hover:border-[#2f2f2f] transition-colors"
               >
                 <div className="space-y-3">
                   <div className="flex items-start justify-between gap-3">
                     <div>
                       <div className="flex items-center gap-2 text-xs">
-                        <span className="font-mono text-[#D4AF37] font-semibold">
+                        <span className="font-mono text-[var(--accent-gold)] font-semibold">
                           {project.status.toUpperCase()}
                         </span>
                         <span aria-hidden="true" className="text-[#444444]">·</span>
-                        <span className="text-[#888888]">{project.lifeArea}</span>
+                        <span className="text-[var(--text-muted)]">{project.lifeArea}</span>
                       </div>
-                      <h3 className="text-base font-bold text-[#F5F5F5] mt-1">
+                      <h3 className="text-base font-bold text-[var(--text-primary)] mt-1">
                         {project.title}
                       </h3>
                     </div>
@@ -368,7 +368,7 @@ export const ProjectsView: React.FC = () => {
                     <div className="flex items-center gap-1.5">
                       <button
                         onClick={() => setEditingProject(project)}
-                        className="text-[#777777] hover:text-[#F5F5F5] p-1"
+                        className="text-[var(--text-muted)] hover:text-[var(--text-primary)] p-1"
                         title="تعديل المشروع"
                       >
                         <Edit3 className="h-4 w-4" />
@@ -377,7 +377,7 @@ export const ProjectsView: React.FC = () => {
                         onClick={() => {
                           if (confirm('هل أنت متأكد من حذف هذا المشروع؟')) deleteProject(project.id);
                         }}
-                        className="text-[#555555] hover:text-red-400 p-1"
+                        className="text-[var(--text-muted)] hover:text-red-400 p-1"
                         title="حذف المشروع"
                       >
                         <Trash2 className="h-4 w-4" />
@@ -385,30 +385,30 @@ export const ProjectsView: React.FC = () => {
                     </div>
                   </div>
 
-                  <p className="text-xs text-[#888888] leading-relaxed line-clamp-2">
+                  <p className="text-xs text-[var(--text-muted)] leading-relaxed line-clamp-2">
                     {project.description}
                   </p>
 
                   {/* شريط الإنجاز الرقمي */}
                   <div className="space-y-1 pt-1">
                     <div className="flex items-center justify-between text-xs font-mono">
-                      <span className="text-[#777777]">المراحل المنجزة: {completedCount}/{project.milestones.length}</span>
-                      <span className="text-[#D4AF37] font-bold tabular-nums">{project.progress}%</span>
+                      <span className="text-[var(--text-muted)]">المراحل المنجزة: {completedCount}/{project.milestones.length}</span>
+                      <span className="text-[var(--accent-gold)] font-bold tabular-nums">{project.progress}%</span>
                     </div>
-                    <div className="h-1.5 w-full bg-[#181818] rounded-full overflow-hidden">
+                    <div className="h-1.5 w-full bg-[var(--bg-elevated)] rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-[#D4AF37] transition-all"
+                        className="h-full bg-[var(--accent-gold)] transition-all"
                         style={{ width: `${project.progress}%` }}
                       />
                     </div>
                   </div>
 
                   {/* المراحل التنفيذية (Milestones Checklist) */}
-                  <div className="space-y-2 pt-2 border-t border-[#1a1a1a]">
-                    <div className="text-[11px] font-semibold text-[#777777] flex items-center justify-between">
+                  <div className="space-y-2 pt-2 border-t border-[var(--border-color)]">
+                    <div className="text-[11px] font-semibold text-[var(--text-muted)] flex items-center justify-between">
                       <span>محطات المشروع (Milestones):</span>
                       {project.targetDate && (
-                        <span className="font-mono text-[10px] text-[#666666]">
+                        <span className="font-mono text-[10px] text-[var(--text-muted)]">
                           تاريخ التسليم: {project.targetDate}
                         </span>
                       )}
@@ -419,14 +419,14 @@ export const ProjectsView: React.FC = () => {
                         <button
                           key={m.id}
                           onClick={() => toggleProjectMilestone(project.id, m.id)}
-                          className="flex w-full items-center gap-2.5 rounded-lg bg-[#111111] p-2 text-right text-xs text-[#cccccc] hover:text-[#F5F5F5] transition-colors"
+                          className="flex w-full items-center gap-2.5 rounded-lg bg-[var(--bg-elevated)] p-2 text-right text-xs text-[#cccccc] hover:text-[var(--text-primary)] transition-colors"
                         >
                           {m.completed ? (
                             <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
                           ) : (
-                            <Circle className="h-4 w-4 text-[#555555] shrink-0" />
+                            <Circle className="h-4 w-4 text-[var(--text-muted)] shrink-0" />
                           )}
-                          <span className={`flex-1 truncate ${m.completed ? 'line-through text-[#666666]' : ''}`}>
+                          <span className={`flex-1 truncate ${m.completed ? 'line-through text-[var(--text-muted)]' : ''}`}>
                             {m.title}
                           </span>
                         </button>
@@ -448,11 +448,11 @@ export const ProjectsView: React.FC = () => {
                         onKeyDown={(e) => {
                           if (e.key === 'Enter') handleAddMilestone(project.id);
                         }}
-                        className="flex-1 rounded-md border border-[#222222] bg-[#121212] px-2.5 py-1 text-xs text-[#F5F5F5] focus:border-[#D4AF37] focus:outline-none"
+                        className="flex-1 rounded-md border border-[var(--border-color)] bg-[var(--bg-elevated)] px-2.5 py-1 text-xs text-[var(--text-primary)] focus:border-[var(--accent-gold)] focus:outline-none"
                       />
                       <button
                         onClick={() => handleAddMilestone(project.id)}
-                        className="rounded-md bg-[#222222] px-2.5 py-1 text-xs text-[#D4AF37] hover:bg-[#2a2a2a]"
+                        className="rounded-md bg-[var(--bg-elevated)] px-2.5 py-1 text-xs text-[var(--accent-gold)] hover:bg-[var(--bg-elevated)]"
                       >
                         إضافة
                       </button>
@@ -461,8 +461,8 @@ export const ProjectsView: React.FC = () => {
                 </div>
 
                 {/* تغيير حالة ومسار المشروع */}
-                <div className="flex items-center justify-between pt-3 border-t border-[#1a1a1a] text-xs">
-                  <span className="text-[#666666]">المسار:</span>
+                <div className="flex items-center justify-between pt-3 border-t border-[var(--border-color)] text-xs">
+                  <span className="text-[var(--text-muted)]">المسار:</span>
                   <div className="flex items-center gap-1">
                     {(['active', 'next', 'parking_lot', 'completed'] as ProjectStatus[]).map(
                       (st) => (
@@ -471,8 +471,8 @@ export const ProjectsView: React.FC = () => {
                           onClick={() => handleStatusChange(project, st)}
                           className={`px-2 py-0.5 rounded text-[11px] transition-colors ${
                             project.status === st
-                              ? 'bg-[#242424] text-[#D4AF37] font-semibold'
-                              : 'text-[#777777] hover:text-[#cccccc]'
+                              ? 'bg-[#242424] text-[var(--accent-gold)] font-semibold'
+                              : 'text-[var(--text-muted)] hover:text-[#cccccc]'
                           }`}
                         >
                           {st === 'active'
@@ -497,14 +497,14 @@ export const ProjectsView: React.FC = () => {
       {/* نافذة إنشاء مشروع جديد */}
       {isCreateModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="w-full max-w-lg rounded-xl border border-[#2a2a2a] bg-[#0e0e0e] p-6 space-y-4">
-            <div className="flex items-center justify-between border-b border-[#222222] pb-3">
-              <h2 className="text-base font-bold text-[#F5F5F5]">
+          <div className="w-full max-w-lg rounded-xl border border-[var(--border-color)] bg-[#0e0e0e] p-6 space-y-4">
+            <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-3">
+              <h2 className="text-base font-bold text-[var(--text-primary)]">
                 إنشاء مشروع جديد
               </h2>
               <button
                 onClick={() => setIsCreateModalOpen(false)}
-                className="text-[#777777] hover:text-[#F5F5F5]"
+                className="text-[var(--text-muted)] hover:text-[var(--text-primary)]"
               >
                 ✕
               </button>
@@ -512,35 +512,35 @@ export const ProjectsView: React.FC = () => {
 
             <form onSubmit={handleCreateProject} className="space-y-4 text-xs">
               <div>
-                <label className="block text-[#999999] mb-1 font-medium">اسم المشروع:</label>
+                <label className="block text-[var(--text-secondary)] mb-1 font-medium">اسم المشروع:</label>
                 <input
                   type="text"
                   required
                   placeholder="مثال: تطبيق متجر إلكتروني مصغر مع ربط الدفع"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="w-full rounded-lg border border-[#2a2a2a] bg-[#141414] px-3 py-2 text-[#F5F5F5] focus:border-[#D4AF37] focus:outline-none"
+                  className="w-full rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] px-3 py-2 text-[var(--text-primary)] focus:border-[var(--accent-gold)] focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-[#999999] mb-1 font-medium">الوصف والنتيجة المرجوة:</label>
+                <label className="block text-[var(--text-secondary)] mb-1 font-medium">الوصف والنتيجة المرجوة:</label>
                 <textarea
                   rows={2}
                   placeholder="ما الذي ستحققه بهذا المشروع؟"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="w-full rounded-lg border border-[#2a2a2a] bg-[#141414] px-3 py-2 text-[#F5F5F5] focus:border-[#D4AF37] focus:outline-none"
+                  className="w-full rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] px-3 py-2 text-[var(--text-primary)] focus:border-[var(--accent-gold)] focus:outline-none"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[#999999] mb-1 font-medium">المجال:</label>
+                  <label className="block text-[var(--text-secondary)] mb-1 font-medium">المجال:</label>
                   <select
                     value={lifeArea}
                     onChange={(e) => setLifeArea(e.target.value as LifeArea)}
-                    className="w-full rounded-lg border border-[#2a2a2a] bg-[#141414] px-3 py-2 text-[#F5F5F5] focus:border-[#D4AF37] focus:outline-none"
+                    className="w-full rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] px-3 py-2 text-[var(--text-primary)] focus:border-[var(--accent-gold)] focus:outline-none"
                   >
                     {allLifeAreas.map((area) => (
                       <option key={area} value={area}>
@@ -551,11 +551,11 @@ export const ProjectsView: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-[#999999] mb-1 font-medium">الحالة الأولية:</label>
+                  <label className="block text-[var(--text-secondary)] mb-1 font-medium">الحالة الأولية:</label>
                   <select
                     value={status}
                     onChange={(e) => setStatus(e.target.value as ProjectStatus)}
-                    className="w-full rounded-lg border border-[#2a2a2a] bg-[#141414] px-3 py-2 text-[#F5F5F5] focus:border-[#D4AF37] focus:outline-none"
+                    className="w-full rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] px-3 py-2 text-[var(--text-primary)] focus:border-[var(--accent-gold)] focus:outline-none"
                   >
                     <option value="active">نشط (Active — أقصى 3 مشاريع)</option>
                     <option value="next">القادم (Next)</option>
@@ -565,26 +565,26 @@ export const ProjectsView: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-[#999999] mb-1 font-medium">تاريخ الإنجاز المستهدف:</label>
+                <label className="block text-[var(--text-secondary)] mb-1 font-medium">تاريخ الإنجاز المستهدف:</label>
                 <input
                   type="date"
                   value={targetDate}
                   onChange={(e) => setTargetDate(e.target.value)}
-                  className="w-full rounded-lg border border-[#2a2a2a] bg-[#141414] px-3 py-2 text-[#F5F5F5] focus:border-[#D4AF37] focus:outline-none font-mono"
+                  className="w-full rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] px-3 py-2 text-[var(--text-primary)] focus:border-[var(--accent-gold)] focus:outline-none font-mono"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#222222]">
+              <div className="flex items-center justify-end gap-3 pt-3 border-t border-[var(--border-color)]">
                 <button
                   type="button"
                   onClick={() => setIsCreateModalOpen(false)}
-                  className="rounded-lg border border-[#333333] px-4 py-2 text-xs text-[#888888] hover:text-white"
+                  className="rounded-lg border border-[var(--border-color)] px-4 py-2 text-xs text-[var(--text-muted)] hover:text-white"
                 >
                   إلغاء
                 </button>
                 <button
                   type="submit"
-                  className="rounded-lg bg-[#D4AF37] px-4 py-2 text-xs font-semibold text-black hover:bg-[#e0bc45]"
+                  className="rounded-lg bg-[var(--accent-gold)] px-4 py-2 text-xs font-semibold text-black hover:bg-[#e0bc45]"
                 >
                   إنشاء المشروع
                 </button>

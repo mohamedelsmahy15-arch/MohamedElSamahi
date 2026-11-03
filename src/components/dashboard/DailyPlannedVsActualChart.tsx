@@ -197,27 +197,27 @@ export const DailyPlannedVsActualChart: React.FC<DailyPlannedVsActualChartProps>
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       return (
-        <div className="rounded-lg border border-[#2a2a2a] bg-[#0c0c0c]/95 p-3 text-xs shadow-2xl backdrop-blur-md">
-          <div className="font-semibold text-[#F5F5F5] border-b border-[#222222] pb-1 mb-2">
+        <div className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)]/95 p-3 text-xs shadow-2xl backdrop-blur-md">
+          <div className="font-semibold text-[var(--text-primary)] border-b border-[var(--border-color)] pb-1 mb-2">
             المجال: {label}
           </div>
           <div className="space-y-1.5 font-mono">
             <div className="flex items-center justify-between gap-4">
-              <span className="flex items-center gap-1.5 text-[#D4AF37]">
-                <span className="h-2 w-2 rounded-full bg-[#D4AF37]" />
+              <span className="flex items-center gap-1.5 text-[var(--accent-gold)]">
+                <span className="h-2 w-2 rounded-full bg-[var(--accent-gold)]" />
                 <span>الوقت المخطط (Planned):</span>
               </span>
-              <span className="font-bold text-[#F5F5F5]">{data.plannedHours} ساعة ({data.plannedMinutes} د)</span>
+              <span className="font-bold text-[var(--text-primary)]">{data.plannedHours} ساعة ({data.plannedMinutes} د)</span>
             </div>
             <div className="flex items-center justify-between gap-4">
               <span className="flex items-center gap-1.5 text-emerald-400">
                 <span className="h-2 w-2 rounded-full bg-emerald-400" />
                 <span>الوقت الفعلي (Actual):</span>
               </span>
-              <span className="font-bold text-[#F5F5F5]">{data.actualHours} ساعة ({data.actualMinutes} د)</span>
+              <span className="font-bold text-[var(--text-primary)]">{data.actualHours} ساعة ({data.actualMinutes} د)</span>
             </div>
-            <div className="flex items-center justify-between gap-4 pt-1 border-t border-[#1f1f1f] text-[11px]">
-              <span className="text-[#888888]">الفارق الزمني:</span>
+            <div className="flex items-center justify-between gap-4 pt-1 border-t border-[var(--border-color)] text-[11px]">
+              <span className="text-[var(--text-muted)]">الفارق الزمني:</span>
               <span className={data.variance > 0 ? 'text-amber-400 font-bold' : 'text-emerald-400 font-bold'}>
                 {data.variance > 0 ? `+${data.variance} دقيقة إضافية` : `${data.variance} دقيقة (توفير)`}
               </span>
@@ -234,12 +234,12 @@ export const DailyPlannedVsActualChart: React.FC<DailyPlannedVsActualChartProps>
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       return (
-        <div className="rounded-lg border border-[#2a2a2a] bg-[#0c0c0c]/95 p-3 text-xs shadow-2xl backdrop-blur-md max-w-xs">
-          <div className="font-semibold text-[#F5F5F5] border-b border-[#222222] pb-1 mb-1.5">
-            <span className="text-xs text-[#E5E5E5]">{data.fullName || label}</span>
+        <div className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)]/95 p-3 text-xs shadow-2xl backdrop-blur-md max-w-xs">
+          <div className="font-semibold text-[var(--text-primary)] border-b border-[var(--border-color)] pb-1 mb-1.5">
+            <span className="text-xs text-[var(--text-primary)]">{data.fullName || label}</span>
           </div>
           <div className="space-y-1 font-mono pt-1 text-xs">
-            <div className="flex items-center justify-between gap-3 text-[#D4AF37]">
+            <div className="flex items-center justify-between gap-3 text-[var(--accent-gold)]">
               <span>الوقت المخطط:</span>
               <span className="font-bold">{data.planned} دقيقة</span>
             </div>
@@ -247,9 +247,9 @@ export const DailyPlannedVsActualChart: React.FC<DailyPlannedVsActualChartProps>
               <span>الوقت المستغرق فعلياً:</span>
               <span className="font-bold">{data.actual} دقيقة</span>
             </div>
-            <div className="flex items-center justify-between gap-3 text-[#888888] text-[11px] pt-1 border-t border-[#1f1f1f]">
+            <div className="flex items-center justify-between gap-3 text-[var(--text-muted)] text-[11px] pt-1 border-t border-[var(--border-color)]">
               <span>حالة المهمة:</span>
-              <span className="text-[#F5F5F5]">
+              <span className="text-[var(--text-primary)]">
                 {data.status === 'completed' ? 'تمت بنجاح' : (data.status === 'in_progress' ? 'قيد التنفيذ' : 'لم تبدأ')}
               </span>
             </div>
@@ -261,32 +261,32 @@ export const DailyPlannedVsActualChart: React.FC<DailyPlannedVsActualChartProps>
   };
 
   return (
-    <section className="space-y-4 rounded-xl border border-[#222222] bg-[#0c0c0c] p-5 shadow-xl">
+    <section className="space-y-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-5 shadow-xl">
       {/* رأس القسم */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#1b1b1b] pb-4">
         <div>
-          <div className="flex items-center gap-2 text-xs font-mono text-[#D4AF37]">
+          <div className="flex items-center gap-2 text-xs font-mono text-[var(--accent-gold)]">
             <Clock className="h-3.5 w-3.5" />
             <span>انضباط التنفيذ اليومي</span>
             <span>·</span>
             <span>Planned vs. Actual Daily Work</span>
           </div>
-          <h2 className="text-base md:text-lg font-bold text-[#F5F5F5] mt-1">
+          <h2 className="text-base md:text-lg font-bold text-[var(--text-primary)] mt-1">
             توزيع ساعات العمل: الوقت المخطط مقابل الفعلي
           </h2>
-          <p className="text-xs text-[#888888] mt-0.5">
+          <p className="text-xs text-[var(--text-muted)] mt-0.5">
             مقارنة فورية بين الساعات المقدرة مسبقاً والوقت الحقيقي المنفذ على أرض الواقع
           </p>
         </div>
 
         {/* فلاتر العرض */}
-        <div className="flex items-center gap-1 rounded-lg border border-[#222222] bg-[#121212] p-1 text-xs self-start sm:self-auto">
+        <div className="flex items-center gap-1 rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] p-1 text-xs self-start sm:self-auto">
           <button
             onClick={() => setViewMode('categories')}
             className={`flex items-center gap-1.5 rounded px-2.5 py-1 transition-all ${
               viewMode === 'categories'
-                ? 'bg-[#222222] text-[#D4AF37] font-semibold'
-                : 'text-[#888888] hover:text-white'
+                ? 'bg-[var(--bg-elevated)] text-[var(--accent-gold)] font-semibold'
+                : 'text-[var(--text-muted)] hover:text-white'
             }`}
           >
             <BarChart3 className="h-3 w-3" />
@@ -296,8 +296,8 @@ export const DailyPlannedVsActualChart: React.FC<DailyPlannedVsActualChartProps>
             onClick={() => setViewMode('tasks')}
             className={`flex items-center gap-1.5 rounded px-2.5 py-1 transition-all ${
               viewMode === 'tasks'
-                ? 'bg-[#222222] text-[#D4AF37] font-semibold'
-                : 'text-[#888888] hover:text-white'
+                ? 'bg-[var(--bg-elevated)] text-[var(--accent-gold)] font-semibold'
+                : 'text-[var(--text-muted)] hover:text-white'
             }`}
           >
             <Layers className="h-3 w-3" />
@@ -307,8 +307,8 @@ export const DailyPlannedVsActualChart: React.FC<DailyPlannedVsActualChartProps>
             onClick={() => setViewMode('distribution')}
             className={`flex items-center gap-1.5 rounded px-2.5 py-1 transition-all ${
               viewMode === 'distribution'
-                ? 'bg-[#222222] text-[#D4AF37] font-semibold'
-                : 'text-[#888888] hover:text-white'
+                ? 'bg-[var(--bg-elevated)] text-[var(--accent-gold)] font-semibold'
+                : 'text-[var(--text-muted)] hover:text-white'
             }`}
           >
             <PieIcon className="h-3 w-3" />
@@ -320,50 +320,50 @@ export const DailyPlannedVsActualChart: React.FC<DailyPlannedVsActualChartProps>
       {/* شريط الإحصاءات المقارنة السريعة */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {/* الوقت المخطط له */}
-        <div className="rounded-lg border border-[#1f1f1f] bg-[#101010] p-3">
-          <div className="flex items-center justify-between text-[11px] text-[#888888]">
+        <div className="rounded-lg border border-[var(--border-color)] bg-[#101010] p-3">
+          <div className="flex items-center justify-between text-[11px] text-[var(--text-muted)]">
             <span>إجمالي المخطط اليوم</span>
-            <Clock className="h-3.5 w-3.5 text-[#D4AF37]" />
+            <Clock className="h-3.5 w-3.5 text-[var(--accent-gold)]" />
           </div>
-          <div className="mt-1 font-mono text-lg font-bold text-[#F5F5F5] tabular-nums">
-            {totals.plannedHours} <span className="text-xs font-normal text-[#888888]">ساعة</span>
+          <div className="mt-1 font-mono text-lg font-bold text-[var(--text-primary)] tabular-nums">
+            {totals.plannedHours} <span className="text-xs font-normal text-[var(--text-muted)]">ساعة</span>
           </div>
-          <div className="text-[10px] text-[#888888] font-mono mt-0.5">
+          <div className="text-[10px] text-[var(--text-muted)] font-mono mt-0.5">
             {totals.totalPlannedMins} دقيقة مجدولة
           </div>
         </div>
 
         {/* الوقت الفعلي المستغرق */}
-        <div className="rounded-lg border border-[#1f1f1f] bg-[#101010] p-3">
-          <div className="flex items-center justify-between text-[11px] text-[#888888]">
+        <div className="rounded-lg border border-[var(--border-color)] bg-[#101010] p-3">
+          <div className="flex items-center justify-between text-[11px] text-[var(--text-muted)]">
             <span>الفعلي المستغرق</span>
             <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
           </div>
           <div className="mt-1 font-mono text-lg font-bold text-emerald-400 tabular-nums">
-            {totals.actualHours} <span className="text-xs font-normal text-[#888888]">ساعة</span>
+            {totals.actualHours} <span className="text-xs font-normal text-[var(--text-muted)]">ساعة</span>
           </div>
-          <div className="text-[10px] text-[#888888] font-mono mt-0.5">
+          <div className="text-[10px] text-[var(--text-muted)] font-mono mt-0.5">
             {totals.totalActualMins} دقيقة إنجاز حقيقي
           </div>
         </div>
 
         {/* دقة التقدير والتنفيذ */}
-        <div className="rounded-lg border border-[#1f1f1f] bg-[#101010] p-3">
-          <div className="flex items-center justify-between text-[11px] text-[#888888]">
+        <div className="rounded-lg border border-[var(--border-color)] bg-[#101010] p-3">
+          <div className="flex items-center justify-between text-[11px] text-[var(--text-muted)]">
             <span>دقة التقدير الزمني</span>
-            <span className="h-2 w-2 rounded-full bg-[#D4AF37]" />
+            <span className="h-2 w-2 rounded-full bg-[var(--accent-gold)]" />
           </div>
-          <div className="mt-1 font-mono text-lg font-bold text-[#D4AF37] tabular-nums">
+          <div className="mt-1 font-mono text-lg font-bold text-[var(--accent-gold)] tabular-nums">
             {totals.accuracy}%
           </div>
-          <div className="text-[10px] text-[#888888] font-mono mt-0.5">
+          <div className="text-[10px] text-[var(--text-muted)] font-mono mt-0.5">
             {totals.accuracy >= 80 ? 'تقدير دقيق ومتقن' : 'يحتاج ضبط التقديرات'}
           </div>
         </div>
 
         {/* الفارق الزمني (الانحراف) */}
-        <div className="rounded-lg border border-[#1f1f1f] bg-[#101010] p-3">
-          <div className="flex items-center justify-between text-[11px] text-[#888888]">
+        <div className="rounded-lg border border-[var(--border-color)] bg-[#101010] p-3">
+          <div className="flex items-center justify-between text-[11px] text-[var(--text-muted)]">
             <span>الفارق الزمني (Variance)</span>
             {totals.diffMins <= 0 ? (
               <ArrowDownRight className="h-3.5 w-3.5 text-emerald-400" />
@@ -378,7 +378,7 @@ export const DailyPlannedVsActualChart: React.FC<DailyPlannedVsActualChartProps>
           >
             {totals.diffMins <= 0 ? `${Math.abs(totals.diffMins)} د` : `+${totals.diffMins} د`}
           </div>
-          <div className="text-[10px] text-[#888888] font-mono mt-0.5">
+          <div className="text-[10px] text-[var(--text-muted)] font-mono mt-0.5">
             {totals.diffMins <= 0 ? 'إنجاز ضمن الوقت أو أسرع' : 'تجاوز للوقت المقدر'}
           </div>
         </div>
@@ -391,17 +391,17 @@ export const DailyPlannedVsActualChart: React.FC<DailyPlannedVsActualChartProps>
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-xs md:text-sm font-semibold text-[#F5F5F5] flex items-center gap-2">
-                  <BarChart3 className="h-4 w-4 text-[#D4AF37]" />
+                <h3 className="text-xs md:text-sm font-semibold text-[var(--text-primary)] flex items-center gap-2">
+                  <BarChart3 className="h-4 w-4 text-[var(--accent-gold)]" />
                   <span>المقارنة المباشرة حسب مجالات العمل (ساعات)</span>
                 </h3>
-                <p className="text-[11px] text-[#777777] mt-0.5">
+                <p className="text-[11px] text-[var(--text-muted)] mt-0.5">
                   أعمدة متجاورة تقارن المخطط له (ذهبي) مقابل المنفذ فعلياً (أخضر زمردي)
                 </p>
               </div>
               <div className="flex items-center gap-3 text-[11px] font-mono">
-                <span className="flex items-center gap-1.5 text-[#D4AF37]">
-                  <span className="h-2.5 w-2.5 rounded bg-[#D4AF37]" />
+                <span className="flex items-center gap-1.5 text-[var(--accent-gold)]">
+                  <span className="h-2.5 w-2.5 rounded bg-[var(--accent-gold)]" />
                   <span>المخطط (ساعة)</span>
                 </span>
                 <span className="flex items-center gap-1.5 text-emerald-400">
@@ -457,17 +457,17 @@ export const DailyPlannedVsActualChart: React.FC<DailyPlannedVsActualChartProps>
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-xs md:text-sm font-semibold text-[#F5F5F5] flex items-center gap-2">
-                  <Layers className="h-4 w-4 text-[#D4AF37]" />
+                <h3 className="text-xs md:text-sm font-semibold text-[var(--text-primary)] flex items-center gap-2">
+                  <Layers className="h-4 w-4 text-[var(--accent-gold)]" />
                   <span>مقارنة مهام اليوم: المخطط مقابل المستغرق (بالدقائق)</span>
                 </h3>
-                <p className="text-[11px] text-[#777777] mt-0.5">
+                <p className="text-[11px] text-[var(--text-muted)] mt-0.5">
                   تفصيل زمني لكل مهمة مبرمجة لليوم لمعرفة أين يذهب الوقت بدقة
                 </p>
               </div>
               <div className="flex items-center gap-3 text-[11px] font-mono">
-                <span className="flex items-center gap-1.5 text-[#D4AF37]">
-                  <span className="h-2.5 w-2.5 rounded bg-[#D4AF37]" />
+                <span className="flex items-center gap-1.5 text-[var(--accent-gold)]">
+                  <span className="h-2.5 w-2.5 rounded bg-[var(--accent-gold)]" />
                   <span>مقدر (د)</span>
                 </span>
                 <span className="flex items-center gap-1.5 text-emerald-400">
@@ -523,11 +523,11 @@ export const DailyPlannedVsActualChart: React.FC<DailyPlannedVsActualChartProps>
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-xs md:text-sm font-semibold text-[#F5F5F5] flex items-center gap-2">
-                  <PieIcon className="h-4 w-4 text-[#D4AF37]" />
+                <h3 className="text-xs md:text-sm font-semibold text-[var(--text-primary)] flex items-center gap-2">
+                  <PieIcon className="h-4 w-4 text-[var(--accent-gold)]" />
                   <span>توزيع الحصص النسبية للوقت المستغرق اليوم</span>
                 </h3>
-                <p className="text-[11px] text-[#777777] mt-0.5">
+                <p className="text-[11px] text-[var(--text-muted)] mt-0.5">
                   نسبة ما تم استثماره في كل مجال من مجالات البناء
                 </p>
               </div>
@@ -577,18 +577,18 @@ export const DailyPlannedVsActualChart: React.FC<DailyPlannedVsActualChartProps>
                   return (
                     <div
                       key={item.name}
-                      className="flex items-center justify-between rounded-lg border border-[#1a1a1a] bg-[#121212] p-2.5 text-xs"
+                      className="flex items-center justify-between rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] p-2.5 text-xs"
                     >
                       <div className="flex items-center gap-2">
                         <span
                           className="h-3 w-3 rounded-full shrink-0"
                           style={{ backgroundColor: item.color }}
                         />
-                        <span className="font-medium text-[#F5F5F5]">{item.name}</span>
+                        <span className="font-medium text-[var(--text-primary)]">{item.name}</span>
                       </div>
                       <div className="flex items-center gap-3 font-mono">
-                        <span className="text-[#888888]">{item.hours} س</span>
-                        <span className="font-bold text-[#D4AF37]">{percentage}%</span>
+                        <span className="text-[var(--text-muted)]">{item.hours} س</span>
+                        <span className="font-bold text-[var(--accent-gold)]">{percentage}%</span>
                       </div>
                     </div>
                   );
@@ -599,16 +599,16 @@ export const DailyPlannedVsActualChart: React.FC<DailyPlannedVsActualChartProps>
         )}
 
         {/* الملاحظة التوجيهية في أسفل المخطط */}
-        <div className="mt-3 pt-3 border-t border-[#1a1a1a] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] text-[#777777]">
+        <div className="mt-3 pt-3 border-t border-[var(--border-color)] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] text-[var(--text-muted)]">
           <div className="flex items-center gap-1.5">
-            <span className="text-[#D4AF37] font-semibold">قاعدة التقدير:</span>
+            <span className="text-[var(--accent-gold)] font-semibold">قاعدة التقدير:</span>
             <span>
               {totals.accuracy >= 80
                 ? 'تقديراتك الزمنية واقعية جداً وتتوافق مع طاقتك التنفيذية اليومية.'
                 : 'يُفضل إضافة هامش 15 دقيقة إضافي للمهام المعقدة لتجنب الاحتراق أو ترحيل المهام.'}
             </span>
           </div>
-          <span className="font-mono text-[#888888] shrink-0">
+          <span className="font-mono text-[var(--text-muted)] shrink-0">
             سنة البناء 2027
           </span>
         </div>

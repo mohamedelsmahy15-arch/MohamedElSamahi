@@ -124,27 +124,27 @@ export const ActionDetailsModal: React.FC = () => {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-2xl overflow-hidden rounded-2xl border border-[#2a2a2a] bg-[#0d0d0d] shadow-2xl transition-all"
+        className="relative w-full max-w-2xl overflow-hidden rounded-2xl border border-[var(--border-color)] bg-[var(--bg-surface)] shadow-2xl transition-all"
       >
         {/* رأس النافذة */}
-        <div className="flex items-center justify-between border-b border-[#222222] bg-[#141414] px-6 py-4">
+        <div className="flex items-center justify-between border-b border-[var(--border-color)] bg-[var(--bg-secondary)] px-6 py-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#D4AF37]/10 border border-[#D4AF37]/25 text-[#D4AF37]">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--accent-gold)]/10 border border-[var(--accent-gold)]/25 text-[var(--accent-gold)]">
               <Sparkles className="h-5 w-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="text-base font-bold text-[#F5F5F5] font-sans">
+                <h3 className="text-base font-bold text-[var(--text-primary)] font-sans">
                   تفاصيل الخطوة المنجزة
                 </h3>
-                <span className="rounded bg-[#222222] px-2 py-0.5 text-[11px] font-mono text-[#D4AF37] border border-[#333333]">
+                <span className="rounded bg-[var(--bg-elevated)] px-2 py-0.5 text-[11px] font-mono text-[var(--accent-gold)] border border-[var(--border-color)]">
                   {getCategoryLabel(action.category)}
                 </span>
-                <span className="rounded bg-[#1a1a1a] px-2 py-0.5 text-[11px] font-mono text-[#999999]">
+                <span className="rounded bg-[var(--bg-elevated)] px-2 py-0.5 text-[11px] font-mono text-[var(--text-secondary)]">
                   {getActionTypeLabel(action.actionType)}
                 </span>
               </div>
-              <p className="text-xs text-[#777777] mt-0.5">
+              <p className="text-xs text-[var(--text-muted)] mt-0.5">
                 توثيق كامل للبيانات مع إمكانية استرجاع العنصر إلى مكانه بدقة
               </p>
             </div>
@@ -152,7 +152,7 @@ export const ActionDetailsModal: React.FC = () => {
 
           <button
             onClick={handleClose}
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#2a2a2a] text-[#888888] hover:border-[#444444] hover:bg-[#1f1f1f] hover:text-[#f5f5f5] transition-colors"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--border-color)] text-[var(--text-muted)] hover:border-[var(--border-color)] hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)] transition-colors"
           >
             <X className="h-4 w-4" />
           </button>
@@ -174,25 +174,25 @@ export const ActionDetailsModal: React.FC = () => {
           )}
 
           {/* بطاقة العنصر الأساسي */}
-          <div className="rounded-xl border border-[#222222] bg-[#121212] p-4">
-            <div className="text-xs text-[#888888]">عنوان العنصر المستهدف:</div>
-            <div className="mt-1 text-lg font-bold text-[#F5F5F5] font-sans">
+          <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-elevated)] p-4">
+            <div className="text-xs text-[var(--text-muted)]">عنوان العنصر المستهدف:</div>
+            <div className="mt-1 text-lg font-bold text-[var(--text-primary)] font-sans">
               {action.itemTitle}
             </div>
             <div className="mt-2 text-xs leading-relaxed text-[#aaaaaa]">
               {action.description}
             </div>
 
-            <div className="mt-3 flex items-center gap-3 text-xs text-[#777777] border-t border-[#1f1f1f] pt-3">
+            <div className="mt-3 flex items-center gap-3 text-xs text-[var(--text-muted)] border-t border-[var(--border-color)] pt-3">
               <div className="flex items-center gap-1.5 font-mono">
-                <Clock className="h-3.5 w-3.5 text-[#D4AF37]" />
+                <Clock className="h-3.5 w-3.5 text-[var(--accent-gold)]" />
                 <span>{formatTimestamp(action.timestamp)}</span>
               </div>
               {action.metadata?.lifeArea && (
                 <>
                   <span aria-hidden="true">·</span>
                   <div className="flex items-center gap-1">
-                    <Tag className="h-3 w-3 text-[#999999]" />
+                    <Tag className="h-3 w-3 text-[var(--text-secondary)]" />
                     <span>المجال: {action.metadata.lifeArea}</span>
                   </div>
                 </>
@@ -205,14 +205,14 @@ export const ActionDetailsModal: React.FC = () => {
             <div className="space-y-2">
               <div className="flex items-center justify-between text-xs font-semibold text-[#dddddd]">
                 <div className="flex items-center gap-1.5">
-                  <Layers className="h-3.5 w-3.5 text-[#D4AF37]" />
+                  <Layers className="h-3.5 w-3.5 text-[var(--accent-gold)]" />
                   <span>ما تم تغييره في هذه الخطوة (المقارنة الدقيقة):</span>
                 </div>
               </div>
 
-              <div className="overflow-hidden rounded-xl border border-[#222222] bg-[#111111]">
+              <div className="overflow-hidden rounded-xl border border-[var(--border-color)] bg-[var(--bg-elevated)]">
                 <table className="w-full text-right text-xs">
-                  <thead className="bg-[#181818] text-[#888888] font-mono text-[11px] border-b border-[#222222]">
+                  <thead className="bg-[var(--bg-elevated)] text-[var(--text-muted)] font-mono text-[11px] border-b border-[var(--border-color)]">
                     <tr>
                       <th className="py-2.5 px-3">الخاصية</th>
                       <th className="py-2.5 px-3">الحالة السابقة (قبل)</th>
@@ -221,11 +221,11 @@ export const ActionDetailsModal: React.FC = () => {
                   </thead>
                   <tbody className="divide-y divide-[#1e1e1e]">
                     {action.changes.map((change, idx) => (
-                      <tr key={idx} className="hover:bg-[#161616]">
+                      <tr key={idx} className="hover:bg-[var(--bg-elevated)]">
                         <td className="py-2.5 px-3 font-medium text-[#f0f0f0]">
                           {change.label}
                         </td>
-                        <td className="py-2.5 px-3 text-[#888888] font-mono">
+                        <td className="py-2.5 px-3 text-[var(--text-muted)] font-mono">
                           {change.oldValue !== undefined ? String(change.oldValue) : '—'}
                         </td>
                         <td className="py-2.5 px-3 font-semibold text-emerald-400 font-mono">
@@ -247,40 +247,40 @@ export const ActionDetailsModal: React.FC = () => {
               </div>
               <div className="grid grid-cols-2 gap-2 text-xs sm:grid-cols-3">
                 {action.metadata.priority && (
-                  <div className="rounded-lg border border-[#222222] bg-[#121212] p-2.5">
-                    <span className="text-[10px] text-[#777777] block font-mono">الأولوية</span>
-                    <span className="font-medium text-[#f5f5f5] mt-0.5 block">
+                  <div className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] p-2.5">
+                    <span className="text-[10px] text-[var(--text-muted)] block font-mono">الأولوية</span>
+                    <span className="font-medium text-[var(--text-primary)] mt-0.5 block">
                       {action.metadata.priority === 'high' ? 'عالية (High Focus)' : action.metadata.priority}
                     </span>
                   </div>
                 )}
                 {action.metadata.durationMinutes !== undefined && (
-                  <div className="rounded-lg border border-[#222222] bg-[#121212] p-2.5">
-                    <span className="text-[10px] text-[#777777] block font-mono">المدة المستغرقة</span>
-                    <span className="font-medium text-[#D4AF37] mt-0.5 block font-mono">
+                  <div className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] p-2.5">
+                    <span className="text-[10px] text-[var(--text-muted)] block font-mono">المدة المستغرقة</span>
+                    <span className="font-medium text-[var(--accent-gold)] mt-0.5 block font-mono">
                       {action.metadata.durationMinutes} دقيقة
                     </span>
                   </div>
                 )}
                 {action.metadata.streak !== undefined && (
-                  <div className="rounded-lg border border-[#222222] bg-[#121212] p-2.5">
-                    <span className="text-[10px] text-[#777777] block font-mono">أيام الالتزام (Streak)</span>
+                  <div className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] p-2.5">
+                    <span className="text-[10px] text-[var(--text-muted)] block font-mono">أيام الالتزام (Streak)</span>
                     <span className="font-medium text-orange-400 mt-0.5 block font-mono">
                       {action.metadata.streak} يوماً متتالياً
                     </span>
                   </div>
                 )}
                 {action.metadata.progress !== undefined && (
-                  <div className="rounded-lg border border-[#222222] bg-[#121212] p-2.5">
-                    <span className="text-[10px] text-[#777777] block font-mono">نسبة الإنجاز</span>
+                  <div className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] p-2.5">
+                    <span className="text-[10px] text-[var(--text-muted)] block font-mono">نسبة الإنجاز</span>
                     <span className="font-medium text-emerald-400 mt-0.5 block font-mono">
                       {action.metadata.progress}%
                     </span>
                   </div>
                 )}
                 {action.metadata.amount !== undefined && (
-                  <div className="rounded-lg border border-[#222222] bg-[#121212] p-2.5">
-                    <span className="text-[10px] text-[#777777] block font-mono">المبلغ المالي</span>
+                  <div className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] p-2.5">
+                    <span className="text-[10px] text-[var(--text-muted)] block font-mono">المبلغ المالي</span>
                     <span className="font-medium text-emerald-400 mt-0.5 block font-mono">
                       {action.metadata.amount.toLocaleString()} ج.م
                     </span>
@@ -291,24 +291,24 @@ export const ActionDetailsModal: React.FC = () => {
           )}
 
           {/* توضيح السيادة والتحكم الذاتي */}
-          <div className="rounded-xl border border-[#222222] bg-[#131313] p-3 text-xs text-[#999999] flex items-start gap-2.5">
-            <ShieldCheck className="h-4 w-4 text-[#D4AF37] shrink-0 mt-0.5" />
+          <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-elevated)] p-3 text-xs text-[var(--text-secondary)] flex items-start gap-2.5">
+            <ShieldCheck className="h-4 w-4 text-[var(--accent-gold)] shrink-0 mt-0.5" />
             <div className="leading-relaxed">
-              <span className="text-[#f5f5f5] font-semibold">تحكم كامل وسيادة ذاتية:</span> يمكنك دائماً التراجع عن أي خطوة في أي وقت لاسترجاع العنصر إلى وضعه وحالته بدقة تامة دون فقدان أي بيانات.
+              <span className="text-[var(--text-primary)] font-semibold">تحكم كامل وسيادة ذاتية:</span> يمكنك دائماً التراجع عن أي خطوة في أي وقت لاسترجاع العنصر إلى وضعه وحالته بدقة تامة دون فقدان أي بيانات.
             </div>
           </div>
         </div>
 
         {/* أزرار الإجراءات في أسفل المودال */}
-        <div className="flex flex-col-reverse sm:flex-row items-center justify-between gap-3 border-t border-[#222222] bg-[#141414] px-6 py-4">
+        <div className="flex flex-col-reverse sm:flex-row items-center justify-between gap-3 border-t border-[var(--border-color)] bg-[var(--bg-secondary)] px-6 py-4">
           <button
             onClick={() => {
               setActiveTab('manba');
               handleClose();
             }}
-            className="flex items-center gap-1.5 text-xs text-[#999999] hover:text-[#D4AF37] transition-colors"
+            className="flex items-center gap-1.5 text-xs text-[var(--text-secondary)] hover:text-[var(--accent-gold)] transition-colors"
           >
-            <Sparkles className="h-3.5 w-3.5 text-[#D4AF37]" />
+            <Sparkles className="h-3.5 w-3.5 text-[var(--accent-gold)]" />
             <span>فتح منبع الإنجازات والأنشطة الكامل</span>
           </button>
 
@@ -323,7 +323,7 @@ export const ActionDetailsModal: React.FC = () => {
             {action.canUndo && !action.undone && (
               <button
                 onClick={handleUndo}
-                className="flex items-center gap-1.5 rounded-lg bg-[#D4AF37] hover:bg-[#e2bd46] active:scale-95 px-4 py-2 text-xs font-bold text-black transition-all shadow-md"
+                className="flex items-center gap-1.5 rounded-lg bg-[var(--accent-gold)] hover:bg-[#e2bd46] active:scale-95 px-4 py-2 text-xs font-bold text-black transition-all shadow-md"
               >
                 <RotateCcw className="h-3.5 w-3.5 stroke-[2.5]" />
                 <span>تراجع عن هذه الخطوة واسترجاع العنصر لمكانه</span>

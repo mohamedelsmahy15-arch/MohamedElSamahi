@@ -81,7 +81,7 @@ export const TopActionNotificationBar: React.FC = () => {
       case 'uncomplete':
         return <RotateCcw className="h-5 w-5 text-blue-400" />;
       case 'create':
-        return <PlusCircle className="h-5 w-5 text-[#D4AF37]" />;
+        return <PlusCircle className="h-5 w-5 text-[var(--accent-gold)]" />;
       case 'update':
         return <Edit3 className="h-5 w-5 text-sky-400" />;
       case 'delete':
@@ -142,10 +142,10 @@ export const TopActionNotificationBar: React.FC = () => {
       className="fixed top-2 left-1/2 z-50 w-[95%] max-w-4xl -translate-x-1/2 transform transition-all duration-300 ease-out"
       role="alert"
     >
-      <div className="relative overflow-hidden rounded-xl border border-[#D4AF37]/40 bg-[#121212]/95 px-4 py-3 shadow-[0_10px_35px_rgba(0,0,0,0.8)] backdrop-blur-xl md:px-5 md:py-3.5">
+      <div className="relative overflow-hidden rounded-xl border border-[var(--accent-gold)]/40 bg-[var(--bg-elevated)]/95 px-4 py-3 shadow-[0_10px_35px_rgba(0,0,0,0.8)] backdrop-blur-xl md:px-5 md:py-3.5">
         {/* شريط التقدم الزمني للإغلاق التلقائي */}
         {!latestAction.undone && (
-          <div className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-[#222222]">
+          <div className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-[var(--bg-elevated)]">
             <div
               className="h-full bg-gradient-to-r from-[#D4AF37] to-amber-300 transition-all duration-100 ease-linear"
               style={{ width: `${progress}%` }}
@@ -156,17 +156,17 @@ export const TopActionNotificationBar: React.FC = () => {
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           {/* الجانب الأيمن: الأيقونة وشرح ما تم إنجازه */}
           <div className="flex items-start gap-3 min-w-0 flex-1">
-            <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#1c1c1c] border border-[#2a2a2a] shadow-inner">
+            <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#1c1c1c] border border-[var(--border-color)] shadow-inner">
               {getActionIcon()}
             </div>
 
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2 flex-wrap text-xs">
-                <span className="font-semibold text-[#F5F5F5] font-sans text-sm">
+                <span className="font-semibold text-[var(--text-primary)] font-sans text-sm">
                   {latestAction.undone ? 'تم التراجع عن الخطوة:' : 'أنجزت خطوة:'} {latestAction.title}
                 </span>
-                <span aria-hidden="true" className="text-[#555555]">·</span>
-                <span className="text-[11px] font-mono text-[#D4AF37] bg-[#D4AF37]/10 px-2 py-0.5 rounded border border-[#D4AF37]/20">
+                <span aria-hidden="true" className="text-[var(--text-muted)]">·</span>
+                <span className="text-[11px] font-mono text-[var(--accent-gold)] bg-[var(--accent-gold)]/10 px-2 py-0.5 rounded border border-[var(--accent-gold)]/20">
                   {getCategoryBadgeLabel(latestAction.category)}
                 </span>
                 {latestAction.undone && (
@@ -180,8 +180,8 @@ export const TopActionNotificationBar: React.FC = () => {
                 <span className="font-medium text-[#f0f0f0] truncate max-w-[280px] md:max-w-md">
                   "{latestAction.itemTitle}"
                 </span>
-                <span aria-hidden="true" className="text-[#555555]">·</span>
-                <span className="text-[#888888] text-[11px] truncate hidden sm:inline">
+                <span aria-hidden="true" className="text-[var(--text-muted)]">·</span>
+                <span className="text-[var(--text-muted)] text-[11px] truncate hidden sm:inline">
                   {latestAction.description}
                 </span>
               </div>
@@ -194,7 +194,7 @@ export const TopActionNotificationBar: React.FC = () => {
             {latestAction.canUndo && !latestAction.undone && (
               <button
                 onClick={handleUndo}
-                className="flex items-center gap-1.5 rounded-lg bg-[#D4AF37] hover:bg-[#e0bc45] active:scale-95 px-3 py-1.5 text-xs font-bold text-black transition-all shadow-sm"
+                className="flex items-center gap-1.5 rounded-lg bg-[var(--accent-gold)] hover:bg-[#e0bc45] active:scale-95 px-3 py-1.5 text-xs font-bold text-black transition-all shadow-sm"
                 title="تراجع فوراً واسترجع العنصر إلى مكانه وحالته السابقة"
               >
                 <RotateCcw className="h-3.5 w-3.5 stroke-[2.5]" />
@@ -205,7 +205,7 @@ export const TopActionNotificationBar: React.FC = () => {
             {/* زر تفاصيل الخطوة */}
             <button
               onClick={handleOpenDetails}
-              className="flex items-center gap-1.5 rounded-lg border border-[#333333] bg-[#1a1a1a] hover:bg-[#252525] hover:border-[#444444] px-3 py-1.5 text-xs font-medium text-[#F5F5F5] transition-colors"
+              className="flex items-center gap-1.5 rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] hover:bg-[var(--bg-elevated)] hover:border-[var(--border-color)] px-3 py-1.5 text-xs font-medium text-[var(--text-primary)] transition-colors"
               title="عرض كل ما حدث في هذه الخطوة ومقارنة ما قبلها وبعدها"
             >
               <Eye className="h-3.5 w-3.5 text-sky-400" />
@@ -215,17 +215,17 @@ export const TopActionNotificationBar: React.FC = () => {
             {/* زر الذهاب للمنبع */}
             <button
               onClick={handleOpenManba}
-              className="hidden lg:flex items-center gap-1 rounded-lg border border-[#2a2a2a] bg-[#141414] hover:bg-[#1f1f1f] hover:text-[#D4AF37] px-2.5 py-1.5 text-xs font-medium text-[#999999] transition-colors"
+              className="hidden lg:flex items-center gap-1 rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] hover:bg-[var(--bg-elevated)] hover:text-[var(--accent-gold)] px-2.5 py-1.5 text-xs font-medium text-[var(--text-secondary)] transition-colors"
               title="الانتقال إلى منبع الإنجازات والأنشطة"
             >
-              <Sparkles className="h-3.5 w-3.5 text-[#D4AF37]" />
+              <Sparkles className="h-3.5 w-3.5 text-[var(--accent-gold)]" />
               <span>المنبع</span>
             </button>
 
             {/* زر إغلاق */}
             <button
               onClick={dismissLatestAction}
-              className="flex items-center gap-1 rounded-lg border border-[#2a2a2a] bg-[#161616] hover:bg-[#222222] hover:text-white px-2.5 py-1.5 text-xs font-medium text-[#888888] transition-colors"
+              className="flex items-center gap-1 rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] hover:bg-[var(--bg-elevated)] hover:text-white px-2.5 py-1.5 text-xs font-medium text-[var(--text-muted)] transition-colors"
               aria-label="إغلاق الإشعار"
               title="إغلاق الإشعار"
             >

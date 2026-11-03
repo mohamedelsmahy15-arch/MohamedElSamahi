@@ -62,46 +62,46 @@ export const EditGoalModal: React.FC = () => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-      <div className="w-full max-w-lg rounded-xl border border-[#2a2a2a] bg-[#0d0d0d] p-6 space-y-4 shadow-2xl">
-        <div className="flex items-center justify-between border-b border-[#222222] pb-3">
+      <div className="w-full max-w-lg rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-6 space-y-4 shadow-2xl">
+        <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-3">
           <div className="flex items-center gap-2">
-            <Edit3 className="h-4 w-4 text-[#D4AF37]" />
-            <h2 className="text-sm font-bold text-[#F5F5F5]">تعديل بيانات الهدف</h2>
+            <Edit3 className="h-4 w-4 text-[var(--accent-gold)]" />
+            <h2 className="text-sm font-bold text-[var(--text-primary)]">تعديل بيانات الهدف</h2>
           </div>
-          <button onClick={() => setEditingGoal(null)} className="text-[#777777] hover:text-[#F5F5F5]">
+          <button onClick={() => setEditingGoal(null)} className="text-[var(--text-muted)] hover:text-[var(--text-primary)]">
             ✕
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-3.5 text-xs">
           <div>
-            <label className="block text-[#999999] mb-1 font-medium">اسم الهدف:</label>
+            <label className="block text-[var(--text-secondary)] mb-1 font-medium">اسم الهدف:</label>
             <input
               type="text"
               required
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full rounded-lg border border-[#2a2a2a] bg-[#141414] px-3 py-2 text-[#F5F5F5] focus:border-[#D4AF37] focus:outline-none"
+              className="w-full rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] px-3 py-2 text-[var(--text-primary)] focus:border-[var(--accent-gold)] focus:outline-none"
             />
           </div>
 
           <div>
-            <label className="block text-[#999999] mb-1 font-medium">الوصف والنتيجة المرجوة:</label>
+            <label className="block text-[var(--text-secondary)] mb-1 font-medium">الوصف والنتيجة المرجوة:</label>
             <textarea
               rows={3}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full rounded-lg border border-[#2a2a2a] bg-[#141414] px-3 py-2 text-[#F5F5F5] focus:border-[#D4AF37] focus:outline-none"
+              className="w-full rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] px-3 py-2 text-[var(--text-primary)] focus:border-[var(--accent-gold)] focus:outline-none"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-[#999999] mb-1 font-medium">الربع السنوي:</label>
+              <label className="block text-[var(--text-secondary)] mb-1 font-medium">الربع السنوي:</label>
               <select
                 value={quarter}
                 onChange={(e) => setQuarter(e.target.value as GoalQuarter)}
-                className="w-full rounded-lg border border-[#2a2a2a] bg-[#141414] px-3 py-2 text-[#F5F5F5] focus:border-[#D4AF37] focus:outline-none"
+                className="w-full rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] px-3 py-2 text-[var(--text-primary)] focus:border-[var(--accent-gold)] focus:outline-none"
               >
                 <option value="Q1">Q1 — BUILD (البناء)</option>
                 <option value="Q2">Q2 — APPLY (التطبيق)</option>
@@ -111,7 +111,7 @@ export const EditGoalModal: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-[#999999] mb-1 font-medium">نسبة الإنجاز ({progress}%):</label>
+              <label className="block text-[var(--text-secondary)] mb-1 font-medium">نسبة الإنجاز ({progress}%):</label>
               <input
                 type="range"
                 min="0"
@@ -124,7 +124,7 @@ export const EditGoalModal: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex items-center justify-between pt-3 border-t border-[#222222]">
+          <div className="flex items-center justify-between pt-3 border-t border-[var(--border-color)]">
             <button
               type="button"
               onClick={handleDelete}
@@ -138,13 +138,13 @@ export const EditGoalModal: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setEditingGoal(null)}
-                className="rounded-lg border border-[#333333] px-3 py-1.5 text-xs text-[#888888] hover:text-white"
+                className="rounded-lg border border-[var(--border-color)] px-3 py-1.5 text-xs text-[var(--text-muted)] hover:text-white"
               >
                 إلغاء
               </button>
               <button
                 type="submit"
-                className="rounded-lg bg-[#D4AF37] px-4 py-1.5 text-xs font-semibold text-black hover:bg-[#e0bc45]"
+                className="rounded-lg bg-[var(--accent-gold)] px-4 py-1.5 text-xs font-semibold text-black hover:bg-[#e0bc45]"
               >
                 حفظ التعديلات
               </button>

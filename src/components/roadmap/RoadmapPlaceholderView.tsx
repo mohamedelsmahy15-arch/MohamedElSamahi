@@ -146,62 +146,62 @@ export const RoadmapPlaceholderView: React.FC<RoadmapPlaceholderProps> = ({ tabI
 
   return (
     <div className="space-y-6 pb-12 max-w-3xl">
-      <div className="flex items-center justify-between border-b border-[#1f1f1f] pb-4">
+      <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-4">
         <div>
-          <div className="flex items-center gap-2 text-xs font-mono text-[#D4AF37]">
+          <div className="flex items-center gap-2 text-xs font-mono text-[var(--accent-gold)]">
             <span>{spec.phase}</span>
             <span>·</span>
             <span>{spec.version}</span>
           </div>
-          <h1 className="text-xl md:text-2xl font-bold tracking-tight text-[#F5F5F5] mt-1">
+          <h1 className="text-xl md:text-2xl font-bold tracking-tight text-[var(--text-primary)] mt-1">
             {spec.title}
           </h1>
         </div>
 
         <button
           onClick={() => setActiveTab('dashboard')}
-          className="flex items-center gap-1.5 rounded-lg border border-[#2a2a2a] bg-[#111111] px-3.5 py-1.5 text-xs text-[#cccccc] hover:border-[#D4AF37]/50 hover:text-[#D4AF37] transition-colors"
+          className="flex items-center gap-1.5 rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] px-3.5 py-1.5 text-xs text-[#cccccc] hover:border-[var(--accent-gold)]/50 hover:text-[var(--accent-gold)] transition-colors"
         >
           <span>العودة للوحة التحكم</span>
           <ArrowRight className="h-3.5 w-3.5" />
         </button>
       </div>
 
-      <div className="rounded-xl border border-[#222222] bg-[#0c0c0c] p-6 space-y-5">
-        <div className="rounded-lg bg-[#14120a] border border-[#D4AF37]/20 p-4">
-          <div className="text-xs font-bold text-[#D4AF37] mb-1">
+      <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-6 space-y-5">
+        <div className="rounded-lg bg-[#14120a] border border-[var(--accent-gold)]/20 p-4">
+          <div className="text-xs font-bold text-[var(--accent-gold)] mb-1">
             لماذا لم نقم ببناء هذا القسم دفعة واحدة؟
           </div>
           <p className="text-xs text-[#cccccc] leading-relaxed">
-            وفقاً لتعليماتك الصارمة: <span className="text-[#D4AF37] font-semibold">"ابدأ بـ Version 0.1 فقط (Dashboard + Goals + Today + Projects + LocalStorage)، ثم اجعل التطبيق يعمل فعلاً، وبعد ذلك نطور نسخة وراء نسخة."</span> هذه المعمارية مهيأة بالكامل لاستقبال هذا الموديول في المرحلة القادمة فور اختبار واستقرار الـ MVP.
+            وفقاً لتعليماتك الصارمة: <span className="text-[var(--accent-gold)] font-semibold">"ابدأ بـ Version 0.1 فقط (Dashboard + Goals + Today + Projects + LocalStorage)، ثم اجعل التطبيق يعمل فعلاً، وبعد ذلك نطور نسخة وراء نسخة."</span> هذه المعمارية مهيأة بالكامل لاستقبال هذا الموديول في المرحلة القادمة فور اختبار واستقرار الـ MVP.
           </p>
         </div>
 
         <div className="space-y-2">
-          <h3 className="text-sm font-semibold text-[#F5F5F5]">
+          <h3 className="text-sm font-semibold text-[var(--text-primary)]">
             نظرة عامة على الموديول:
           </h3>
-          <p className="text-xs text-[#888888] leading-relaxed">
+          <p className="text-xs text-[var(--text-muted)] leading-relaxed">
             {spec.summary}
           </p>
         </div>
 
-        <div className="space-y-2 pt-2 border-t border-[#1a1a1a]">
-          <h3 className="text-xs font-semibold text-[#999999] uppercase tracking-wider">
+        <div className="space-y-2 pt-2 border-t border-[var(--border-color)]">
+          <h3 className="text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider">
             الميزات المخططة برمجياً في {spec.version}:
           </h3>
           <div className="space-y-2 pt-1">
             {spec.features.map((feat, idx) => (
               <div key={idx} className="flex items-start gap-2.5 text-xs text-[#e0e0e0]">
-                <div className="h-1.5 w-1.5 rounded-full bg-[#D4AF37] mt-1.5 shrink-0" />
+                <div className="h-1.5 w-1.5 rounded-full bg-[var(--accent-gold)] mt-1.5 shrink-0" />
                 <span className="leading-relaxed">{feat}</span>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="rounded-lg border border-[#1a1a1a] bg-[#111111] p-4 text-xs text-[#888888] leading-relaxed">
-          <span className="font-semibold text-[#D4AF37]">فلسفة التنفيذ: </span>
+        <div className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] p-4 text-xs text-[var(--text-muted)] leading-relaxed">
+          <span className="font-semibold text-[var(--accent-gold)]">فلسفة التنفيذ: </span>
           {spec.philosophy}
         </div>
       </div>

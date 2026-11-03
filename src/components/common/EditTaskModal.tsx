@@ -77,36 +77,36 @@ export const EditTaskModal: React.FC = () => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-      <div className="w-full max-w-md rounded-xl border border-[#2a2a2a] bg-[#0d0d0d] p-6 space-y-4 shadow-2xl">
-        <div className="flex items-center justify-between border-b border-[#222222] pb-3">
+      <div className="w-full max-w-md rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-6 space-y-4 shadow-2xl">
+        <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-3">
           <div className="flex items-center gap-2">
-            <Edit3 className="h-4 w-4 text-[#D4AF37]" />
-            <h2 className="text-sm font-bold text-[#F5F5F5]">تعديل بيانات المهمة</h2>
+            <Edit3 className="h-4 w-4 text-[var(--accent-gold)]" />
+            <h2 className="text-sm font-bold text-[var(--text-primary)]">تعديل بيانات المهمة</h2>
           </div>
-          <button onClick={() => setEditingTask(null)} className="text-[#777777] hover:text-[#F5F5F5]">
+          <button onClick={() => setEditingTask(null)} className="text-[var(--text-muted)] hover:text-[var(--text-primary)]">
             ✕
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-3.5 text-xs">
           <div>
-            <label className="block text-[#999999] mb-1 font-medium">اسم المهمة:</label>
+            <label className="block text-[var(--text-secondary)] mb-1 font-medium">اسم المهمة:</label>
             <input
               type="text"
               required
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full rounded-lg border border-[#2a2a2a] bg-[#141414] px-3 py-2 text-[#F5F5F5] focus:border-[#D4AF37] focus:outline-none"
+              className="w-full rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] px-3 py-2 text-[var(--text-primary)] focus:border-[var(--accent-gold)] focus:outline-none"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-[#999999] mb-1 font-medium">المجال:</label>
+              <label className="block text-[var(--text-secondary)] mb-1 font-medium">المجال:</label>
               <select
                 value={lifeArea}
                 onChange={(e) => setLifeArea(e.target.value as LifeArea)}
-                className="w-full rounded-lg border border-[#2a2a2a] bg-[#141414] px-3 py-2 text-[#F5F5F5] focus:border-[#D4AF37] focus:outline-none"
+                className="w-full rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] px-3 py-2 text-[var(--text-primary)] focus:border-[var(--accent-gold)] focus:outline-none"
               >
                 {allLifeAreas.map((area) => (
                   <option key={area} value={area}>
@@ -117,21 +117,21 @@ export const EditTaskModal: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-[#999999] mb-1 font-medium">الوقت المخطط (دقيقة):</label>
+              <label className="block text-[var(--text-secondary)] mb-1 font-medium">الوقت المخطط (دقيقة):</label>
               <input
                 type="number"
                 min={5}
                 max={360}
                 value={estimatedMinutes}
                 onChange={(e) => setEstimatedMinutes(Number(e.target.value))}
-                className="w-full rounded-lg border border-[#2a2a2a] bg-[#141414] px-3 py-2 text-[#F5F5F5] focus:border-[#D4AF37] focus:outline-none"
+                className="w-full rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] px-3 py-2 text-[var(--text-primary)] focus:border-[var(--accent-gold)] focus:outline-none"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-[#999999] mb-1 font-medium">الوقت الفعلي المستغرق (دقيقة):</label>
+              <label className="block text-[var(--text-secondary)] mb-1 font-medium">الوقت الفعلي المستغرق (دقيقة):</label>
               <input
                 type="number"
                 min={0}
@@ -139,16 +139,16 @@ export const EditTaskModal: React.FC = () => {
                 placeholder="مثال: 45 (اختياري)"
                 value={actualMinutes}
                 onChange={(e) => setActualMinutes(e.target.value === '' ? '' : Number(e.target.value))}
-                className="w-full rounded-lg border border-[#2a2a2a] bg-[#141414] px-3 py-2 text-[#F5F5F5] focus:border-[#D4AF37] focus:outline-none placeholder:text-[#555555]"
+                className="w-full rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] px-3 py-2 text-[var(--text-primary)] focus:border-[var(--accent-gold)] focus:outline-none placeholder:text-[var(--text-muted)]"
               />
             </div>
 
             <div>
-              <label className="block text-[#999999] mb-1 font-medium">الأولوية:</label>
+              <label className="block text-[var(--text-secondary)] mb-1 font-medium">الأولوية:</label>
               <select
                 value={priority}
                 onChange={(e) => setPriority(e.target.value as TaskPriority)}
-                className="w-full rounded-lg border border-[#2a2a2a] bg-[#141414] px-3 py-2 text-[#F5F5F5] focus:border-[#D4AF37] focus:outline-none"
+                className="w-full rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] px-3 py-2 text-[var(--text-primary)] focus:border-[var(--accent-gold)] focus:outline-none"
               >
                 <option value="strategic">استراتيجية (عالية القيمة)</option>
                 <option value="high">عالية</option>
@@ -159,11 +159,11 @@ export const EditTaskModal: React.FC = () => {
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-[#999999] mb-1 font-medium">الحالة:</label>
+              <label className="block text-[var(--text-secondary)] mb-1 font-medium">الحالة:</label>
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value as TaskStatus)}
-                className="w-full rounded-lg border border-[#2a2a2a] bg-[#141414] px-3 py-2 text-[#F5F5F5] focus:border-[#D4AF37] focus:outline-none"
+                className="w-full rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] px-3 py-2 text-[var(--text-primary)] focus:border-[var(--accent-gold)] focus:outline-none"
               >
                 <option value="todo">لم تبدأ بعد</option>
                 <option value="in_progress">قيد التنفيذ</option>
@@ -174,11 +174,11 @@ export const EditTaskModal: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-[#999999] mb-1 font-medium">المشروع المرتبط:</label>
+            <label className="block text-[var(--text-secondary)] mb-1 font-medium">المشروع المرتبط:</label>
             <select
               value={linkedProjectId}
               onChange={(e) => setLinkedProjectId(e.target.value)}
-              className="w-full rounded-lg border border-[#2a2a2a] bg-[#141414] px-3 py-2 text-[#F5F5F5] focus:border-[#D4AF37] focus:outline-none"
+              className="w-full rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] px-3 py-2 text-[var(--text-primary)] focus:border-[var(--accent-gold)] focus:outline-none"
             >
               <option value="">بدون مشروع محدد</option>
               {state.projects.map((p) => (
@@ -201,7 +201,7 @@ export const EditTaskModal: React.FC = () => {
             </label>
           </div>
 
-          <div className="flex items-center justify-between pt-3 border-t border-[#222222]">
+          <div className="flex items-center justify-between pt-3 border-t border-[var(--border-color)]">
             <button
               type="button"
               onClick={handleDelete}
@@ -215,13 +215,13 @@ export const EditTaskModal: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setEditingTask(null)}
-                className="rounded-lg border border-[#333333] px-3 py-1.5 text-xs text-[#888888] hover:text-white"
+                className="rounded-lg border border-[var(--border-color)] px-3 py-1.5 text-xs text-[var(--text-muted)] hover:text-white"
               >
                 إلغاء
               </button>
               <button
                 type="submit"
-                className="rounded-lg bg-[#D4AF37] px-4 py-1.5 text-xs font-semibold text-black hover:bg-[#e0bc45]"
+                className="rounded-lg bg-[var(--accent-gold)] px-4 py-1.5 text-xs font-semibold text-black hover:bg-[#e0bc45]"
               >
                 حفظ التعديلات
               </button>
