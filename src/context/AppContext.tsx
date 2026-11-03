@@ -164,6 +164,15 @@ interface AppContextType {
   clearActionHistory: () => void;
   recordAction: (action: Omit<ActionHistoryItem, 'id' | 'timestamp' | 'undone'>) => ActionHistoryItem;
 
+
+  // سجل الأخطاء والدروس المستفادة (Error & Bug Codex)
+  errorLogs: ErrorLogItem[];
+  addErrorLog: (item: Omit<ErrorLogItem, 'id' | 'createdAt'>) => void;
+  updateErrorLog: (item: ErrorLogItem) => void;
+  deleteErrorLog: (id: string) => void;
+  toggleErrorResolved: (id: string) => void;
+  exportErrorLogToMarkdown: (id?: string) => string;
+
   // المؤشرات الحسابية
   todayFocusTasks: Task[];
   activeProjects: Project[];

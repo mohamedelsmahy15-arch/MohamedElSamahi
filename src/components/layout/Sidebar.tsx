@@ -22,6 +22,7 @@ import {
   FileCheck2,
   Settings,
   Lock,
+  ShieldAlert,
   Trash2,
   Sparkles,
   Flame,

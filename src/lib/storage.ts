@@ -32,6 +32,7 @@ export function loadAppState(): AppState {
       dailyReports: parsed.dailyReports || INITIAL_SEED_DATA.dailyReports || [],
       actionHistory: parsed.actionHistory || INITIAL_SEED_DATA.actionHistory || [],
       skills: parsed.skills || INITIAL_SEED_DATA.skills || [],
+      errorLogs: parsed.errorLogs || INITIAL_SEED_DATA.errorLogs || [],
       lastReviewDate: parsed.lastReviewDate,
     };
   } catch (error) {

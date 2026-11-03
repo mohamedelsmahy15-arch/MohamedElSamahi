@@ -22,6 +22,7 @@ import { MoneyView } from './components/money/MoneyView';
 import { BusinessView } from './components/business/BusinessView';
 import { CalendarView } from './components/calendar/CalendarView';
 import { SettingsView } from './components/settings/SettingsView';
+import { ErrorCodexView } from './components/errors/ErrorCodexView';
 import { TrashView } from './components/trash/TrashView';
 import { ManbaView } from './components/manba/ManbaView';
 import { LearningView } from './components/learning/LearningView';
@@ -78,6 +79,8 @@ const AppContent: React.FC = () => {
         return <ManbaView />;
       case 'settings':
         return <SettingsView />;
+      case 'errors':
+        return <ErrorCodexView />;
       default:
         return <TodayView />;
     }

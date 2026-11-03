@@ -357,6 +357,26 @@ export interface ActionHistoryItem {
   undoneAt?: string;
 }
 
+
+// سجل الأخطاء والدروس المستفادة (Error & Bug Codex)
+export type ErrorSeverity = 'low' | 'medium' | 'high' | 'critical';
+export type ErrorCategory = 'برمجة وكود' | 'بيئة وتشغيل' | 'تصميم وواجهة' | 'قواعد بيانات وتخزين' | 'سيرفر وAPI' | 'أخرى';
+
+export interface ErrorLogItem {
+  id: string;
+  title: string;              // عنوان الخطأ أو المشكلة
+  category: ErrorCategory;    // التصنيف
+  severity: ErrorSeverity;    // درجة الخطورة
+  date: string;               // تاريخ الحدوث YYYY-MM-DD
+  symptoms: string;           // ماذا حدث؟ (الأعراض أو رسالة الخطأ)
+  rootCause: string;          // ما السبب الجذري؟ (Root Cause)
+  solution: string;           // كيف تم الحل؟ (الخطوات البرمجية أو التقنية)
+  preventionRule: string;     // القاعدة الذهبية لعدم التكرار مستقبلاً
+  tags: string[];             // وسوم للبحث السريع (مثال: react, vite, build)
+  isResolved: boolean;        // هل تم حلها؟
+  createdAt: string;
+}
+
 export interface AppState {
   goals: Goal[];
   projects: Project[];
@@ -372,6 +392,7 @@ export interface AppState {
   dailyReports: DailyReportItem[]; // تقارير الإنتاجية اليومية
   actionHistory: ActionHistoryItem[]; // منبع الإنجازات والأنشطة وسجل الخطوات
   skills?: LearningSkill[]; // مهارات التعلم والتطبيق
+  errorLogs?: ErrorLogItem[]; // سجل الأخطاء والمشاكل البرمجية والدروس
   lastReviewDate?: string;
 }
 

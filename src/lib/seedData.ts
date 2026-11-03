@@ -572,4 +572,35 @@ export const INITIAL_SEED_DATA: AppState = {
       createdAt: '2027-01-15',
     },
   ],
+
+  errorLogs: [
+    {
+      id: 'err-seed-1',
+      title: 'تعارض حزم Vite مع esbuild وغياب مكتبة react-is',
+      category: 'بيئة وتشغيل',
+      severity: 'high',
+      date: '2026-11-03',
+      symptoms: 'Rolldown failed to resolve import "react-is" أثناء تنفيذ أمر npm run build',
+      rootCause: 'مكتبة recharts تستدعي react-is ضمنياً لكنها لم تكن مضافة في dependencies المباشرة.',
+      solution: 'تثبيت حزمة react-is صراحة، وضبط .npmrc بـ legacy-peer-deps=true لحل تعارض النسخ.',
+      preventionRule: 'قبل أي رفع سحابي، اختبار أمر npm run build محلياً والتأكد من تثبيت أي peer dependencies مفقودة.',
+      tags: ['vite', 'build', 'recharts', 'react-is'],
+      isResolved: true,
+      createdAt: '2026-11-03T18:05:00Z',
+    },
+    {
+      id: 'err-seed-2',
+      title: 'خطأ استدعاء دالة القفل logout is not defined في الـ Sidebar',
+      category: 'برمجة وكود',
+      severity: 'medium',
+      date: '2026-11-03',
+      symptoms: 'شاشة بيضاء فارغة وظهور Uncaught ReferenceError في الـ Console عند فتح الموقع',
+      rootCause: 'تم وضع زر قفل النظام في القائمة الجانبية دون تفكيك دالة logout من useAuth() داخل جسم المكون.',
+      solution: 'إضافة const { logout } = useAuth(); في بداية مكون Sidebar.',
+      preventionRule: 'مراجعة كافة الدوال المستخدمة في JSX والتحقق من تعريفها في المكون قبل الاختبار.',
+      tags: ['react', 'auth', 'sidebar', 'reference-error'],
+      isResolved: true,
+      createdAt: '2026-11-03T21:05:00Z',
+    }
+  ],
 };
