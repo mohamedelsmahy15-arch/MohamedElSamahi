@@ -54,6 +54,7 @@ export const AssistantView: React.FC = () => {
     toggleHabitToday,
     addLearningSkill,
     updateLearningSkill,
+    addErrorLog,
     addIncomeExperiment,
   } = useApp();
 

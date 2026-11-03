@@ -31,6 +31,8 @@ export interface Goal {
   lifeArea: LifeArea;
   progress: number; // 0 - 100
   status: 'not_started' | 'in_progress' | 'completed' | 'on_hold';
+  resourceLink?: string;
+  actionPlanNotes?: string;
   createdAt: string;
 }
 
@@ -69,6 +71,9 @@ export interface Task {
   linkedProjectId?: string;
   status: TaskStatus;
   isTodayFocus: boolean; // هل هي ضمن أهم 3 مهام؟
+  resourceLink?: string;
+  executionGuide?: string;
+  aiNextSuggestion?: string;
   completedAt?: string;
   createdAt: string;
 }

@@ -22,6 +22,8 @@ import {
   AlertCircle,
   Target,
   Compass,
+  ExternalLink,
+  Bot,
 } from 'lucide-react';
 
 export const TodayView: React.FC = () => {

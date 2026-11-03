@@ -27,6 +27,7 @@ import {
   ActionCategory,
   ActionType,
   ActionDetailField,
+  ErrorLogItem,
 } from '../types';
 import {
   loadAppState,
@@ -1863,6 +1864,76 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return false;
   };
 
+  // دوال سجل الأخطاء والدروس المستفادة (Error & Bug Codex)
+  const errorLogs: ErrorLogItem[] = state.errorLogs || [];
+
+  const addErrorLog = (item: Omit<ErrorLogItem, 'id' | 'createdAt'>) => {
+    const newItem: ErrorLogItem = {
+      ...item,
+      id: 'err-' + Date.now(),
+      createdAt: new Date().toISOString(),
+    };
+    setState((prev) => ({
+      ...prev,
+      errorLogs: [newItem, ...(prev.errorLogs || [])],
+    }));
+    recordAction({
+      title: 'توثيق خطأ/درس مستفاد',
+      itemTitle: newItem.title,
+      category: 'learning',
+      actionType: 'create',
+      description: `تم توثيق الخطأ: "${newItem.title}" في سجل الأخطاء والدروس المستفادة.`,
+      canUndo: false,
+    });
+  };
+
+  const updateErrorLog = (updatedItem: ErrorLogItem) => {
+    setState((prev) => ({
+      ...prev,
+      errorLogs: (prev.errorLogs || []).map((e) => (e.id === updatedItem.id ? updatedItem : e)),
+    }));
+  };
+
+  const deleteErrorLog = (id: string) => {
+    setState((prev) => ({
+      ...prev,
+      errorLogs: (prev.errorLogs || []).filter((e) => e.id !== id),
+    }));
+  };
+
+  const toggleErrorResolved = (id: string) => {
+    setState((prev) => ({
+      ...prev,
+      errorLogs: (prev.errorLogs || []).map((e) =>
+        e.id === id ? { ...e, isResolved: !e.isResolved } : e
+      ),
+    }));
+  };
+
+  const exportErrorLogToMarkdown = (id?: string): string => {
+    const list = id ? (state.errorLogs || []).filter((e) => e.id === id) : (state.errorLogs || []);
+    if (list.length === 0) return '# لا توجد أخطاء مسجلة حالياً\n';
+
+    let md = '# 🛡️ سجل الأخطاء والدروس المستفادة — السماحي OS\n\n';
+    md += `*تاريخ التصدير: ${new Date().toLocaleDateString('ar-EG')}*\n\n---\n\n`;
+
+    list.forEach((err, idx) => {
+      md += `## ${idx + 1}. ${err.title}\n\n`;
+      md += `- **التاريخ:** ${err.date}\n`;
+      md += `- **التصنيف:** ${err.category}\n`;
+      md += `- **الخطورة:** ${err.severity.toUpperCase()}\n`;
+      md += `- **الحالة:** ${err.isResolved ? '✅ تم الحل' : '⏳ قيد المتابعة'}\n`;
+      md += `- **الوسوم:** ${err.tags.map((t) => `#${t}`).join(' ')}\n\n`;
+      md += '### 🔍 الأعراض والمشكلة:\n' + err.symptoms + '\n\n';
+      md += '### 🎯 السبب الجذري (Root Cause):\n' + err.rootCause + '\n\n';
+      md += '### 💡 الحل المنفذ (Solution):\n' + err.solution + '\n\n';
+      md += '### 🏆 القاعدة الذهبية للمستقبل:\n> ' + err.preventionRule + '\n\n';
+      md += '---\n\n';
+    });
+
+    return md;
+  };
+
   const dismissDistractionAlert = () => setDistractionAlert(null);
   const triggerDistractionAlert = (msg: string) => setDistractionAlert(msg);
 
@@ -1872,6 +1943,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         state,
         activeTab,
         setActiveTab,
+        // سجل الأخطاء والدروس
+        errorLogs,
+        addErrorLog,
+        updateErrorLog,
+        deleteErrorLog,
+        toggleErrorResolved,
+        exportErrorLogToMarkdown,
         isIdeaModalOpen,
         setIsIdeaModalOpen,
         isQuickTaskModalOpen,

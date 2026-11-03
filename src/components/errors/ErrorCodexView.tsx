@@ -85,7 +85,7 @@ export const ErrorCodexView: React.FC = () => {
         item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.symptoms.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.solution.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.tags.some((t) => t.toLowerCase().includes(searchQuery.toLowerCase()));
+        item.tags.some((t: string) => t.toLowerCase().includes(searchQuery.toLowerCase()));
 
       const matchCategory = selectedCategory === 'all' || item.category === selectedCategory;
       const matchSeverity = selectedSeverity === 'all' || item.severity === selectedSeverity;
@@ -370,7 +370,7 @@ export const ErrorCodexView: React.FC = () => {
                         <span className="font-mono text-[11px]">{item.date}</span>
                         {item.tags.length > 0 && (
                           <div className="flex items-center gap-1.5 flex-wrap">
-                            {item.tags.map((t, idx) => (
+                            {item.tags.map((t: string, idx: number) => (
                               <span
                                 key={idx}
                                 className="text-[10px] font-mono text-[var(--accent-gold)] bg-[var(--accent-gold)]/10 px-1.5 py-0.2 rounded"
