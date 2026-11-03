@@ -20,6 +20,12 @@ import { MoneyView } from './components/money/MoneyView';
 import { BusinessView } from './components/business/BusinessView';
 import { CalendarView } from './components/calendar/CalendarView';
 import { SettingsView } from './components/settings/SettingsView';
+import { TrashView } from './components/trash/TrashView';
+import { ManbaView } from './components/manba/ManbaView';
+import { LearningView } from './components/learning/LearningView';
+import { AssistantView } from './components/assistant/AssistantView';
+import { TopActionNotificationBar } from './components/common/TopActionNotificationBar';
+import { ActionDetailsModal } from './components/common/ActionDetailsModal';
 import { QuickTaskModal } from './components/common/QuickTaskModal';
 import { IdeasModal } from './components/common/IdeasModal';
 import { EditTaskModal } from './components/common/EditTaskModal';
@@ -34,6 +40,8 @@ const AppContent: React.FC = () => {
     switch (activeTab) {
       case 'dashboard':
         return <DashboardView />;
+      case 'assistant':
+        return <AssistantView />;
       case 'today':
         return <TodayView />;
       case 'goals':
@@ -52,17 +60,26 @@ const AppContent: React.FC = () => {
         return <MoneyView />;
       case 'business':
         return <BusinessView />;
+      case 'learning':
+        return <LearningView />;
       case 'ideas':
         return <IdeasView />;
+      case 'trash':
+        return <TrashView />;
+      case 'manba':
+        return <ManbaView />;
       case 'settings':
         return <SettingsView />;
       default:
-        return <DashboardView />;
+        return <TodayView />;
     }
   };
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-[#050505] text-[#F5F5F5]">
+    <div className="flex h-screen w-screen overflow-hidden bg-[var(--bg-primary)] text-[var(--text-primary)] transition-colors duration-200">
+      {/* شريط الإشعار العلوي للخطوات المنجزة مع زر التراجع وتفاصيل الخطوة */}
+      <TopActionNotificationBar />
+
       {/* الشريط الجانبي */}
       <Sidebar
         isOpenMobile={isMobileMenuOpen}
@@ -81,7 +98,8 @@ const AppContent: React.FC = () => {
         </main>
       </div>
 
-      {/* النوافذ العائمة ومودالات الإضافة والتعديل السهل */}
+      {/* النوافذ العائمة ومودالات الإضافة والتعديل السهل وفحص الخطوات */}
+      <ActionDetailsModal />
       <QuickTaskModal />
       <IdeasModal />
       <EditTaskModal />

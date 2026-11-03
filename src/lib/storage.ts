@@ -28,6 +28,10 @@ export function loadAppState(): AppState {
       timeLogs: parsed.timeLogs || INITIAL_SEED_DATA.timeLogs,
       transactions: parsed.transactions || INITIAL_SEED_DATA.transactions,
       incomeExperiments: parsed.incomeExperiments || INITIAL_SEED_DATA.incomeExperiments,
+      trashItems: parsed.trashItems || INITIAL_SEED_DATA.trashItems || [],
+      dailyReports: parsed.dailyReports || INITIAL_SEED_DATA.dailyReports || [],
+      actionHistory: parsed.actionHistory || INITIAL_SEED_DATA.actionHistory || [],
+      skills: parsed.skills || INITIAL_SEED_DATA.skills || [],
       lastReviewDate: parsed.lastReviewDate,
     };
   } catch (error) {

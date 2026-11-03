@@ -1,29 +1,34 @@
 /**
  * components/dashboard/DashboardView.tsx
- * لوحة القيادة التنفيذية الفاخرة لنظام "السماحي OS"
- * تجمع الرؤية، مؤشر اليوم الذكي، أهم 3 نتائج، عداد العادات، والمؤقت الحي
+ * لوحة القيادة التنفيذية بمستوى عالمي لمحمد السماحي (SAMAHY OS — 2027)
+ * تصميم هجين يجمع بين راحة وضع النهار (DealDeck) وفخامة وعمق وضع الليل (Stovest & TradeVision)
+ * يحافظ على صفاء الذهن، مكافحة التشتت، والتركيز على الإنجاز الفعلي
  */
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useApp } from '../../context/AppContext';
 import {
   CheckCircle2,
   Circle,
   Clock,
-  ArrowUpRight,
   TrendingUp,
   AlertTriangle,
   Flame,
   Plus,
-  Compass,
   Edit3,
-  Play,
-  Square,
-  Briefcase,
   ChevronLeft,
+  Sparkles,
+  Target,
+  FolderGit2,
+  Wallet,
+  Calendar,
+  Layers,
+  ArrowUpRight,
+  Shield,
+  Zap,
 } from 'lucide-react';
-import { TaskStatus } from '../../types';
 import { WeeklyProductivityCharts } from './WeeklyProductivityCharts';
+import { DailyProductivityAudit } from './DailyProductivityAudit';
 
 export const DashboardView: React.FC = () => {
   const {
@@ -38,50 +43,57 @@ export const DashboardView: React.FC = () => {
     setIsQuickTaskModalOpen,
     distractionAlert,
     dismissDistractionAlert,
-    toggleProjectMilestone,
     setEditingTask,
-    setEditingProject,
-    toggleHabitToday,
-    activeTimer,
-    startTimer,
-    stopTimer,
+    financialSummary,
   } = useApp();
 
-  const todayStr = new Date().toISOString().split('T')[0];
-
-  const getStatusLabel = (status: TaskStatus) => {
-    switch (status) {
-      case 'completed':
-        return 'تمت';
-      case 'in_progress':
-        return 'قيد التنفيذ';
-      case 'deferred':
-        return 'مؤجلة';
-      default:
-        return 'لم تبدأ';
+  // Dynamic Arabic Date
+  const formattedArabicDate = useMemo(() => {
+    try {
+      const now = new Date();
+      return new Intl.DateTimeFormat('ar-EG', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      }).format(now);
+    } catch {
+      return '2027 · سنة البناء';
     }
-  };
+  }, []);
 
-  const getStatusColor = (status: TaskStatus) => {
-    switch (status) {
-      case 'completed':
-        return 'text-emerald-400';
-      case 'in_progress':
-        return 'text-amber-400';
-      case 'deferred':
-        return 'text-neutral-500';
-      default:
-        return 'text-[#888888]';
-    }
-  };
+  // Goals & Projects stats
+  const totalGoals = state.goals.length;
+  const avgGoalProgress =
+    totalGoals > 0
+      ? Math.round(state.goals.reduce((acc, curr) => acc + curr.progress, 0) / totalGoals)
+      : 0;
+
+  // Time metrics
+  const totalFocusMinutesThisWeek = useMemo(() => {
+    return state.timeLogs
+      .filter((l) => l.isDeepWork)
+      .reduce((acc, curr) => acc + curr.durationMinutes, 0);
+  }, [state.timeLogs]);
+
+  const focusHoursThisWeek = (totalFocusMinutesThisWeek / 60).toFixed(1);
+
+  // Latest weekly review highlights for Weekly Focus Card
+  const latestWeeklyReview = state.weeklyReviews[state.weeklyReviews.length - 1];
+
+  // Income stream highlights
+  const topExperiment = state.incomeExperiments[0];
+
+  // Completed focus count
+  const completedFocusCount = todayFocusTasks.filter((t) => t.status === 'completed').length;
 
   return (
-    <div className="space-y-6 pb-12">
+    <div className="space-y-6 pb-20">
       {/* تحذير مكافحة التشتت (إن وجد) */}
       {distractionAlert && (
-        <div className="flex items-start justify-between rounded-lg border border-amber-500/30 bg-amber-500/10 p-4 text-xs text-amber-200">
+        <div className="flex items-start justify-between rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4 text-xs text-amber-200 animate-in fade-in shadow-md">
           <div className="flex items-center gap-3">
-            <AlertTriangle className="h-5 w-5 text-amber-400 shrink-0" />
+            <AlertTriangle className="h-4 w-4 text-amber-400 shrink-0" />
             <p className="leading-relaxed">{distractionAlert}</p>
           </div>
           <button
@@ -93,422 +105,429 @@ export const DashboardView: React.FC = () => {
         </div>
       )}
 
-      {/* الرؤية الشخصية والهوية (2027 سنة البناء) */}
-      <section className="relative overflow-hidden rounded-xl border border-[#222222] bg-[#0c0c0c] p-5 md:p-7 shadow-xl">
-        <div className="absolute top-0 left-0 h-full w-1 bg-gradient-to-b from-[#D4AF37] via-[#D4AF37]/50 to-transparent" />
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="space-y-2 max-w-3xl">
-            <div className="flex items-center gap-2 text-xs font-mono text-[#D4AF37]">
-              <span>2027</span>
-              <span>—</span>
-              <span>سنة البناء</span>
-            </div>
-            <p className="text-base md:text-lg font-medium text-[#F5F5F5] leading-relaxed">
-              "أبني نفسي، أتعلم، أعمل، أتاجر بما يرضي الله، وأزرع اليوم ما أريد حصاده غدًا."
-            </p>
-            <div className="flex items-center gap-2 text-xs text-[#999999] font-mono">
-              <span>Build</span>
-              <span className="text-[#D4AF37]">→</span>
-              <span>Learn</span>
-              <span className="text-[#D4AF37]">→</span>
-              <span>Apply</span>
-              <span className="text-[#D4AF37]">→</span>
-              <span>Earn</span>
-              <span className="text-[#D4AF37]">→</span>
-              <span>Scale</span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3 self-start md:self-auto border-t md:border-t-0 md:border-r border-[#222222] pt-3 md:pt-0 md:pr-6">
-            <button
-              onClick={() => setActiveTab('today')}
-              className="flex items-center gap-1.5 rounded-lg bg-[#141414] border border-[#2a2a2a] px-3.5 py-2 text-xs font-medium text-[#F5F5F5] hover:border-[#D4AF37]/40 hover:text-[#D4AF37] transition-colors"
-            >
-              <span>خطة اليوم الكاملة</span>
-              <ChevronLeft className="h-3.5 w-3.5" />
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* الترحيب الصباحي ومؤشرات اليوم الذكية */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-xl md:text-2xl font-bold tracking-tight text-[#F5F5F5]">
-            صباح الخير يا محمد 👋
-          </h1>
-          <p className="text-xs text-[#999999] mt-1">
-            اليوم هو فرصة جديدة لبناء مهارة، إنجاز التزام، وتثبيت عادة يومية.
-          </p>
-        </div>
-
-        {/* مؤشر اليوم الرقمي ومؤقت العمل السريع */}
-        <div className="flex items-center gap-3">
-          {/* مؤقت العمل السريع في الهيدر */}
-          <div className="flex items-center gap-2 rounded-lg border border-[#222222] bg-[#0e0e0e] px-3 py-2 text-xs font-mono">
-            <Clock className="h-3.5 w-3.5 text-[#D4AF37]" />
-            <span className="tabular-nums text-[#F5F5F5]">
-              {Math.floor(activeTimer.elapsedSeconds / 60)} دقيقة
+      {/* 1. Header — World-Class Clean Typography with Ambient Glow */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--border-color)] pb-5">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2.5">
+            <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-[var(--text-primary)]">
+              أهلاً يا محمد
+            </h1>
+            <span className="inline-flex items-center gap-1 rounded-full bg-[var(--accent-gold)]/10 px-2.5 py-0.5 text-[11px] font-semibold text-[var(--accent-gold)] border border-[var(--accent-gold)]/25">
+              <Sparkles className="h-3 w-3" />
+              2027 · سنة البناء
             </span>
-            {!activeTimer.isRunning ? (
-              <button
-                onClick={() => startTimer('Programming', 'جلسة عمل سريعة')}
-                className="text-emerald-400 hover:text-emerald-300 mr-1"
-                title="بدء المؤقت"
-              >
-                <Play className="h-3.5 w-3.5 fill-emerald-400" />
-              </button>
-            ) : (
-              <button
-                onClick={stopTimer}
-                className="text-red-400 hover:text-red-300 mr-1"
-                title="إيقاف وحفظ"
-              >
-                <Square className="h-3.5 w-3.5 fill-red-400" />
-              </button>
-            )}
           </div>
 
-          <div className="flex items-center gap-3 rounded-lg border border-[#222222] bg-[#0e0e0e] px-4 py-2">
-            <div className="text-right">
-              <div className="text-[10px] text-[#888888] font-medium">مؤشر اليوم</div>
-              <div className="font-mono text-sm font-semibold tabular-nums text-[#D4AF37]">
-                {dailyScoreBreakdown.score}%
-              </div>
-            </div>
-            <div className="h-8 w-8 rounded-full border border-[#D4AF37]/30 bg-[#D4AF37]/10 flex items-center justify-center text-[#D4AF37]">
-              <TrendingUp className="h-4 w-4" />
-            </div>
+          <p className="text-sm text-[var(--text-secondary)] font-medium">
+            كل يوم خطوة. كل خطوة تبني المستقبل.
+          </p>
+
+          <div className="flex items-center gap-2 text-xs text-[var(--text-muted)] pt-0.5 font-mono">
+            <Calendar className="h-3.5 w-3.5 text-[var(--accent-gold)]" />
+            <span>{formattedArabicDate}</span>
+            <span>·</span>
+            <span>الربع الأول Q1: التأسيس والبناء</span>
           </div>
         </div>
-      </div>
 
-      {/* شريط العادات اليومية السريع (Quick Habit Check-in Row) */}
-      <div className="rounded-xl border border-[#222222] bg-[#0c0c0c] p-4">
-        <div className="flex items-center justify-between border-b border-[#1a1a1a] pb-2 mb-3">
-          <div className="flex items-center gap-2 text-xs font-semibold text-[#F5F5F5]">
-            <Flame className="h-4 w-4 text-[#D4AF37]" />
-            <span>العادات الصباحية واليومية:</span>
-          </div>
+        <div className="flex items-center gap-2.5 self-start sm:self-auto">
           <button
-            onClick={() => setActiveTab('habits')}
-            className="text-[11px] text-[#D4AF37] hover:underline"
+            onClick={() => setActiveTab('assistant')}
+            className="flex items-center gap-1.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] px-3.5 py-2.5 text-xs font-semibold text-[var(--accent-gold)] hover:border-[var(--accent-gold)]/50 hover:bg-[var(--accent-gold)]/10 transition-all shadow-sm"
           >
-            كل العادات ←
+            <Zap className="h-3.5 w-3.5" />
+            <span>المساعد الذكي</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('today')}
+            className="flex items-center gap-1.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] px-3.5 py-2.5 text-xs font-medium text-[var(--text-primary)] hover:border-[var(--accent-gold)]/40 hover:text-[var(--accent-gold)] transition-colors shadow-sm"
+          >
+            <span>خطة اليوم المباشرة</span>
+            <ChevronLeft className="h-3.5 w-3.5" />
+          </button>
+
+          <button
+            onClick={() => setIsQuickTaskModalOpen(true)}
+            className="flex items-center gap-1.5 rounded-xl bg-[var(--accent-gold)] px-4 py-2.5 text-xs font-bold text-black transition-all hover:opacity-95 active:scale-95 shadow-lg shadow-[var(--accent-gold)]/15"
+          >
+            <Plus className="h-4 w-4 stroke-[3]" />
+            <span>+ مهمة جديدة</span>
           </button>
         </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
-          {state.habits.map((habit) => {
-            const isDone = habit.completedDates.includes(todayStr);
-            return (
-              <button
-                key={habit.id}
-                onClick={() => toggleHabitToday(habit.id)}
-                className={`flex items-center justify-between rounded-lg border p-2.5 text-xs text-right transition-all ${
-                  isDone
-                    ? 'border-emerald-800/40 bg-emerald-950/20 text-[#cccccc]'
-                    : 'border-[#1f1f1f] bg-[#111111] text-[#888888] hover:border-[#333333]'
-                }`}
-              >
-                <div className="truncate pr-1">
-                  <div className={`truncate font-medium ${isDone ? 'line-through text-[#666666]' : 'text-[#F5F5F5]'}`}>
-                    {habit.title}
-                  </div>
-                  <div className="text-[10px] text-[#666666] font-mono">
-                    {habit.streak} يوم متتالي
-                  </div>
-                </div>
-
-                {isDone ? (
-                  <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
-                ) : (
-                  <Circle className="h-4 w-4 text-[#444444] shrink-0" />
-                )}
-              </button>
-            );
-          })}
-        </div>
       </div>
 
-      {/* القسم الأساسي: أهم 3 مهام لليوم + مؤشر التشخيص */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* عمود أهم 3 مهام */}
-        <div className="lg:col-span-2 space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-[#F5F5F5] flex items-center gap-2">
-              <span>Today's Focus</span>
-              <span className="text-xs text-[#999999] font-normal">(أهم 3 مهام لليوم فقط)</span>
-            </h2>
-            <div className="flex items-center gap-2 text-xs text-[#999999]">
-              <span className="font-mono tabular-nums text-[#D4AF37]">
-                {dailyScoreBreakdown.focusTasksRatio}
-              </span>
-              <span>مكتملة</span>
+      {/* 2. Main Focus Area — Today's Focus (Top 3 Priority Tasks Only) */}
+      <section className="rounded-2xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-5 md:p-6 space-y-4 shadow-lg shadow-black/5 relative overflow-hidden">
+        {/* Subtle background highlight for visual comfort */}
+        <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--accent-gold)]/5 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
+
+        <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-3.5 relative z-10">
+          <div className="flex items-center gap-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[var(--accent-gold)]/10 border border-[var(--accent-gold)]/30 text-[var(--accent-gold)] text-xs font-mono font-bold shadow-inner">
+              3
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h2 className="text-sm md:text-base font-bold text-[var(--text-primary)]">
+                  Today's Focus — تركيز اليوم
+                </h2>
+                <span className="text-[10px] font-mono text-[var(--text-muted)] bg-[var(--bg-elevated)] px-2 py-0.5 rounded-full border border-[var(--border-subtle)]">
+                  أهم 3 نتائج
+                </span>
+              </div>
+              <p className="text-xs text-[var(--text-muted)]">
+                الأولويات الاستراتيجية الثلاث المحركة لليوم — ابدأ بالأثقل أولاً دون تشتت
+              </p>
             </div>
           </div>
 
-          <div className="space-y-3">
-            {todayFocusTasks.length === 0 ? (
-              <div className="rounded-lg border border-dashed border-[#222222] bg-[#0c0c0c] p-6 text-center">
-                <Compass className="h-7 w-7 text-[#555555] mx-auto mb-2" />
-                <p className="text-xs text-[#888888]">
-                  لم تحدد مهام التركيز الثلاثية بعد. اختر الآن ما يبني يومك!
-                </p>
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-mono tabular-nums text-[var(--accent-gold)] font-bold bg-[var(--accent-gold)]/10 px-2.5 py-1 rounded-lg border border-[var(--accent-gold)]/20">
+              {completedFocusCount} من {todayFocusTasks.length || 3} أنجزت
+            </span>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 relative z-10">
+          {[0, 1, 2].map((slotIndex) => {
+            const task = todayFocusTasks[slotIndex];
+
+            if (!task) {
+              return (
                 <button
+                  key={`empty-${slotIndex}`}
                   onClick={() => setIsQuickTaskModalOpen(true)}
-                  className="mt-3 inline-flex items-center gap-1.5 text-xs text-[#D4AF37] hover:underline"
+                  className="group flex flex-col items-center justify-center gap-2.5 rounded-2xl border border-dashed border-[var(--border-color)] bg-[var(--bg-elevated)]/40 p-6 text-center text-xs text-[var(--text-muted)] hover:border-[var(--accent-gold)]/50 hover:bg-[var(--accent-gold)]/5 hover:text-[var(--accent-gold)] transition-all min-h-[150px]"
                 >
-                  <Plus className="h-3.5 w-3.5" />
-                  <span>تحديد مهمة تركيز</span>
+                  <div className="flex h-8 w-8 items-center justify-center rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] text-[var(--text-muted)] group-hover:text-[var(--accent-gold)] group-hover:border-[var(--accent-gold)]/40 transition-colors">
+                    <Plus className="h-4 w-4" />
+                  </div>
+                  <span className="font-semibold">تحديد نتيجة رئيسية #{slotIndex + 1}</span>
+                  <span className="text-[11px] text-[var(--text-muted)]">اضغط للتعيين من مهامك</span>
                 </button>
-              </div>
-            ) : (
-              todayFocusTasks.map((task, index) => {
-                const isDone = task.status === 'completed';
-                const linkedProject = state.projects.find((p) => p.id === task.linkedProjectId);
+              );
+            }
 
-                return (
-                  <div
-                    key={task.id}
-                    className={`group relative flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-lg border p-4 transition-all ${
-                      isDone
-                        ? 'border-[#1a261f] bg-[#0a120e]/60'
-                        : 'border-[#222222] bg-[#0e0e0e] hover:border-[#333333]'
-                    }`}
-                  >
-                    <div className="flex items-start sm:items-center gap-3">
-                      <button
-                        onClick={() => toggleTaskStatus(task.id)}
-                        className={`mt-0.5 sm:mt-0 flex h-5 w-5 shrink-0 items-center justify-center rounded transition-colors ${
-                          isDone
-                            ? 'text-emerald-400 bg-emerald-500/10'
-                            : 'text-[#555555] hover:text-[#D4AF37]'
-                        }`}
-                        title={isDone ? 'إلغاء الإنجاز' : 'تعليم كمكتملة'}
-                      >
-                        {isDone ? (
-                          <CheckCircle2 className="h-5 w-5" />
-                        ) : (
-                          <Circle className="h-5 w-5" />
-                        )}
-                      </button>
+            const isDone = task.status === 'completed';
 
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2">
-                          <span className="font-mono text-xs text-[#D4AF37] font-semibold">
-                            0{index + 1}.
-                          </span>
-                          <span
-                            className={`text-xs md:text-sm font-medium transition-all ${
-                              isDone ? 'line-through text-[#666666]' : 'text-[#F5F5F5]'
-                            }`}
-                          >
-                            {task.title}
-                          </span>
-                        </div>
+            return (
+              <div
+                key={task.id}
+                className={`relative flex flex-col justify-between rounded-2xl border p-5 transition-all duration-200 shadow-sm ${
+                  isDone
+                    ? 'border-emerald-500/30 bg-emerald-950/10'
+                    : 'border-[var(--border-color)] bg-[var(--bg-elevated)] hover:border-[var(--accent-gold)]/40 hover:-translate-y-0.5'
+                }`}
+              >
+                <div className="space-y-2.5">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-mono text-xs text-[var(--accent-gold)] font-bold tracking-wide">
+                      0{slotIndex + 1} · {task.lifeArea}
+                    </span>
 
-                        <div className="flex flex-wrap items-center gap-2 text-[11px] text-[#777777]">
-                          <span>{task.lifeArea}</span>
-                          <span aria-hidden="true">·</span>
-                          <span className="flex items-center gap-1">
-                            <Clock className="h-3 w-3" />
-                            <span className="font-mono tabular-nums">{task.estimatedMinutes} د</span>
-                          </span>
-                          {linkedProject && (
-                            <>
-                              <span aria-hidden="true">·</span>
-                              <span className="text-[#999999] truncate max-w-[140px]">
-                                {linkedProject.title}
-                              </span>
-                            </>
-                          )}
-                          <span aria-hidden="true">·</span>
-                          <span className={getStatusColor(task.status)}>
-                            {getStatusLabel(task.status)}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* خيارات التحكم والتعديل السهل (Edit Task Modal Trigger) */}
-                    <div className="flex items-center gap-2 sm:self-center pr-8 sm:pr-0">
+                    <div className="flex items-center gap-1.5">
                       <button
                         onClick={() => setEditingTask(task)}
-                        className="text-[11px] text-[#777777] hover:text-[#F5F5F5] p-1"
-                        title="تعديل بيانات المهمة"
+                        className="rounded-md p-1 text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface)] transition-colors"
+                        title="تعديل المهمة"
                       >
                         <Edit3 className="h-3.5 w-3.5" />
                       </button>
                       <button
                         onClick={() => moveTaskToParkingLot(task.id)}
-                        className="text-[11px] text-[#666666] hover:text-amber-400 transition-colors whitespace-nowrap"
-                        title="انقلها إلى الـ Parking Lot إذا لم تكن ضرورية اليوم"
+                        className="rounded-md px-1.5 py-0.5 text-[11px] text-[var(--text-muted)] hover:text-amber-400 hover:bg-[var(--bg-surface)] transition-colors"
+                        title="نقل للـ Parking Lot لمنع التشتت"
                       >
-                        Parking Lot
-                      </button>
-                      <button
-                        onClick={() => setTaskTodayFocus(task.id, false)}
-                        className="text-[11px] text-[#555555] hover:text-[#999999] transition-colors"
-                        title="إزالة من تركيز اليوم"
-                      >
-                        إلغاء التركيز
+                        نقل
                       </button>
                     </div>
                   </div>
-                );
-              })
-            )}
 
-            {todayFocusTasks.length < 3 && (
-              <button
-                onClick={() => setIsQuickTaskModalOpen(true)}
-                className="flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-[#222222] bg-transparent py-3 text-xs text-[#777777] hover:border-[#D4AF37]/50 hover:text-[#D4AF37] transition-all"
-              >
-                <Plus className="h-3.5 w-3.5" />
-                <span>
-                  أضف مهمة تركيز رقم {todayFocusTasks.length + 1} (الحد الأقصى 3)
-                </span>
-              </button>
-            )}
+                  <p
+                    className={`text-sm md:text-[15px] font-bold leading-snug ${
+                      isDone ? 'line-through text-[var(--text-muted)]' : 'text-[var(--text-primary)]'
+                    }`}
+                  >
+                    {task.title}
+                  </p>
+
+                  <div className="flex items-center gap-2 text-xs text-[var(--text-muted)] pt-0.5">
+                    <Clock className="h-3.5 w-3.5 shrink-0 text-[var(--accent-gold)]" />
+                    <span className="font-mono tabular-nums">{task.estimatedMinutes} دقيقة</span>
+                    <span>·</span>
+                    <span className={task.priority === 'strategic' ? 'text-[var(--accent-gold)] font-semibold' : ''}>
+                      {task.priority === 'strategic'
+                        ? 'أولوية استراتيجية قصوى'
+                        : task.priority === 'high'
+                        ? 'أولوية عالية'
+                        : 'عادية'}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="mt-4 pt-3 border-t border-[var(--border-color)] flex items-center justify-between">
+                  <button
+                    onClick={() => toggleTaskStatus(task.id)}
+                    className={`flex items-center gap-1.5 text-xs font-semibold transition-colors ${
+                      isDone ? 'text-emerald-400' : 'text-[var(--text-secondary)] hover:text-emerald-400'
+                    }`}
+                  >
+                    {isDone ? (
+                      <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+                    ) : (
+                      <Circle className="h-4 w-4 text-[var(--text-muted)]" />
+                    )}
+                    <span>{isDone ? 'تم الإنجاز بنجاح' : 'تعليم كمكتمل'}</span>
+                  </button>
+
+                  <span
+                    className={`text-[11px] font-mono px-2 py-0.5 rounded-md font-semibold ${
+                      isDone
+                        ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
+                        : 'bg-[var(--bg-surface)] text-[var(--text-muted)] border border-[var(--border-subtle)]'
+                    }`}
+                  >
+                    {isDone ? 'مكتملة ⚡' : 'قيد التنفيذ'}
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* 3. Progress Overview — Balanced Data Cards (Inspired by DealDeck & Stovest) */}
+      <section className="space-y-2.5">
+        <div className="flex items-center justify-between px-1">
+          <div className="text-[11px] font-mono uppercase tracking-wider text-[var(--text-muted)] font-semibold">
+            نظرة عامة على التقدم (Progress Overview)
+          </div>
+          <div className="text-xs text-[var(--text-muted)]">
+            مؤشرات القيادة والنتائج الحية
           </div>
         </div>
 
-        {/* عمود تشخيص اليوم */}
-        <div className="space-y-4">
-          <h2 className="text-sm font-semibold text-[#F5F5F5] flex items-center justify-between">
-            <span>مؤشر اليوم</span>
-            <span className="text-xs text-[#D4AF37] font-mono">Daily Diagnostic</span>
-          </h2>
-
-          <div className="rounded-xl border border-[#222222] bg-[#0c0c0c] p-5 space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-[#1a1a1a]">
-              <span className="text-xs text-[#999999]">التقييم الحقيقي لليوم:</span>
-              <span className="text-xs font-semibold text-[#D4AF37]">
-                {dailyScoreBreakdown.verdict}
-              </span>
-            </div>
-
-            <div className="space-y-2">
-              <div className="flex justify-between text-xs">
-                <span className="text-[#888888]">إنجاز مهام التركيز:</span>
-                <span className="font-mono text-[#F5F5F5] tabular-nums">
-                  {dailyScoreBreakdown.focusTasksRatio} ({dailyScoreBreakdown.focusTasksPercent}%)
-                </span>
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-3.5">
+          {/* Month Goals */}
+          <div
+            onClick={() => setActiveTab('goals')}
+            className="cursor-pointer rounded-2xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-4 md:p-5 space-y-2 hover:border-[var(--accent-gold)]/40 hover:-translate-y-0.5 transition-all shadow-sm"
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-[var(--text-secondary)] font-medium">أهداف الربع Q1</span>
+              <div className="flex h-7 w-7 items-center justify-center rounded-xl bg-[var(--accent-gold)]/10 text-[var(--accent-gold)]">
+                <Target className="h-4 w-4" />
               </div>
-              <div className="h-1.5 w-full bg-[#181818] rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-[#D4AF37] transition-all duration-300"
-                  style={{ width: `${dailyScoreBreakdown.focusTasksPercent}%` }}
+            </div>
+            <div className="font-mono text-2xl md:text-3xl font-extrabold text-[var(--text-primary)] tabular-nums">
+              {avgGoalProgress}%
+            </div>
+            {/* Mini Progress Bar */}
+            <div className="h-1.5 w-full bg-[var(--bg-elevated)] rounded-full overflow-hidden">
+              <div
+                className="h-full bg-[var(--accent-gold)] rounded-full transition-all duration-500"
+                style={{ width: `${avgGoalProgress}%` }}
+              />
+            </div>
+            <div className="text-[11px] text-[var(--text-muted)] flex items-center justify-between">
+              <span>{totalGoals} أهداف معتمدة</span>
+              <span className="text-[var(--accent-gold)]">BUILD</span>
+            </div>
+          </div>
+
+          {/* Active Projects */}
+          <div
+            onClick={() => setActiveTab('projects')}
+            className="cursor-pointer rounded-2xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-4 md:p-5 space-y-2 hover:border-blue-500/40 hover:-translate-y-0.5 transition-all shadow-sm"
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-[var(--text-secondary)] font-medium">المشاريع النشطة</span>
+              <div className="flex h-7 w-7 items-center justify-center rounded-xl bg-blue-500/10 text-blue-400">
+                <FolderGit2 className="h-4 w-4" />
+              </div>
+            </div>
+            <div className="font-mono text-2xl md:text-3xl font-extrabold text-[var(--text-primary)] tabular-nums">
+              {activeProjects.length} <span className="text-sm font-normal text-[var(--text-muted)]">/ 3</span>
+            </div>
+            {/* Active dots */}
+            <div className="flex items-center gap-1.5 pt-1">
+              {[0, 1, 2].map((i) => (
+                <span
+                  key={i}
+                  className={`h-2 flex-1 rounded-full ${
+                    i < activeProjects.length ? 'bg-blue-500' : 'bg-[var(--bg-elevated)]'
+                  }`}
                 />
+              ))}
+            </div>
+            <div className="text-[11px] text-[var(--text-muted)]">
+              انضباط التركيز لحماية طاقتك
+            </div>
+          </div>
+
+          {/* Focus Hours */}
+          <div
+            onClick={() => setActiveTab('time')}
+            className="cursor-pointer rounded-2xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-4 md:p-5 space-y-2 hover:border-emerald-500/40 hover:-translate-y-0.5 transition-all shadow-sm"
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-[var(--text-secondary)] font-medium">ساعات التركيز</span>
+              <div className="flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-400">
+                <Clock className="h-4 w-4" />
               </div>
             </div>
+            <div className="font-mono text-2xl md:text-3xl font-extrabold text-[var(--accent-gold)] tabular-nums">
+              {focusHoursThisWeek} <span className="text-xs font-normal text-[var(--text-muted)]">ساعة</span>
+            </div>
+            {/* Progress gauge */}
+            <div className="h-1.5 w-full bg-[var(--bg-elevated)] rounded-full overflow-hidden">
+              <div
+                className="h-full bg-emerald-400 rounded-full transition-all duration-500"
+                style={{ width: `${Math.min(100, (Number(focusHoursThisWeek) / 20) * 100)}%` }}
+              />
+            </div>
+            <div className="text-[11px] text-[var(--text-muted)]">
+              عمل عميق خلال هذا الأسبوع
+            </div>
+          </div>
 
-            <div className="rounded-lg bg-[#111111] p-3 border border-[#1f1f1f]">
-              <div className="text-[11px] font-semibold text-[#999999] mb-1">توجيه النظام:</div>
-              <p className="text-xs text-[#e0e0e0] leading-relaxed">
-                {dailyScoreBreakdown.advice}
+          {/* Execution Rate */}
+          <div className="rounded-2xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-4 md:p-5 space-y-2 shadow-sm">
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-[var(--text-secondary)] font-medium">معدل الإنجاز</span>
+              <div className="flex h-7 w-7 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-400">
+                <TrendingUp className="h-4 w-4" />
+              </div>
+            </div>
+            <div className="font-mono text-2xl md:text-3xl font-extrabold text-[var(--text-primary)] tabular-nums">
+              {dailyScoreBreakdown.score}%
+            </div>
+            <div className="h-1.5 w-full bg-[var(--bg-elevated)] rounded-full overflow-hidden">
+              <div
+                className="h-full bg-cyan-400 rounded-full transition-all duration-500"
+                style={{ width: `${dailyScoreBreakdown.score}%` }}
+              />
+            </div>
+            <div className="text-[11px] text-[var(--text-muted)] truncate">
+              {dailyScoreBreakdown.verdict}
+            </div>
+          </div>
+
+          {/* Income Stream Progress */}
+          <div
+            onClick={() => setActiveTab('business')}
+            className="col-span-2 md:col-span-1 cursor-pointer rounded-2xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-4 md:p-5 space-y-2 hover:border-emerald-500/40 hover:-translate-y-0.5 transition-all shadow-sm"
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-[var(--text-secondary)] font-medium">معمل الدخل</span>
+              <div className="flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-400">
+                <Wallet className="h-4 w-4" />
+              </div>
+            </div>
+            <div className="font-mono text-2xl md:text-3xl font-extrabold text-emerald-400 tabular-nums">
+              {financialSummary.businessIncome.toLocaleString()} <span className="text-xs font-normal text-[var(--text-muted)]">ج</span>
+            </div>
+            <div className="h-1.5 w-full bg-[var(--bg-elevated)] rounded-full overflow-hidden">
+              <div
+                className="h-full bg-emerald-500 rounded-full transition-all duration-500"
+                style={{ width: '45%' }}
+              />
+            </div>
+            <div className="text-[11px] text-[var(--text-muted)] truncate">
+              {topExperiment ? topExperiment.name : 'تجارب أول عميل'}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. Weekly Focus Summary Card */}
+      <section className="rounded-2xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-5 md:p-6 space-y-4 shadow-sm">
+        <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-3.5">
+          <div className="flex items-center gap-2.5">
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--accent-gold)]/10 text-[var(--accent-gold)]">
+              <Calendar className="h-4 w-4" />
+            </div>
+            <div>
+              <h2 className="text-sm md:text-base font-bold text-[var(--text-primary)]">
+                Weekly Focus — ملخص الأسبوع الاستراتيجي
+              </h2>
+              <p className="text-xs text-[var(--text-muted)]">
+                مراجعة الأداء الأسبوعي وتثبيت البوصلة
               </p>
             </div>
-
-            <div className="pt-1 text-[11px] text-[#666666] leading-relaxed">
-              💡 <span className="font-medium text-[#888888]">مبدأ اليوم:</span> لا تقضِ اليوم في التشتت بين 10 مهام جانبية، إنهاء 3 مهام استراتيجية يعادل أسبوعاً كاملاً من العمل العشوائي.
-            </div>
           </div>
-        </div>
-      </div>
 
-      {/* قسم التحليل البصري الأسبوعي والإنتاجية (Recharts) */}
-      <WeeklyProductivityCharts state={state} />
-
-      {/* خطة 2027 والمشاريع النشطة الثلاثية */}
-      <section className="space-y-4 pt-2">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <h2 className="text-sm font-semibold text-[#F5F5F5]">
-              المشاريع النشطة (حد أقصى 3)
-            </h2>
-            <span className="font-mono text-xs text-[#999999]">
-              ({activeProjects.length}/3)
-            </span>
-          </div>
           <button
-            onClick={() => setActiveTab('projects')}
-            className="flex items-center gap-1 text-xs text-[#D4AF37] hover:underline"
+            onClick={() => setActiveTab('review')}
+            className="flex items-center gap-1 text-xs text-[var(--accent-gold)] hover:underline font-semibold"
           >
-            <span>إدارة المشاريع</span>
+            <span>جلسة المراجعة الكاملة</span>
             <ChevronLeft className="h-3.5 w-3.5" />
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {activeProjects.map((project) => (
-            <div
-              key={project.id}
-              className="flex flex-col justify-between rounded-xl border border-[#222222] bg-[#0c0c0c] p-4 hover:border-[#333333] transition-colors"
-            >
-              <div className="space-y-2">
-                <div className="flex items-center justify-between text-[11px] text-[#777777]">
-                  <span>{project.lifeArea}</span>
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono tabular-nums text-[#D4AF37] font-semibold">
-                      {project.progress}%
-                    </span>
-                    <button
-                      onClick={() => setEditingProject(project)}
-                      className="text-[#555555] hover:text-[#F5F5F5]"
-                      title="تعديل المشروع"
-                    >
-                      <Edit3 className="h-3 w-3" />
-                    </button>
-                  </div>
-                </div>
-
-                <h3 className="text-xs md:text-sm font-semibold text-[#F5F5F5] leading-snug">
-                  {project.title}
-                </h3>
-                <p className="text-[11px] text-[#777777] line-clamp-2">
-                  {project.description}
-                </p>
-
-                <div className="h-1 w-full bg-[#1c1c1c] rounded-full overflow-hidden my-2">
-                  <div
-                    className="h-full bg-[#D4AF37] transition-all"
-                    style={{ width: `${project.progress}%` }}
-                  />
-                </div>
-
-                {/* المراحل المصغرة */}
-                <div className="pt-2 space-y-1.5">
-                  {project.milestones.slice(0, 3).map((m) => (
-                    <button
-                      key={m.id}
-                      onClick={() => toggleProjectMilestone(project.id, m.id)}
-                      className="flex w-full items-center gap-2 text-right text-[11px] text-[#888888] hover:text-[#F5F5F5] transition-colors"
-                    >
-                      {m.completed ? (
-                        <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
-                      ) : (
-                        <Circle className="h-3.5 w-3.5 text-[#444444] shrink-0" />
-                      )}
-                      <span className={`truncate ${m.completed ? 'line-through text-[#555555]' : ''}`}>
-                        {m.title}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="mt-4 pt-3 border-t border-[#1a1a1a] flex items-center justify-between text-[11px] text-[#666666]">
-                <span>المراحل: {project.milestones.filter((m) => m.completed).length} / {project.milestones.length}</span>
-                <span className="text-[#D4AF37] hover:underline cursor-pointer" onClick={() => setActiveTab('projects')}>
-                  عرض التفاصيل ←
-                </span>
-              </div>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-3.5 text-xs">
+          {/* Planned vs Actual Time */}
+          <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-elevated)] p-4 space-y-2">
+            <div className="text-[11px] text-[var(--text-muted)] font-semibold">الوقت المخطط مقابل الفعلي</div>
+            <div className="flex items-baseline gap-2 font-mono tabular-nums">
+              <span className="text-xl font-extrabold text-[var(--accent-gold)]">
+                {focusHoursThisWeek} س
+              </span>
+              <span className="text-[11px] text-[var(--text-muted)]">فعلي / 20 س هدف</span>
             </div>
-          ))}
+            <div className="h-1.5 w-full bg-[var(--bg-surface)] rounded-full overflow-hidden mt-2">
+              <div
+                className="h-full bg-[var(--accent-gold)] rounded-full"
+                style={{ width: `${Math.min(100, (Number(focusHoursThisWeek) / 20) * 100)}%` }}
+              />
+            </div>
+          </div>
+
+          {/* Top Achievement */}
+          <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-elevated)] p-4 space-y-1.5">
+            <div className="flex items-center gap-1.5 text-[11px] text-emerald-400 font-semibold">
+              <CheckCircle2 className="h-3.5 w-3.5" />
+              <span>أهم إنجاز تحقق</span>
+            </div>
+            <p className="text-[var(--text-primary)] font-medium leading-relaxed line-clamp-3">
+              {latestWeeklyReview?.q1_biggestAchievement ||
+                'تثبيت هيكل نظام التشغيل الشخصي، وانضباط جلسة الفجر البرمجية (90 دقيقة).'}
+            </p>
+          </div>
+
+          {/* Biggest Problem / Time Waster */}
+          <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-elevated)] p-4 space-y-1.5">
+            <div className="flex items-center gap-1.5 text-[11px] text-amber-400 font-semibold">
+              <AlertTriangle className="h-3.5 w-3.5" />
+              <span>أكبر عائق / وقت ضائع</span>
+            </div>
+            <p className="text-amber-200/90 font-medium leading-relaxed line-clamp-3">
+              {latestWeeklyReview?.q4_biggestTimeWaster ||
+                'التردد في إرسال عروض الخدمات للمتاجر والبحث عن الكمال الزائد قبل الإطلاق.'}
+            </p>
+          </div>
+
+          {/* Next Strategic Step */}
+          <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-elevated)] p-4 space-y-1.5">
+            <div className="flex items-center gap-1.5 text-[11px] text-blue-400 font-semibold">
+              <ArrowUpRight className="h-3.5 w-3.5" />
+              <span>الخطوة القادمة المحسومة</span>
+            </div>
+            <p className="text-blue-200/90 font-medium leading-relaxed line-clamp-3">
+              {latestWeeklyReview?.q8_nextWeekTop3?.split('\n')[0] ||
+                'التواصل المباشر مع 10 عملاء محتملين لخدمة صفحات الهبوط خلال 48 ساعة.'}
+            </p>
+          </div>
         </div>
       </section>
+
+      {/* 5. Recharts Productivity Charts */}
+      <WeeklyProductivityCharts state={state} />
+
+      {/* 6. Daily Productivity Audit (Gemini API + Manual Sovereign Control) */}
+      <DailyProductivityAudit />
     </div>
   );
 };

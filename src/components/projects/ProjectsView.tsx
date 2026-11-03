@@ -17,6 +17,8 @@ import {
   Calendar,
   Layers,
   Edit3,
+  LayoutGrid,
+  List,
 } from 'lucide-react';
 import { LifeArea, Project, ProjectStatus } from '../../types';
 
@@ -32,6 +34,7 @@ export const ProjectsView: React.FC = () => {
   } = useApp();
 
   const [activeFilter, setActiveFilter] = useState<ProjectStatus | 'all'>('active');
+  const [layoutMode, setLayoutMode] = useState<'grid' | 'list'>('grid');
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   // حقول إضافة مشروع
@@ -160,61 +163,179 @@ export const ProjectsView: React.FC = () => {
         )}
       </div>
 
-      {/* فلاتر الحالات */}
-      <div className="flex items-center gap-1 bg-[#121212] p-1 rounded-lg border border-[#222222] self-start w-fit text-xs">
-        <button
-          onClick={() => setActiveFilter('active')}
-          className={`px-3 py-1 rounded transition-colors ${
-            activeFilter === 'active'
-              ? 'bg-[#222222] text-[#D4AF37] font-semibold'
-              : 'text-[#888888] hover:text-white'
-          }`}
-        >
-          النشطة ({state.projects.filter((p) => p.status === 'active').length})
-        </button>
-        <button
-          onClick={() => setActiveFilter('next')}
-          className={`px-3 py-1 rounded transition-colors ${
-            activeFilter === 'next'
-              ? 'bg-[#222222] text-[#F5F5F5]'
-              : 'text-[#888888] hover:text-white'
-          }`}
-        >
-          القادمة Next ({state.projects.filter((p) => p.status === 'next').length})
-        </button>
-        <button
-          onClick={() => setActiveFilter('parking_lot')}
-          className={`px-3 py-1 rounded transition-colors ${
-            activeFilter === 'parking_lot'
-              ? 'bg-[#222222] text-[#F5F5F5]'
-              : 'text-[#888888] hover:text-white'
-          }`}
-        >
-          المؤجلة Parking Lot ({state.projects.filter((p) => p.status === 'parking_lot').length})
-        </button>
-        <button
-          onClick={() => setActiveFilter('completed')}
-          className={`px-3 py-1 rounded transition-colors ${
-            activeFilter === 'completed'
-              ? 'bg-[#222222] text-emerald-400'
-              : 'text-[#888888] hover:text-white'
-          }`}
-        >
-          المكتملة ({state.projects.filter((p) => p.status === 'completed').length})
-        </button>
-        <button
-          onClick={() => setActiveFilter('all')}
-          className={`px-3 py-1 rounded transition-colors ${
-            activeFilter === 'all'
-              ? 'bg-[#222222] text-white'
-              : 'text-[#888888] hover:text-white'
-          }`}
-        >
-          الكل ({state.projects.length})
-        </button>
+      {/* فلاتر الحالات ونمط العرض (Grid / List) */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex items-center gap-1 bg-[#121212] p-1 rounded-lg border border-[#222222] self-start w-fit text-xs">
+          <button
+            onClick={() => setActiveFilter('active')}
+            className={`px-3 py-1 rounded transition-colors ${
+              activeFilter === 'active'
+                ? 'bg-[#222222] text-[#D4AF37] font-semibold'
+                : 'text-[#888888] hover:text-white'
+            }`}
+          >
+            النشطة ({state.projects.filter((p) => p.status === 'active').length})
+          </button>
+          <button
+            onClick={() => setActiveFilter('next')}
+            className={`px-3 py-1 rounded transition-colors ${
+              activeFilter === 'next'
+                ? 'bg-[#222222] text-[#F5F5F5]'
+                : 'text-[#888888] hover:text-white'
+            }`}
+          >
+            القادمة Next ({state.projects.filter((p) => p.status === 'next').length})
+          </button>
+          <button
+            onClick={() => setActiveFilter('parking_lot')}
+            className={`px-3 py-1 rounded transition-colors ${
+              activeFilter === 'parking_lot'
+                ? 'bg-[#222222] text-[#F5F5F5]'
+                : 'text-[#888888] hover:text-white'
+            }`}
+          >
+            المؤجلة Parking Lot ({state.projects.filter((p) => p.status === 'parking_lot').length})
+          </button>
+          <button
+            onClick={() => setActiveFilter('completed')}
+            className={`px-3 py-1 rounded transition-colors ${
+              activeFilter === 'completed'
+                ? 'bg-[#222222] text-emerald-400'
+                : 'text-[#888888] hover:text-white'
+            }`}
+          >
+            المكتملة ({state.projects.filter((p) => p.status === 'completed').length})
+          </button>
+          <button
+            onClick={() => setActiveFilter('all')}
+            className={`px-3 py-1 rounded transition-colors ${
+              activeFilter === 'all'
+                ? 'bg-[#222222] text-white'
+                : 'text-[#888888] hover:text-white'
+            }`}
+          >
+            الكل ({state.projects.length})
+          </button>
+        </div>
+
+        {/* View Switcher: Grid vs List */}
+        <div className="flex items-center gap-1 bg-[#121212] p-1 rounded-lg border border-[#222222] self-start sm:self-auto text-xs">
+          <button
+            onClick={() => setLayoutMode('grid')}
+            className={`flex items-center gap-1 px-2.5 py-1 rounded transition-colors ${
+              layoutMode === 'grid'
+                ? 'bg-[#D4AF37] text-black font-semibold'
+                : 'text-[#888888] hover:text-white'
+            }`}
+            title="عرض شبكي (Grid View)"
+          >
+            <LayoutGrid className="h-3.5 w-3.5" />
+            <span>شبكة</span>
+          </button>
+          <button
+            onClick={() => setLayoutMode('list')}
+            className={`flex items-center gap-1 px-2.5 py-1 rounded transition-colors ${
+              layoutMode === 'list'
+                ? 'bg-[#D4AF37] text-black font-semibold'
+                : 'text-[#888888] hover:text-white'
+            }`}
+            title="عرض قائمة (List View)"
+          >
+            <List className="h-3.5 w-3.5" />
+            <span>قائمة</span>
+          </button>
+        </div>
       </div>
 
-      {/* قائمة بطاقات المشاريع والمراحل */}
+      {/* قائمة المشاريع في نمط القائمة (List View) */}
+      {layoutMode === 'list' && (
+        <div className="rounded-xl border border-[#222222] bg-[#0c0c0c] overflow-hidden divide-y divide-[#1a1a1a]">
+          {filteredProjects.length === 0 ? (
+            <div className="p-12 text-center text-xs text-[#777777]">
+              لا توجد مشاريع في هذا القسم حالياً.
+            </div>
+          ) : (
+            filteredProjects.map((project) => {
+              const completedCount = project.milestones.filter((m) => m.completed).length;
+              const remainingCount = project.milestones.length - completedCount;
+
+              return (
+                <div
+                  key={project.id}
+                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 hover:bg-[#121212] transition-colors"
+                >
+                  <div className="space-y-1 min-w-0 max-w-md">
+                    <div className="flex items-center gap-2 text-xs">
+                      <span className="font-mono text-[#D4AF37] font-semibold text-[11px]">
+                        {project.status.toUpperCase()}
+                      </span>
+                      <span className="text-[#444444]">·</span>
+                      <span className="text-[#888888]">{project.lifeArea}</span>
+                      {project.targetDate && (
+                        <>
+                          <span className="text-[#444444]">·</span>
+                          <span className="text-[#666666] font-mono text-[11px]">
+                            التسليم: {project.targetDate}
+                          </span>
+                        </>
+                      )}
+                    </div>
+                    <h3 className="text-sm font-bold text-[#F5F5F5] truncate">
+                      {project.title}
+                    </h3>
+                    <p className="text-xs text-[#777777] truncate">
+                      {project.description}
+                    </p>
+                  </div>
+
+                  {/* Progress Bar & Milestones Remaining */}
+                  <div className="flex items-center gap-6 text-xs">
+                    <div className="w-36 space-y-1">
+                      <div className="flex justify-between text-[11px] font-mono">
+                        <span className="text-[#777777]">المراحل: {completedCount}/{project.milestones.length}</span>
+                        <span className="text-[#D4AF37] font-bold tabular-nums">{project.progress}%</span>
+                      </div>
+                      <div className="h-1.5 w-full bg-[#181818] rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-[#D4AF37] transition-all"
+                          style={{ width: `${project.progress}%` }}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="text-center font-mono text-xs">
+                      <div className="text-[10px] text-[#666666]">المتبقي</div>
+                      <div className="font-bold text-[#F5F5F5]">{remainingCount} مهام</div>
+                    </div>
+
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        onClick={() => setEditingProject(project)}
+                        className="rounded-lg border border-[#2a2a2a] bg-[#141414] p-2 text-[#cccccc] hover:text-white hover:border-[#D4AF37]/40"
+                        title="تعديل المشروع"
+                      >
+                        <Edit3 className="h-3.5 w-3.5" />
+                      </button>
+                      <button
+                        onClick={() => {
+                          if (confirm('هل أنت متأكد من حذف هذا المشروع؟')) deleteProject(project.id);
+                        }}
+                        className="rounded-lg border border-[#2a2a2a] bg-[#141414] p-2 text-[#777777] hover:text-red-400"
+                        title="حذف المشروع"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })
+          )}
+        </div>
+      )}
+
+      {/* قائمة بطاقات المشاريع والمراحل (Grid View) */}
+      {layoutMode === 'grid' && (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {filteredProjects.length === 0 ? (
           <div className="col-span-2 rounded-xl border border-dashed border-[#222222] bg-[#090909] p-12 text-center text-xs text-[#777777]">
@@ -371,6 +492,7 @@ export const ProjectsView: React.FC = () => {
           })
         )}
       </div>
+      )}
 
       {/* نافذة إنشاء مشروع جديد */}
       {isCreateModalOpen && (

@@ -14,6 +14,7 @@ export const EditTaskModal: React.FC = () => {
   const [title, setTitle] = useState('');
   const [lifeArea, setLifeArea] = useState<LifeArea>('البرمجة');
   const [estimatedMinutes, setEstimatedMinutes] = useState(30);
+  const [actualMinutes, setActualMinutes] = useState<number | ''>('');
   const [priority, setPriority] = useState<TaskPriority>('high');
   const [status, setStatus] = useState<TaskStatus>('todo');
   const [linkedProjectId, setLinkedProjectId] = useState<string>('');
@@ -24,6 +25,7 @@ export const EditTaskModal: React.FC = () => {
       setTitle(editingTask.title);
       setLifeArea(editingTask.lifeArea);
       setEstimatedMinutes(editingTask.estimatedMinutes);
+      setActualMinutes(editingTask.actualMinutes !== undefined ? editingTask.actualMinutes : '');
       setPriority(editingTask.priority);
       setStatus(editingTask.status);
       setLinkedProjectId(editingTask.linkedProjectId || '');
@@ -42,6 +44,7 @@ export const EditTaskModal: React.FC = () => {
       title: title.trim(),
       lifeArea,
       estimatedMinutes: Number(estimatedMinutes) || 30,
+      actualMinutes: actualMinutes !== '' ? Number(actualMinutes) : undefined,
       priority,
       status,
       linkedProjectId: linkedProjectId || undefined,
@@ -114,7 +117,7 @@ export const EditTaskModal: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-[#999999] mb-1 font-medium">الوقت المقدر (دقيقة):</label>
+              <label className="block text-[#999999] mb-1 font-medium">الوقت المخطط (دقيقة):</label>
               <input
                 type="number"
                 min={5}
@@ -128,6 +131,19 @@ export const EditTaskModal: React.FC = () => {
 
           <div className="grid grid-cols-2 gap-3">
             <div>
+              <label className="block text-[#999999] mb-1 font-medium">الوقت الفعلي المستغرق (دقيقة):</label>
+              <input
+                type="number"
+                min={0}
+                max={600}
+                placeholder="مثال: 45 (اختياري)"
+                value={actualMinutes}
+                onChange={(e) => setActualMinutes(e.target.value === '' ? '' : Number(e.target.value))}
+                className="w-full rounded-lg border border-[#2a2a2a] bg-[#141414] px-3 py-2 text-[#F5F5F5] focus:border-[#D4AF37] focus:outline-none placeholder:text-[#555555]"
+              />
+            </div>
+
+            <div>
               <label className="block text-[#999999] mb-1 font-medium">الأولوية:</label>
               <select
                 value={priority}
@@ -139,7 +155,9 @@ export const EditTaskModal: React.FC = () => {
                 <option value="normal">عادية</option>
               </select>
             </div>
+          </div>
 
+          <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-[#999999] mb-1 font-medium">الحالة:</label>
               <select

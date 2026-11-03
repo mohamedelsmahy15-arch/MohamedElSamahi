@@ -1,7 +1,8 @@
 /**
  * components/business/BusinessView.tsx
- * مختبر الدخل وتجارب المشاريع (Income Lab & Income Experiments)
- * تحويل الأفكار إلى تجارب سريعة مدتها 14 يوماً مع التواصل مع 20 عميل وتحقيق أول إيراد
+ * معمل الأعمال ومختبر تجارب الدخل (Business & Income Lab)
+ * مصمم كلوحة إدارة شركات ناشئة لاختبار الفرص التجارية الواقعية
+ * بنظام المراحل السبعة: Idea · Research · Testing · First Customer · Validated · Profitable · Stopped
  */
 
 import React, { useState } from 'react';
@@ -15,10 +16,25 @@ import {
   TrendingUp,
   Sparkles,
   CheckCircle2,
+  Clock,
+  ArrowRight,
+  DollarSign,
   AlertCircle,
-  HelpCircle,
+  ChevronLeft,
+  ChevronRight,
+  Filter,
 } from 'lucide-react';
 import { ExperimentStatus, IncomeExperiment } from '../../types';
+
+const STAGES: { id: ExperimentStatus; labelAr: string; color: string }[] = [
+  { id: 'Idea', labelAr: 'فكرة (Idea)', color: 'text-neutral-400 border-neutral-700 bg-neutral-900/50' },
+  { id: 'Research', labelAr: 'بحث ودراسة (Research)', color: 'text-sky-400 border-sky-800/40 bg-sky-950/20' },
+  { id: 'Testing', labelAr: 'اختبار بالسوق (Testing)', color: 'text-amber-400 border-amber-800/40 bg-amber-950/20' },
+  { id: 'First Customer', labelAr: 'أول عميل تحقق (First Customer)', color: 'text-emerald-400 border-emerald-800/40 bg-emerald-950/20' },
+  { id: 'Validated', labelAr: 'مثبتة تجارياً (Validated)', color: 'text-teal-400 border-teal-800/40 bg-teal-950/20' },
+  { id: 'Profitable', labelAr: 'مربحة ومستدامة (Profitable)', color: 'text-[var(--accent-gold)] border-[var(--accent-gold)]/40 bg-[var(--accent-gold)]/10' },
+  { id: 'Stopped', labelAr: 'متوقفة (Stopped)', color: 'text-rose-400 border-rose-900/40 bg-rose-950/20' },
+];
 
 export const BusinessView: React.FC = () => {
   const {
@@ -29,16 +45,19 @@ export const BusinessView: React.FC = () => {
   } = useApp();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [filterStage, setFilterStage] = useState<string>('all');
 
-  // حقول نموذج التجربة
+  // Form states
   const [name, setName] = useState('');
   const [problem, setProblem] = useState('');
   const [targetClient, setTargetClient] = useState('');
   const [requiredSkill, setRequiredSkill] = useState('');
   const [requiredCapital, setRequiredCapital] = useState('300');
   const [requiredTimeHours, setRequiredTimeHours] = useState('15');
-  const [monetizationSource, setMonetizationSource] = useState('');
+  const [monetizationSource, setMonetizationSource] = useState('رسوم خدمة مدفوعة أو باقة عمل');
   const [testDurationDays, setTestDurationDays] = useState('14');
+  const [status, setStatus] = useState<ExperimentStatus>('Testing');
+  const [nextStep, setNextStep] = useState('');
 
   const handleCreate = (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,129 +65,201 @@ export const BusinessView: React.FC = () => {
 
     addIncomeExperiment({
       name: name.trim(),
-      problem: problem.trim() || 'مشكلة سوق حقيقية',
-      targetClient: targetClient.trim() || 'متاجر أو أفراد',
-      requiredSkill: requiredSkill.trim() || 'مهارة تقنية أو تسويقية',
+      problem: problem.trim() || 'مشكلة سوق حقيقية يبحث أصحابها عن حل سريع',
+      targetClient: targetClient.trim() || 'الشركات أو المتاجر المحلية',
+      requiredSkill: requiredSkill.trim() || 'مهارة تقنية أو تسويقية عملية',
       requiredCapital: Number(requiredCapital) || 0,
-      requiredTimeHours: Number(requiredTimeHours) || 10,
-      monetizationSource: monetizationSource.trim() || 'رسوم خدمة مدفوعة',
+      requiredTimeHours: Number(requiredTimeHours) || 15,
+      monetizationSource: monetizationSource.trim() || 'تعاقد مباشر لكل مشروع',
       startDate: new Date().toISOString().split('T')[0],
       testDurationDays: Number(testDurationDays) || 14,
       targetClientsContacted: 20,
-      status: 'اختبار جاري (14 يوم)',
+      status,
       learningsNotes: '',
+      nextStep: nextStep.trim() || 'إعداد قائمة بأول 5 عملاء والتواصل معهم فوراً',
+      outcomeNotes: 'بدأت التجربة حديثاً في معمل الأعمال',
     });
 
     setName('');
     setProblem('');
     setTargetClient('');
     setRequiredSkill('');
+    setNextStep('');
     setIsModalOpen(false);
   };
 
   const handleUpdateContacted = (exp: IncomeExperiment, delta: number) => {
     const nextVal = Math.max(0, exp.actualClientsContacted + delta);
+    let nextStatus = exp.status;
+    if (nextVal >= 20 && exp.revenueEarned > 0) {
+      nextStatus = 'Validated';
+    } else if (nextVal > 0 && exp.revenueEarned > 0 && exp.status === 'Testing') {
+      nextStatus = 'First Customer';
+    }
+
     updateIncomeExperiment({
       ...exp,
       actualClientsContacted: nextVal,
-      status:
-        nextVal >= 20 && exp.revenueEarned > 0
-          ? 'مربح ومستمر'
-          : nextVal > 0 && exp.revenueEarned > 0
-          ? 'أول عميل تحقق'
-          : exp.status,
+      status: nextStatus,
     });
   };
 
   const handleUpdateRevenue = (exp: IncomeExperiment) => {
-    const amountStr = prompt('أدخل قيمة الإيراد الجديد المتحقق (ج.م):', '1000');
+    const amountStr = prompt('أدخل قيمة الإيراد الجديد المتحقق بالجنيه (ج.م):', '2000');
     if (amountStr) {
       const added = Number(amountStr);
       if (!isNaN(added) && added > 0) {
+        const nextRev = exp.revenueEarned + added;
+        let nextStatus = exp.status;
+        if (exp.status === 'Idea' || exp.status === 'Research' || exp.status === 'Testing') {
+          nextStatus = 'First Customer';
+        }
         updateIncomeExperiment({
           ...exp,
-          revenueEarned: exp.revenueEarned + added,
-          status: 'أول عميل تحقق',
+          revenueEarned: nextRev,
+          status: nextStatus,
         });
       }
     }
   };
 
-  const handleStatusChange = (exp: IncomeExperiment, nextStatus: ExperimentStatus) => {
-    updateIncomeExperiment({
-      ...exp,
-      status: nextStatus,
-    });
+  const handleUpdateNextStep = (exp: IncomeExperiment) => {
+    const newStep = prompt('حدّد الخطوة القادمة المحسومة لهذه التجربة:', exp.nextStep || '');
+    if (newStep !== null) {
+      updateIncomeExperiment({
+        ...exp,
+        nextStep: newStep.trim(),
+      });
+    }
   };
 
+  const handleAdvanceStage = (exp: IncomeExperiment) => {
+    const stageIds: ExperimentStatus[] = ['Idea', 'Research', 'Testing', 'First Customer', 'Validated', 'Profitable'];
+    const currentIdx = stageIds.indexOf(exp.status as any);
+    if (currentIdx !== -1 && currentIdx < stageIds.length - 1) {
+      updateIncomeExperiment({
+        ...exp,
+        status: stageIds[currentIdx + 1],
+      });
+    }
+  };
+
+  // Aggregated Stats
+  const totalRevenue = state.incomeExperiments.reduce((acc, curr) => acc + curr.revenueEarned, 0);
+  const totalContacted = state.incomeExperiments.reduce((acc, curr) => acc + curr.actualClientsContacted, 0);
+  const activeCount = state.incomeExperiments.filter((e) => e.status !== 'Stopped').length;
+
+  const filteredExperiments = state.incomeExperiments.filter((exp) => {
+    if (filterStage === 'all') return true;
+    return exp.status === filterStage;
+  });
+
   return (
-    <div className="space-y-6 pb-12">
-      {/* رأس الصفحة */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#1f1f1f] pb-4">
+    <div className="space-y-6 pb-16">
+      {/* 1. Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--border-color)] pb-4">
         <div>
-          <div className="flex items-center gap-2 text-xs font-mono text-[#D4AF37]">
-            <span>بناء الثروة بالقيمة</span>
+          <div className="flex items-center gap-2 text-xs font-mono text-[var(--accent-gold)]">
+            <span>معمل الأعمال</span>
             <span>·</span>
-            <span>Income Lab</span>
+            <span>Startup & Income Incubator</span>
           </div>
-          <h1 className="text-xl md:text-2xl font-bold tracking-tight text-[#F5F5F5] mt-1">
-            مختبر مصادر الدخل والتجارب
+          <h1 className="text-xl md:text-2xl font-bold tracking-tight text-[var(--text-primary)] mt-1">
+            مختبر مصادر الدخل والتجارب التجارية
           </h1>
-          <p className="text-xs text-[#999999] mt-0.5">
-            "لا تبحث عن فكرة مثالية بمليون جنيه من البداية. اختبر خدمة بسيطة، تواصل مع 20 عميل، واكسب أول جنيه."
+          <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+            "لا تبنِ منتجاً في الظل لشهور. اختبر فرضيتك، تواصل مع 20 عميلاً مستهدفاً، وحقق أول إيراد حقيقي."
           </p>
         </div>
 
         <button
           onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 rounded bg-[#D4AF37] px-4 py-2 text-xs font-semibold text-black hover:bg-[#e0bc45] transition-all self-start sm:self-auto"
+          className="flex items-center gap-2 rounded bg-[var(--accent-gold)] px-4 py-2 text-xs font-semibold text-black transition-all hover:opacity-90 self-start sm:self-auto shadow-sm active:scale-95"
         >
           <Plus className="h-4 w-4 stroke-[3]" />
-          <span>+ إطلاق تجربة دخل جديدة (14 يوم)</span>
+          <span>+ إطلاق تجربة عمل جديدة</span>
         </button>
       </div>
 
-      {/* ميثاق تجارب الدخل */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="rounded-xl border border-[#222222] bg-[#0c0c0c] p-4 space-y-1 text-xs">
-          <div className="font-semibold text-[#D4AF37] flex items-center gap-1.5">
-            <Target className="h-4 w-4" />
-            <span>قاعدة الـ 20 عميل</span>
+      {/* 2. Startup Metrics Dashboard */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-4 space-y-1">
+          <div className="text-[11px] text-[var(--text-muted)] font-medium">إجمالي الإيرادات المتحققة</div>
+          <div className="font-mono text-xl md:text-2xl font-bold text-emerald-400 tabular-nums">
+            {totalRevenue.toLocaleString()} <span className="text-xs font-normal">ج.م</span>
           </div>
-          <p className="text-[#888888] leading-relaxed">
-            لا تحكم على أي خدمة أو فكرة بالفشل قبل عرضها مباشرة على 20 عميل مستهدف على الأقل وتدوين اعتراضاتهم.
-          </p>
+          <div className="text-[10px] text-[var(--text-secondary)]">مال حقيقي مدفوع مقابل القيمة</div>
         </div>
 
-        <div className="rounded-xl border border-[#222222] bg-[#0c0c0c] p-4 space-y-1 text-xs">
-          <div className="font-semibold text-[#D4AF37] flex items-center gap-1.5">
-            <TrendingUp className="h-4 w-4" />
-            <span>دورة الـ 14 يوماً</span>
+        <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-4 space-y-1">
+          <div className="text-[11px] text-[var(--text-muted)] font-medium">التواصل مع العملاء</div>
+          <div className="font-mono text-xl md:text-2xl font-bold text-[var(--text-primary)] tabular-nums">
+            {totalContacted} <span className="text-xs font-normal text-[var(--text-muted)]">اتصال</span>
           </div>
-          <p className="text-[#888888] leading-relaxed">
-            كل تجربة يجب أن تبدأ وتختبر وتصل لنتيجتها في أسبوعين. لا تمضِ 6 أشهر في بناء شيء لم يطلبه أحد.
-          </p>
+          <div className="text-[10px] text-[var(--text-secondary)]">اختبارات مباشرة مع السوق</div>
         </div>
 
-        <div className="rounded-xl border border-[#222222] bg-[#0c0c0c] p-4 space-y-1 text-xs">
-          <div className="font-semibold text-[#D4AF37] flex items-center gap-1.5">
-            <CheckCircle2 className="h-4 w-4" />
-            <span>معيار النجاح الصريح</span>
+        <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-4 space-y-1">
+          <div className="text-[11px] text-[var(--text-muted)] font-medium">التجارب النشطة</div>
+          <div className="font-mono text-xl md:text-2xl font-bold text-[var(--accent-gold)] tabular-nums">
+            {activeCount}
           </div>
-          <p className="text-[#888888] leading-relaxed">
-            النجاح ليس الإعجاب أو المديح. النجاح هو عميل يدفع لك مالاً مقابل القيمة التي قدمتها له.
-          </p>
+          <div className="text-[10px] text-[var(--text-secondary)]">فرص قيد الاختبار والتحقق</div>
+        </div>
+
+        <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-4 space-y-1">
+          <div className="text-[11px] text-[var(--text-muted)] font-medium">معيار النجاح الصريح</div>
+          <div className="text-xs font-bold text-[var(--text-primary)] truncate mt-1">
+            20 عميل · أول جنيه
+          </div>
+          <div className="text-[10px] text-[var(--text-secondary)]">لا نجاح دون دفع مالي صريح</div>
         </div>
       </div>
 
-      {/* قائمة التجارب */}
-      <div className="space-y-4">
-        {state.incomeExperiments.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-[#222222] bg-[#090909] p-12 text-center text-xs text-[#777777]">
-            لم تطلق أي تجربة دخل بعد. اضغط زر الإطلاق بالأعلى لبدء أول اختبار لمهارتك في السوق.
+      {/* 3. Stage Pipeline Tabs Filter */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
+        <span className="text-[var(--text-muted)] shrink-0 flex items-center gap-1">
+          <Filter className="h-3 w-3" />
+          <span>المرحلة:</span>
+        </span>
+        <button
+          onClick={() => setFilterStage('all')}
+          className={`px-3 py-1.5 rounded-md font-medium transition-colors whitespace-nowrap ${
+            filterStage === 'all'
+              ? 'bg-[var(--accent-gold)] text-black font-semibold'
+              : 'border border-[var(--border-color)] bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+          }`}
+        >
+          كافة التجارب ({state.incomeExperiments.length})
+        </button>
+
+        {STAGES.map((s) => {
+          const count = state.incomeExperiments.filter((e) => e.status === s.id).length;
+          return (
+            <button
+              key={s.id}
+              onClick={() => setFilterStage(s.id)}
+              className={`px-3 py-1.5 rounded-md font-medium transition-colors whitespace-nowrap ${
+                filterStage === s.id
+                  ? 'bg-[var(--accent-gold)] text-black font-semibold'
+                  : 'border border-[var(--border-color)] bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+              }`}
+            >
+              {s.labelAr} {count > 0 ? `(${count})` : ''}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* 4. Startup Cards Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {filteredExperiments.length === 0 ? (
+          <div className="col-span-full rounded-xl border border-dashed border-[var(--border-color)] bg-[var(--bg-surface)] p-12 text-center text-xs text-[var(--text-muted)]">
+            لا توجد تجارب في هذه المرحلة حالياً. اضغط "+ إطلاق تجربة عمل جديدة" لبدء اختبار فرضية تجارية في السوق.
           </div>
         ) : (
-          state.incomeExperiments.map((exp) => {
+          filteredExperiments.map((exp) => {
+            const currentStageObj = STAGES.find((s) => s.id === exp.status) || STAGES[2];
             const clientsProgress = Math.min(
               100,
               Math.round((exp.actualClientsContacted / exp.targetClientsContacted) * 100)
@@ -177,122 +268,152 @@ export const BusinessView: React.FC = () => {
             return (
               <div
                 key={exp.id}
-                className="rounded-xl border border-[#222222] bg-[#0c0c0c] p-5 space-y-4 hover:border-[#2f2f2f] transition-colors"
+                className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-5 space-y-4 hover:border-[var(--accent-gold)]/40 transition-all flex flex-col justify-between shadow-sm"
               >
-                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2 text-xs">
-                      <span className="font-mono text-[#D4AF37] font-semibold">{exp.status}</span>
-                      <span aria-hidden="true" className="text-[#444444]">·</span>
-                      <span className="text-[#888888]">بدأت: {exp.startDate}</span>
-                      <span aria-hidden="true" className="text-[#444444]">·</span>
-                      <span className="text-[#888888]">المدة: {exp.testDurationDays} يوماً</span>
-                    </div>
-
-                    <h3 className="text-sm md:text-base font-bold text-[#F5F5F5]">
-                      {exp.name}
-                    </h3>
-
-                    <p className="text-xs text-[#888888] leading-relaxed max-w-3xl">
-                      <span className="text-[#aaaaaa]">المشكلة: </span>
-                      {exp.problem}
-                    </p>
-                  </div>
-
-                  <button
-                    onClick={() => {
-                      if (confirm('حذف هذه التجربة؟')) deleteIncomeExperiment(exp.id);
-                    }}
-                    className="text-[#555555] hover:text-red-400 p-1 self-start"
-                    title="حذف"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
-                </div>
-
-                {/* مقاييس التجربة: التواصل مع العملاء + الإيراد المتحقق */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-[#1a1a1a]">
-                  {/* عداد العملاء */}
-                  <div className="rounded-lg bg-[#111111] p-3 border border-[#1a1a1a] space-y-2">
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="text-[#888888] flex items-center gap-1">
-                        <Users className="h-3.5 w-3.5 text-[#D4AF37]" />
-                        <span>العملاء المتواصل معهم:</span>
-                      </span>
-                      <div className="flex items-center gap-2">
-                        <button
-                          onClick={() => handleUpdateContacted(exp, -1)}
-                          className="h-6 w-6 rounded border border-[#222222] bg-[#141414] text-xs text-[#888888] hover:text-white flex items-center justify-center font-mono"
+                {/* Card Header: Title & Stage */}
+                <div className="space-y-3">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2 text-xs">
+                        <span
+                          className={`font-mono text-[11px] font-semibold px-2 py-0.5 rounded border ${currentStageObj.color}`}
                         >
-                          -
-                        </button>
-                        <span className="font-mono text-[#F5F5F5] font-bold tabular-nums">
-                          {exp.actualClientsContacted} / {exp.targetClientsContacted}
+                          {currentStageObj.labelAr}
                         </span>
-                        <button
-                          onClick={() => handleUpdateContacted(exp, 1)}
-                          className="h-6 w-6 rounded border border-[#222222] bg-[#141414] text-xs text-[#888888] hover:text-white flex items-center justify-center font-mono"
-                        >
-                          +
-                        </button>
+                        <span className="text-[var(--text-muted)]">·</span>
+                        <span className="text-[var(--text-muted)] font-mono text-[11px]">
+                          دورة {exp.testDurationDays || 14} يوماً
+                        </span>
                       </div>
-                    </div>
 
-                    <div className="h-1.5 w-full bg-[#1c1c1c] rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-[#D4AF37] transition-all"
-                        style={{ width: `${clientsProgress}%` }}
-                      />
-                    </div>
-                  </div>
-
-                  {/* الإيراد المالي المتحقق */}
-                  <div className="rounded-lg bg-[#111111] p-3 border border-[#1a1a1a] flex items-center justify-between">
-                    <div>
-                      <div className="text-[11px] text-[#888888]">الإيراد المالي من التجربة:</div>
-                      <div className="font-mono text-lg font-bold text-emerald-400 tabular-nums mt-0.5">
-                        {exp.revenueEarned.toLocaleString()} ج.م
-                      </div>
+                      <h3 className="text-base font-bold text-[var(--text-primary)] leading-tight pt-1">
+                        {exp.name}
+                      </h3>
                     </div>
 
                     <button
-                      onClick={() => handleUpdateRevenue(exp)}
-                      className="rounded border border-[#2a2a2a] bg-[#161616] px-2.5 py-1.5 text-xs text-[#D4AF37] hover:border-[#D4AF37]/50"
+                      onClick={() => {
+                        if (confirm(`حذف تجربة "${exp.name}" ونقلها لسلة المهملات؟`)) {
+                          deleteIncomeExperiment(exp.id);
+                        }
+                      }}
+                      className="text-[var(--text-muted)] hover:text-rose-400 p-1 transition-colors"
+                      title="حذف ونقل للسلة"
                     >
-                      + تسجيل إيراد
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+
+                  {/* Core Problem & Target Customer */}
+                  <div className="space-y-2 text-xs rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] p-3">
+                    <div>
+                      <span className="text-[var(--text-muted)] font-medium">العميل المستهدف: </span>
+                      <span className="text-[var(--text-primary)] font-semibold">{exp.targetClient}</span>
+                    </div>
+                    <div>
+                      <span className="text-[var(--text-muted)] font-medium">المشكلة بالسوق: </span>
+                      <span className="text-[var(--text-secondary)]">{exp.problem}</span>
+                    </div>
+                  </div>
+
+                  {/* Metrics Row: Customer Touches & Revenue */}
+                  <div className="grid grid-cols-2 gap-3 pt-1">
+                    {/* Customer Touches */}
+                    <div className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] p-3 space-y-1.5">
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="text-[var(--text-muted)] flex items-center gap-1">
+                          <Users className="h-3 w-3 text-[var(--accent-gold)]" />
+                          <span>العملاء:</span>
+                        </span>
+                        <div className="flex items-center gap-1.5">
+                          <button
+                            onClick={() => handleUpdateContacted(exp, -1)}
+                            className="h-5 w-5 rounded border border-[var(--border-color)] bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] flex items-center justify-center font-mono text-xs"
+                          >
+                            -
+                          </button>
+                          <span className="font-mono text-[var(--text-primary)] font-bold tabular-nums">
+                            {exp.actualClientsContacted}/{exp.targetClientsContacted}
+                          </span>
+                          <button
+                            onClick={() => handleUpdateContacted(exp, 1)}
+                            className="h-5 w-5 rounded border border-[var(--border-color)] bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] flex items-center justify-center font-mono text-xs"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="h-1.5 w-full bg-[var(--bg-surface)] rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-[var(--accent-gold)] transition-all duration-300"
+                          style={{ width: `${clientsProgress}%` }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Revenue Earned */}
+                    <div className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] p-3 flex items-center justify-between">
+                      <div>
+                        <div className="text-[10px] text-[var(--text-muted)]">الإيرادات المحققة:</div>
+                        <div className="font-mono text-base font-bold text-emerald-400 tabular-nums">
+                          {exp.revenueEarned.toLocaleString()} ج.م
+                        </div>
+                      </div>
+
+                      <button
+                        onClick={() => handleUpdateRevenue(exp)}
+                        className="rounded-md border border-[var(--border-color)] bg-[var(--bg-surface)] px-2 py-1 text-[11px] text-[var(--accent-gold)] hover:border-[var(--accent-gold)]/50 transition-colors"
+                      >
+                        + إيراد
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Next Step Banner */}
+                  <div className="flex items-start justify-between gap-2 rounded-lg bg-[var(--bg-elevated)] border border-[var(--border-color)] p-2.5 text-xs">
+                    <div className="space-y-0.5">
+                      <span className="text-[10px] text-[var(--accent-gold)] font-medium">الخطوة القادمة:</span>
+                      <p className="text-[var(--text-primary)] font-medium leading-relaxed">
+                        {exp.nextStep || 'تحديد أول خطوة تواصل مع العملاء.'}
+                      </p>
+                    </div>
+
+                    <button
+                      onClick={() => handleUpdateNextStep(exp)}
+                      className="text-[11px] text-[var(--text-muted)] hover:text-[var(--text-primary)] underline shrink-0 mt-0.5"
+                    >
+                      تعديل
                     </button>
                   </div>
                 </div>
 
-                {/* تفاصيل المهارة والعميل المستهدف */}
-                <div className="flex flex-wrap items-center gap-3 text-[11px] text-[#777777]">
-                  <span>العميل: {exp.targetClient}</span>
-                  <span aria-hidden="true">·</span>
-                  <span>المهارة: {exp.requiredSkill}</span>
-                  <span aria-hidden="true">·</span>
-                  <span>المصدر: {exp.monetizationSource}</span>
-                </div>
-
-                {/* تغيير حالة التجربة */}
-                <div className="flex items-center justify-between pt-2 border-t border-[#1a1a1a] text-xs">
-                  <span className="text-[#666666]">تحديث مسار التجربة:</span>
+                {/* Card Footer: Stage Stepper & Outcome */}
+                <div className="pt-3 border-t border-[var(--border-color)] flex items-center justify-between text-xs">
                   <div className="flex items-center gap-1.5">
-                    {(['اختبار جاري (14 يوم)', 'أول عميل تحقق', 'مربح ومستمر', 'متوقف'] as ExperimentStatus[]).map(
-                      (st) => (
-                        <button
-                          key={st}
-                          onClick={() => handleStatusChange(exp, st)}
-                          className={`px-2 py-0.5 rounded text-[11px] transition-colors ${
-                            exp.status === st
-                              ? 'bg-[#262626] text-[#D4AF37] font-semibold'
-                              : 'text-[#777777] hover:text-[#cccccc]'
-                          }`}
-                        >
-                          {st}
-                        </button>
-                      )
-                    )}
+                    <span className="text-[var(--text-muted)] text-[11px]">المرحلة:</span>
+                    <select
+                      value={exp.status}
+                      onChange={(e) => updateIncomeExperiment({ ...exp, status: e.target.value as ExperimentStatus })}
+                      className="rounded border border-[var(--border-color)] bg-[var(--bg-elevated)] px-2 py-1 text-[11px] text-[var(--text-primary)] outline-none"
+                    >
+                      {STAGES.map((s) => (
+                        <option key={s.id} value={s.id}>
+                          {s.labelAr}
+                        </option>
+                      ))}
+                    </select>
                   </div>
+
+                  {exp.status !== 'Profitable' && exp.status !== 'Stopped' && (
+                    <button
+                      onClick={() => handleAdvanceStage(exp)}
+                      className="flex items-center gap-1 text-[11px] text-[var(--accent-gold)] hover:underline font-medium"
+                    >
+                      <span>الترقية للمرحلة التالية</span>
+                      <ChevronLeft className="h-3 w-3" />
+                    </button>
+                  )}
                 </div>
               </div>
             );
@@ -300,104 +421,125 @@ export const BusinessView: React.FC = () => {
         )}
       </div>
 
-      {/* نافذة إطلاق تجربة جديدة */}
+      {/* 5. Modal: Launch New Income Experiment */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 overflow-y-auto">
-          <div className="w-full max-w-lg rounded-xl border border-[#2a2a2a] bg-[#0e0e0e] p-6 space-y-4 my-8">
-            <div className="flex items-center justify-between border-b border-[#222222] pb-3">
-              <h2 className="text-sm font-bold text-[#F5F5F5]">إطلاق تجربة دخل مصغرة (14 يوماً)</h2>
-              <button onClick={() => setIsModalOpen(false)} className="text-[#777777] hover:text-[#F5F5F5]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+          <div className="w-full max-w-lg rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-6 space-y-4 animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-3">
+              <div className="flex items-center gap-2">
+                <Briefcase className="h-4 w-4 text-[var(--accent-gold)]" />
+                <h2 className="text-base font-bold text-[var(--text-primary)]">
+                  إطلاق تجربة عمل جديدة في المعمل
+                </h2>
+              </div>
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+              >
                 ✕
               </button>
             </div>
 
-            <form onSubmit={handleCreate} className="space-y-3.5 text-xs">
-              <div>
-                <label className="block text-[#999999] mb-1 font-medium">اسم الخدمة أو التجربة:</label>
+            <form onSubmit={handleCreate} className="space-y-4 text-xs">
+              <div className="space-y-1">
+                <label className="text-[var(--text-secondary)]">اسم التجربة / العرض التجاري:</label>
                 <input
                   type="text"
                   required
-                  placeholder="مثال: خدمة برمجة حاسبة أسعار للمصممين"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full rounded-lg border border-[#2a2a2a] bg-[#141414] px-3 py-2 text-[#F5F5F5] focus:border-[#D4AF37] focus:outline-none"
-                />
-              </div>
-
-              <div>
-                <label className="block text-[#999999] mb-1 font-medium">ما المشكلة الحقيقية التي تحلها؟</label>
-                <input
-                  type="text"
-                  placeholder="مثال: صعوبة تسعير المشاريع وإهدار الوقت في المفاوضات"
-                  value={problem}
-                  onChange={(e) => setProblem(e.target.value)}
-                  className="w-full rounded-lg border border-[#2a2a2a] bg-[#141414] px-3 py-2 text-[#F5F5F5] focus:border-[#D4AF37] focus:outline-none"
+                  placeholder="مثال: خدمة أتمتة الردود على الواتساب للمتاجر المحلية"
+                  className="w-full rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] px-3 py-2 text-[var(--text-primary)] outline-none focus:border-[var(--accent-gold)]"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-[#999999] mb-1 font-medium">العميل المستهدف:</label>
+                <div className="space-y-1">
+                  <label className="text-[var(--text-secondary)]">العميل المستهدف:</label>
                   <input
                     type="text"
-                    placeholder="مثال: المصممون الأحرار"
+                    required
                     value={targetClient}
                     onChange={(e) => setTargetClient(e.target.value)}
-                    className="w-full rounded-lg border border-[#2a2a2a] bg-[#141414] px-3 py-2 text-[#F5F5F5] focus:border-[#D4AF37] focus:outline-none"
+                    placeholder="مثال: متاجر الملابس على إنستغرام"
+                    className="w-full rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] px-3 py-2 text-[var(--text-primary)] outline-none focus:border-[var(--accent-gold)]"
                   />
                 </div>
 
-                <div>
-                  <label className="block text-[#999999] mb-1 font-medium">المهارة المطلوبة:</label>
-                  <input
-                    type="text"
-                    placeholder="مثال: JavaScript, Tailwind"
-                    value={requiredSkill}
-                    onChange={(e) => setRequiredSkill(e.target.value)}
-                    className="w-full rounded-lg border border-[#2a2a2a] bg-[#141414] px-3 py-2 text-[#F5F5F5] focus:border-[#D4AF37] focus:outline-none"
-                  />
+                <div className="space-y-1">
+                  <label className="text-[var(--text-secondary)]">المرحلة الابتدائية:</label>
+                  <select
+                    value={status}
+                    onChange={(e: any) => setStatus(e.target.value)}
+                    className="w-full rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] px-3 py-2 text-[var(--text-primary)] outline-none focus:border-[var(--accent-gold)]"
+                  >
+                    {STAGES.map((s) => (
+                      <option key={s.id} value={s.id}>
+                        {s.labelAr}
+                      </option>
+                    ))}
+                  </select>
                 </div>
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-[var(--text-secondary)]">المشكلة الحقيقية التي تحلها للعميل:</label>
+                <textarea
+                  rows={2}
+                  value={problem}
+                  onChange={(e) => setProblem(e.target.value)}
+                  placeholder="مثال: المتجر يفقد 40% من مبيعات السلة المتروكة بسبب تأخر الرد البشري"
+                  className="w-full rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] px-3 py-2 text-[var(--text-primary)] outline-none focus:border-[var(--accent-gold)]"
+                />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-[#999999] mb-1 font-medium">الساعات المطلوبة للتجهيز:</label>
+                <div className="space-y-1">
+                  <label className="text-[var(--text-secondary)]">مدة الاختبار (أيام):</label>
                   <input
                     type="number"
-                    value={requiredTimeHours}
-                    onChange={(e) => setRequiredTimeHours(e.target.value)}
-                    className="w-full rounded-lg border border-[#2a2a2a] bg-[#141414] px-3 py-2 text-[#F5F5F5] focus:border-[#D4AF37] focus:outline-none font-mono"
+                    value={testDurationDays}
+                    onChange={(e) => setTestDurationDays(e.target.value)}
+                    className="w-full rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] px-3 py-2 text-[var(--text-primary)] outline-none focus:border-[var(--accent-gold)] font-mono"
                   />
                 </div>
 
-                <div>
-                  <label className="block text-[#999999] mb-1 font-medium">رأس المال المطلوب (ج.م):</label>
+                <div className="space-y-1">
+                  <label className="text-[var(--text-secondary)]">طريقة التسعير والإيراد:</label>
                   <input
-                    type="number"
-                    value={requiredCapital}
-                    onChange={(e) => setRequiredCapital(e.target.value)}
-                    className="w-full rounded-lg border border-[#2a2a2a] bg-[#141414] px-3 py-2 text-[#F5F5F5] focus:border-[#D4AF37] focus:outline-none font-mono"
+                    type="text"
+                    value={monetizationSource}
+                    onChange={(e) => setMonetizationSource(e.target.value)}
+                    placeholder="مثال: 1500 ج.م إعداد + 500 ج.م شهرياً"
+                    className="w-full rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] px-3 py-2 text-[var(--text-primary)] outline-none focus:border-[var(--accent-gold)]"
                   />
                 </div>
               </div>
 
-              <div className="rounded border border-[#1f1f1f] bg-[#080808] p-3 text-[11px] text-[#888888] leading-relaxed">
-                🎯 <span className="text-[#D4AF37]">الالتزام بالتجربة:</span> ستقوم بإنشاء نموذج تجريبي سريع والتواصل المباشر مع 20 عميل مستهدف لتقييم النتيجة الواقعية.
+              <div className="space-y-1">
+                <label className="text-[var(--text-secondary)]">الخطوة القادمة المحسومة (Next Step):</label>
+                <input
+                  type="text"
+                  value={nextStep}
+                  onChange={(e) => setNextStep(e.target.value)}
+                  placeholder="مثال: إعداد قائمة بـ 10 متاجر والتواصل مع أول 3 غداً"
+                  className="w-full rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] px-3 py-2 text-[var(--text-primary)] outline-none focus:border-[var(--accent-gold)]"
+                />
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-3 border-t border-[#222222]">
+              <div className="flex items-center justify-end gap-2 pt-2 border-t border-[var(--border-color)]">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="rounded-lg border border-[#333333] px-3 py-1.5 text-xs text-[#888888] hover:text-white"
+                  className="px-3 py-1.5 rounded-lg border border-[var(--border-color)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                 >
                   إلغاء
                 </button>
                 <button
                   type="submit"
-                  className="rounded-lg bg-[#D4AF37] px-4 py-1.5 text-xs font-semibold text-black hover:bg-[#e0bc45]"
+                  className="px-4 py-1.5 rounded-lg bg-[var(--accent-gold)] text-black font-semibold hover:opacity-90 transition-opacity"
                 >
-                  اعتماد وبدء التجربة
+                  إطلاق التجربة
                 </button>
               </div>
             </form>

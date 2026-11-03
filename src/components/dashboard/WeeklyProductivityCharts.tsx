@@ -1,7 +1,8 @@
 /**
  * components/dashboard/WeeklyProductivityCharts.tsx
  * رسوم بيانية تفاعلية دقيقة باستخدام Recharts
- * تعرض تقدم الأهداف الأسبوعية، ساعات العمل العميق، ومؤشرات الإنتاجية
+ * متوافقة بالكامل مع نمط النهار (DealDeck) ونمط الليل الفاخر (Stovest & TradeVision)
+ * توفر تجربة بصرية مريحة للعين، عميقة، ومحفزة على الإنجاز المستمر
  */
 
 import React, { useMemo, useState } from 'react';
@@ -15,11 +16,10 @@ import {
   YAxis,
   Tooltip,
   CartesianGrid,
-  Legend,
   ReferenceLine,
 } from 'recharts';
-import { AppState, TimeLog } from '../../types';
-import { Flame, Target, TrendingUp, Clock, Calendar, CheckCircle2 } from 'lucide-react';
+import { AppState } from '../../types';
+import { Flame, Target, TrendingUp, Clock } from 'lucide-react';
 
 interface WeeklyProductivityChartsProps {
   state: AppState;
@@ -30,9 +30,6 @@ export const WeeklyProductivityCharts: React.FC<WeeklyProductivityChartsProps> =
 
   // حساب بيانات الأيام السبعة للأسبوع الحالي
   const weeklyProductivityData = useMemo(() => {
-    const dayNames = ['السبت', 'الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'];
-    
-    // إعداد تواريخ الأيام السبعة الأخيرة وصولاً لليوم
     const today = new Date();
     const result = [];
 
@@ -40,9 +37,8 @@ export const WeeklyProductivityCharts: React.FC<WeeklyProductivityChartsProps> =
       const d = new Date(today);
       d.setDate(today.getDate() - i);
       const dateStr = d.toISOString().split('T')[0];
-      const dayIndex = d.getDay(); // 0 is Sunday, 6 is Saturday
-      // تحويل اليوم لترتيب الأسبوع العربي
-      // السبت=6, الأحد=0, الإثنين=1, الثلاثاء=2, الأربعاء=3, الخميس=4, الجمعة=5
+      const dayIndex = d.getDay();
+
       const arabicDayName =
         dayIndex === 6
           ? 'السبت'
@@ -58,7 +54,7 @@ export const WeeklyProductivityCharts: React.FC<WeeklyProductivityChartsProps> =
           ? 'الخميس'
           : 'الجمعة';
 
-      // حساب ساعات الوقت المسجلة في هذا اليوم
+      // حساب ساعات الوقت المسجلة
       const dayLogs = state.timeLogs.filter((log) => log.date === dateStr);
       let deepWorkMins = 0;
       let regularWorkMins = 0;
@@ -71,18 +67,10 @@ export const WeeklyProductivityCharts: React.FC<WeeklyProductivityChartsProps> =
         }
       });
 
-      // حساب العادات المنجزة في هذا اليوم
       const habitsDone = state.habits.filter((h) =>
         h.completedDates.includes(dateStr)
       ).length;
 
-      // حساب المهام المنجزة في هذا اليوم (إذا وجدت)
-      const tasksCompleted = state.tasks.filter(
-        (t) => t.status === 'completed' && t.createdAt.startsWith(dateStr)
-      ).length;
-
-      // إضافة قيمة إرشادية في حال عدم وجود سجلات قديمة لجعل الرسم البياني مفيداً ومقروءاً فوراً
-      // ولكن مع إعطاء الأولوية للبيانات الحقيقية
       const displayDeepHours = deepWorkMins > 0 ? +(deepWorkMins / 60).toFixed(1) : (i === 0 ? 1.5 : (i === 1 ? 2.5 : (i === 2 ? 3.0 : 1.5)));
       const displayRegularHours = regularWorkMins > 0 ? +(regularWorkMins / 60).toFixed(1) : (i === 0 ? 0.75 : (i === 1 ? 1.0 : (i === 2 ? 1.5 : 1.0)));
       const productivityScore = Math.min(100, Math.round((displayDeepHours * 20) + (habitsDone * 10) + 20));
@@ -101,10 +89,9 @@ export const WeeklyProductivityCharts: React.FC<WeeklyProductivityChartsProps> =
     return result;
   }, [state.timeLogs, state.habits, state.tasks]);
 
-  // حساب بيانات تقدم الأهداف والمشاريع لهذا الأسبوع
+  // حساب بيانات تقدم الأهداف والمشاريع
   const goalsProgressData = useMemo(() => {
     return state.goals.map((goal) => {
-      // إيجاد المشاريع المرتبطة بهذا الهدف
       const linkedProjects = state.projects.filter((p) => p.linkedGoalId === goal.id || p.lifeArea === goal.lifeArea);
       const totalMilestones = linkedProjects.reduce((sum, p) => sum + p.milestones.length, 0);
       const completedMilestones = linkedProjects.reduce(
@@ -119,7 +106,7 @@ export const WeeklyProductivityCharts: React.FC<WeeklyProductivityChartsProps> =
         fullName: goal.title,
         progress: goal.progress,
         milestones: milestoneRate,
-        target: 75, // الهدف المعياري للربع الحالي
+        target: 75,
         quarter: goal.quarter,
         theme: goal.quarterTheme,
       };
@@ -136,33 +123,33 @@ export const WeeklyProductivityCharts: React.FC<WeeklyProductivityChartsProps> =
     return Math.round(total / weeklyProductivityData.length);
   }, [weeklyProductivityData]);
 
-  // Custom Dark Tooltip للإنتاجية
+  // Custom Universal Tooltip للإنتاجية
   const CustomProductivityTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       return (
-        <div className="rounded-lg border border-[#2a2a2a] bg-[#0c0c0c]/95 p-3 text-xs shadow-2xl backdrop-blur-md">
-          <div className="font-semibold text-[#F5F5F5] border-b border-[#222222] pb-1 mb-2 flex items-center justify-between gap-3">
+        <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-3.5 text-xs shadow-2xl backdrop-blur-md">
+          <div className="font-semibold text-[var(--text-primary)] border-b border-[var(--border-color)] pb-1 mb-2 flex items-center justify-between gap-3">
             <span>{label}</span>
-            <span className="font-mono text-[10px] text-[#888888]">{data.date}</span>
+            <span className="font-mono text-[10px] text-[var(--text-muted)]">{data.date}</span>
           </div>
           <div className="space-y-1.5 font-mono">
             <div className="flex items-center justify-between gap-4">
-              <span className="flex items-center gap-1.5 text-[#D4AF37]">
-                <span className="h-2 w-2 rounded-full bg-[#D4AF37]" />
+              <span className="flex items-center gap-1.5 text-[var(--accent-gold)]">
+                <span className="h-2 w-2 rounded-full bg-[var(--accent-gold)]" />
                 <span>عمل عميق (Deep Work):</span>
               </span>
-              <span className="font-bold text-[#F5F5F5]">{data.deepWorkHours} س</span>
+              <span className="font-bold text-[var(--text-primary)]">{data.deepWorkHours} س</span>
             </div>
             <div className="flex items-center justify-between gap-4">
-              <span className="flex items-center gap-1.5 text-[#38bdf8]">
-                <span className="h-2 w-2 rounded-full bg-[#38bdf8]" />
+              <span className="flex items-center gap-1.5 text-sky-400">
+                <span className="h-2 w-2 rounded-full bg-sky-400" />
                 <span>تعلم وتطبيق:</span>
               </span>
-              <span className="font-bold text-[#F5F5F5]">{data.regularHours} س</span>
+              <span className="font-bold text-[var(--text-primary)]">{data.regularHours} س</span>
             </div>
-            <div className="flex items-center justify-between gap-4 pt-1 border-t border-[#1f1f1f] text-[11px]">
-              <span className="text-[#888888]">مؤشر الإنتاجية:</span>
+            <div className="flex items-center justify-between gap-4 pt-1 border-t border-[var(--border-color)] text-[11px]">
+              <span className="text-[var(--text-muted)]">مؤشر الإنتاجية:</span>
               <span className="text-emerald-400 font-bold">{data.score}%</span>
             </div>
           </div>
@@ -172,26 +159,26 @@ export const WeeklyProductivityCharts: React.FC<WeeklyProductivityChartsProps> =
     return null;
   };
 
-  // Custom Tooltip للأهداف
+  // Custom Universal Tooltip للأهداف
   const CustomGoalsTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       return (
-        <div className="rounded-lg border border-[#2a2a2a] bg-[#0c0c0c]/95 p-3 text-xs shadow-2xl backdrop-blur-md max-w-xs">
-          <div className="font-semibold text-[#F5F5F5] border-b border-[#222222] pb-1 mb-1.5">
-            <div className="text-[10px] text-[#D4AF37] font-mono">{data.quarter} — {data.theme}</div>
-            <div className="line-clamp-2 text-xs text-[#E5E5E5] mt-0.5">{data.fullName}</div>
+        <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-3.5 text-xs shadow-2xl backdrop-blur-md max-w-xs">
+          <div className="font-semibold text-[var(--text-primary)] border-b border-[var(--border-color)] pb-1 mb-1.5">
+            <div className="text-[10px] text-[var(--accent-gold)] font-mono font-bold">{data.quarter} — {data.theme}</div>
+            <div className="line-clamp-2 text-xs text-[var(--text-primary)] mt-0.5">{data.fullName}</div>
           </div>
           <div className="space-y-1 font-mono pt-1 text-xs">
-            <div className="flex items-center justify-between gap-3 text-[#D4AF37]">
+            <div className="flex items-center justify-between gap-3 text-[var(--accent-gold)] font-semibold">
               <span>نسبة الإنجاز الفعلية:</span>
-              <span className="font-bold">{data.progress}%</span>
+              <span>{data.progress}%</span>
             </div>
-            <div className="flex items-center justify-between gap-3 text-emerald-400">
+            <div className="flex items-center justify-between gap-3 text-emerald-400 font-semibold">
               <span>إنجاز المحطات:</span>
-              <span className="font-bold">{data.milestones}%</span>
+              <span>{data.milestones}%</span>
             </div>
-            <div className="flex items-center justify-between gap-3 text-[#777777] text-[11px] pt-1 border-t border-[#1f1f1f]">
+            <div className="flex items-center justify-between gap-3 text-[var(--text-muted)] text-[11px] pt-1 border-t border-[var(--border-color)]">
               <span>الهدف المستهدف للربع:</span>
               <span>{data.target}%</span>
             </div>
@@ -203,52 +190,52 @@ export const WeeklyProductivityCharts: React.FC<WeeklyProductivityChartsProps> =
   };
 
   return (
-    <section className="space-y-4 rounded-xl border border-[#222222] bg-[#0c0c0c] p-5 shadow-xl">
-      {/* الترويسة والأزرار */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#1b1b1b] pb-4">
+    <section className="space-y-4 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-5 md:p-6 shadow-sm">
+      {/* الترويسة وأزرار التبديل */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[var(--border-color)] pb-4">
         <div>
-          <div className="flex items-center gap-2 text-xs font-mono text-[#D4AF37]">
+          <div className="flex items-center gap-2 text-xs font-mono text-[var(--accent-gold)] font-semibold">
             <TrendingUp className="h-3.5 w-3.5" />
             <span>التحليل البصري الأسبوعي</span>
             <span>·</span>
             <span>Weekly Analytics & Productivity</span>
           </div>
-          <h2 className="text-base md:text-lg font-bold text-[#F5F5F5] mt-1">
+          <h2 className="text-base md:text-lg font-bold text-[var(--text-primary)] mt-1">
             تقدم الأهداف والإنتاجية وساعات العمل العميق
           </h2>
-          <p className="text-xs text-[#888888] mt-0.5">
+          <p className="text-xs text-[var(--text-muted)] mt-0.5">
             قياس كمي دقيق لتوزيع ساعات التركيز ومعدل الإنجاز التراكمي
           </p>
         </div>
 
-        {/* فلاتر العرض السريع */}
-        <div className="flex items-center gap-1 rounded-lg border border-[#222222] bg-[#121212] p-1 text-xs self-start sm:self-auto">
+        {/* فلاتر العرض السريع Segmented Control */}
+        <div className="flex items-center gap-1 rounded-xl border border-[var(--border-color)] bg-[var(--bg-elevated)] p-1 text-xs self-start sm:self-auto shadow-inner">
           <button
             onClick={() => setChartView('both')}
-            className={`rounded px-2.5 py-1 transition-all ${
+            className={`rounded-lg px-3 py-1.5 transition-all ${
               chartView === 'both'
-                ? 'bg-[#222222] text-[#D4AF37] font-semibold'
-                : 'text-[#888888] hover:text-white'
+                ? 'bg-[var(--bg-surface)] text-[var(--accent-gold)] font-bold shadow-sm'
+                : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
             }`}
           >
             العرض الشامل
           </button>
           <button
             onClick={() => setChartView('productivity')}
-            className={`rounded px-2.5 py-1 transition-all ${
+            className={`rounded-lg px-3 py-1.5 transition-all ${
               chartView === 'productivity'
-                ? 'bg-[#222222] text-[#D4AF37] font-semibold'
-                : 'text-[#888888] hover:text-white'
+                ? 'bg-[var(--bg-surface)] text-[var(--accent-gold)] font-bold shadow-sm'
+                : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
             }`}
           >
             ساعات العمل
           </button>
           <button
             onClick={() => setChartView('goals')}
-            className={`rounded px-2.5 py-1 transition-all ${
+            className={`rounded-lg px-3 py-1.5 transition-all ${
               chartView === 'goals'
-                ? 'bg-[#222222] text-[#D4AF37] font-semibold'
-                : 'text-[#888888] hover:text-white'
+                ? 'bg-[var(--bg-surface)] text-[var(--accent-gold)] font-bold shadow-sm'
+                : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
             }`}
           >
             تقدم الأهداف
@@ -257,55 +244,55 @@ export const WeeklyProductivityCharts: React.FC<WeeklyProductivityChartsProps> =
       </div>
 
       {/* شريط المؤشرات الحسابية السريعة */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="rounded-lg border border-[#1f1f1f] bg-[#101010] p-3">
-          <div className="flex items-center justify-between text-[11px] text-[#888888]">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
+        <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-elevated)] p-4 space-y-1">
+          <div className="flex items-center justify-between text-xs text-[var(--text-muted)]">
             <span>ساعات التركيز هذا الأسبوع</span>
-            <Clock className="h-3.5 w-3.5 text-[#D4AF37]" />
+            <Clock className="h-3.5 w-3.5 text-[var(--accent-gold)]" />
           </div>
-          <div className="mt-1 font-mono text-lg font-bold text-[#F5F5F5] tabular-nums">
-            {totalWeeklyDeepHours} <span className="text-xs font-normal text-[#888888]">ساعة</span>
+          <div className="font-mono text-xl md:text-2xl font-bold text-[var(--text-primary)] tabular-nums">
+            {totalWeeklyDeepHours} <span className="text-xs font-normal text-[var(--text-muted)]">ساعة</span>
           </div>
-          <div className="text-[10px] text-emerald-400 font-mono mt-0.5">
+          <div className="text-[11px] text-emerald-400 font-mono mt-0.5">
             ↑ أعلى من الأسبوع الماضي
           </div>
         </div>
 
-        <div className="rounded-lg border border-[#1f1f1f] bg-[#101010] p-3">
-          <div className="flex items-center justify-between text-[11px] text-[#888888]">
+        <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-elevated)] p-4 space-y-1">
+          <div className="flex items-center justify-between text-xs text-[var(--text-muted)]">
             <span>متوسط مؤشر الإنتاجية</span>
             <TrendingUp className="h-3.5 w-3.5 text-emerald-400" />
           </div>
-          <div className="mt-1 font-mono text-lg font-bold text-[#D4AF37] tabular-nums">
+          <div className="font-mono text-xl md:text-2xl font-bold text-[var(--accent-gold)] tabular-nums">
             {avgProductivityScore}%
           </div>
-          <div className="text-[10px] text-[#888888] font-mono mt-0.5">
-            حالة الأداء: ممتاز ومتزن
+          <div className="text-[11px] text-[var(--text-muted)] font-mono mt-0.5">
+            حالة الأداء: متزن وثابت
           </div>
         </div>
 
-        <div className="rounded-lg border border-[#1f1f1f] bg-[#101010] p-3">
-          <div className="flex items-center justify-between text-[11px] text-[#888888]">
+        <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-elevated)] p-4 space-y-1">
+          <div className="flex items-center justify-between text-xs text-[var(--text-muted)]">
             <span>أهداف الربع قيد البناء</span>
             <Target className="h-3.5 w-3.5 text-sky-400" />
           </div>
-          <div className="mt-1 font-mono text-lg font-bold text-[#F5F5F5] tabular-nums">
+          <div className="font-mono text-xl md:text-2xl font-bold text-[var(--text-primary)] tabular-nums">
             {state.goals.filter((g) => g.progress > 0).length} / {state.goals.length}
           </div>
-          <div className="text-[10px] text-[#888888] font-mono mt-0.5">
-            Q1 Build Theme
+          <div className="text-[11px] text-[var(--text-muted)] font-mono mt-0.5">
+            Q1 · Build Theme
           </div>
         </div>
 
-        <div className="rounded-lg border border-[#1f1f1f] bg-[#101010] p-3">
-          <div className="flex items-center justify-between text-[11px] text-[#888888]">
+        <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-elevated)] p-4 space-y-1">
+          <div className="flex items-center justify-between text-xs text-[var(--text-muted)]">
             <span>التزام العادات اليومية</span>
             <Flame className="h-3.5 w-3.5 text-amber-400" />
           </div>
-          <div className="mt-1 font-mono text-lg font-bold text-[#F5F5F5] tabular-nums">
+          <div className="font-mono text-xl md:text-2xl font-bold text-[var(--text-primary)] tabular-nums">
             86%
           </div>
-          <div className="text-[10px] text-amber-400 font-mono mt-0.5">
+          <div className="text-[11px] text-amber-400 font-mono mt-0.5">
             تثبيت الانضباط الذاتي
           </div>
         </div>
@@ -319,30 +306,30 @@ export const WeeklyProductivityCharts: React.FC<WeeklyProductivityChartsProps> =
       >
         {/* الرسم الأول: ساعات العمل العميق وساعات التطبيق (Area Chart) */}
         {(chartView === 'both' || chartView === 'productivity') && (
-          <div className="rounded-xl border border-[#1c1c1c] bg-[#0e0e0e] p-4 flex flex-col justify-between">
-            <div className="flex items-center justify-between mb-3">
+          <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-elevated)] p-4 md:p-5 flex flex-col justify-between shadow-sm">
+            <div className="flex items-center justify-between mb-3.5">
               <div>
-                <h3 className="text-xs md:text-sm font-semibold text-[#F5F5F5] flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-[#D4AF37]" />
+                <h3 className="text-xs md:text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-[var(--accent-gold)]" />
                   <span>توزيع ساعات العمل والتركيز اليومي (آخر 7 أيام)</span>
                 </h3>
-                <p className="text-[11px] text-[#777777] mt-0.5">
-                  تتبع الـ Deep Work مقابل مهام التعلم والتنفيذ المعتادة
+                <p className="text-xs text-[var(--text-muted)] mt-0.5">
+                  تتبع ساعات الـ Deep Work مقابل مهام التعلم والتنفيذ
                 </p>
               </div>
-              <div className="flex items-center gap-3 text-[11px] font-mono">
-                <span className="flex items-center gap-1 text-[#D4AF37]">
-                  <span className="h-2 w-2 rounded-full bg-[#D4AF37]" />
+              <div className="flex items-center gap-3 text-xs font-mono">
+                <span className="flex items-center gap-1.5 text-[var(--accent-gold)] font-semibold">
+                  <span className="h-2 w-2 rounded-full bg-[var(--accent-gold)]" />
                   <span>عمل عميق</span>
                 </span>
-                <span className="flex items-center gap-1 text-[#38bdf8]">
-                  <span className="h-2 w-2 rounded-full bg-[#38bdf8]" />
+                <span className="flex items-center gap-1.5 text-sky-400 font-semibold">
+                  <span className="h-2 w-2 rounded-full bg-sky-400" />
                   <span>تعلم وتطبيق</span>
                 </span>
               </div>
             </div>
 
-            <div className="h-60 w-full min-w-0" dir="ltr">
+            <div className="h-64 w-full min-w-0" dir="ltr">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart
                   data={weeklyProductivityData}
@@ -350,37 +337,37 @@ export const WeeklyProductivityCharts: React.FC<WeeklyProductivityChartsProps> =
                 >
                   <defs>
                     <linearGradient id="deepWorkGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#D4AF37" stopOpacity={0.4} />
+                      <stop offset="5%" stopColor="#D4AF37" stopOpacity={0.45} />
                       <stop offset="95%" stopColor="#D4AF37" stopOpacity={0.0} />
                     </linearGradient>
                     <linearGradient id="regularGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#38bdf8" stopOpacity={0.3} />
+                      <stop offset="5%" stopColor="#38bdf8" stopOpacity={0.35} />
                       <stop offset="95%" stopColor="#38bdf8" stopOpacity={0.0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#1f1f1f" vertical={false} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(150, 150, 150, 0.12)" vertical={false} />
                   <XAxis
                     dataKey="day"
-                    stroke="#666666"
+                    stroke="#888888"
                     fontSize={11}
                     tickLine={false}
-                    axisLine={{ stroke: '#222222' }}
+                    axisLine={{ stroke: 'rgba(150, 150, 150, 0.2)' }}
                   />
                   <YAxis
-                    stroke="#666666"
+                    stroke="#888888"
                     fontSize={11}
                     tickLine={false}
-                    axisLine={{ stroke: '#222222' }}
+                    axisLine={{ stroke: 'rgba(150, 150, 150, 0.2)' }}
                     unit="س"
                   />
                   <Tooltip content={<CustomProductivityTooltip />} />
                   <ReferenceLine
                     y={2}
-                    stroke="#444444"
+                    stroke="rgba(212, 175, 55, 0.5)"
                     strokeDasharray="3 3"
                     label={{
                       value: 'الحد الأدنى (2س)',
-                      fill: '#666666',
+                      fill: '#D4AF37',
                       fontSize: 10,
                       position: 'insideTopLeft',
                     }}
@@ -389,7 +376,7 @@ export const WeeklyProductivityCharts: React.FC<WeeklyProductivityChartsProps> =
                     type="monotone"
                     dataKey="deepWorkHours"
                     stroke="#D4AF37"
-                    strokeWidth={2}
+                    strokeWidth={2.5}
                     fillOpacity={1}
                     fill="url(#deepWorkGrad)"
                     name="العمل العميق"
@@ -398,7 +385,7 @@ export const WeeklyProductivityCharts: React.FC<WeeklyProductivityChartsProps> =
                     type="monotone"
                     dataKey="regularHours"
                     stroke="#38bdf8"
-                    strokeWidth={1.5}
+                    strokeWidth={2}
                     fillOpacity={1}
                     fill="url(#regularGrad)"
                     name="تعلم وتطبيق"
@@ -407,86 +394,86 @@ export const WeeklyProductivityCharts: React.FC<WeeklyProductivityChartsProps> =
               </ResponsiveContainer>
             </div>
 
-            <div className="mt-3 pt-2.5 border-t border-[#1a1a1a] flex items-center justify-between text-[11px] text-[#777777]">
+            <div className="mt-3.5 pt-2.5 border-t border-[var(--border-color)] flex items-center justify-between text-xs text-[var(--text-muted)]">
               <span>🎯 الهدف اليومي: ساعتان على الأقل من التركيز الخالص بدون انقطاع</span>
-              <span className="text-[#D4AF37] font-mono">انضباط 2027</span>
+              <span className="text-[var(--accent-gold)] font-mono font-semibold">انضباط 2027</span>
             </div>
           </div>
         )}
 
         {/* الرسم الثاني: تقدم الأهداف والمحطات الأسبوعية (Bar Chart) */}
         {(chartView === 'both' || chartView === 'goals') && (
-          <div className="rounded-xl border border-[#1c1c1c] bg-[#0e0e0e] p-4 flex flex-col justify-between">
-            <div className="flex items-center justify-between mb-3">
+          <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-elevated)] p-4 md:p-5 flex flex-col justify-between shadow-sm">
+            <div className="flex items-center justify-between mb-3.5">
               <div>
-                <h3 className="text-xs md:text-sm font-semibold text-[#F5F5F5] flex items-center gap-2">
+                <h3 className="text-xs md:text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
                   <Target className="h-4 w-4 text-emerald-400" />
                   <span>تقدم الأهداف والمحطات الاستراتيجية (%)</span>
                 </h3>
-                <p className="text-[11px] text-[#777777] mt-0.5">
+                <p className="text-xs text-[var(--text-muted)] mt-0.5">
                   نسبة إنجاز أهداف أرباع سنة 2027 والمحطات الفعلية
                 </p>
               </div>
-              <div className="flex items-center gap-3 text-[11px] font-mono">
-                <span className="flex items-center gap-1 text-[#D4AF37]">
-                  <span className="h-2 w-2 rounded-full bg-[#D4AF37]" />
+              <div className="flex items-center gap-3 text-xs font-mono">
+                <span className="flex items-center gap-1.5 text-[var(--accent-gold)] font-semibold">
+                  <span className="h-2 w-2 rounded-full bg-[var(--accent-gold)]" />
                   <span>الهدف التراكمي</span>
                 </span>
-                <span className="flex items-center gap-1 text-emerald-400">
+                <span className="flex items-center gap-1.5 text-emerald-400 font-semibold">
                   <span className="h-2 w-2 rounded-full bg-emerald-400" />
                   <span>المحطات</span>
                 </span>
               </div>
             </div>
 
-            <div className="h-60 w-full min-w-0" dir="ltr">
+            <div className="h-64 w-full min-w-0" dir="ltr">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
                   data={goalsProgressData}
                   margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
                   barGap={4}
                 >
-                  <CartesianGrid strokeDasharray="3 3" stroke="#1f1f1f" vertical={false} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(150, 150, 150, 0.12)" vertical={false} />
                   <XAxis
                     dataKey="name"
-                    stroke="#666666"
+                    stroke="#888888"
                     fontSize={11}
                     tickLine={false}
-                    axisLine={{ stroke: '#222222' }}
+                    axisLine={{ stroke: 'rgba(150, 150, 150, 0.2)' }}
                   />
                   <YAxis
-                    stroke="#666666"
+                    stroke="#888888"
                     fontSize={11}
                     tickLine={false}
-                    axisLine={{ stroke: '#222222' }}
+                    axisLine={{ stroke: 'rgba(150, 150, 150, 0.2)' }}
                     domain={[0, 100]}
                     unit="%"
                   />
                   <Tooltip content={<CustomGoalsTooltip />} />
                   <ReferenceLine
                     y={50}
-                    stroke="#333333"
+                    stroke="rgba(150, 150, 150, 0.3)"
                     strokeDasharray="2 2"
                   />
                   <Bar
                     dataKey="progress"
                     fill="#D4AF37"
-                    radius={[4, 4, 0, 0]}
+                    radius={[6, 6, 0, 0]}
                     name="الإنجاز العام"
                   />
                   <Bar
                     dataKey="milestones"
                     fill="#10b981"
-                    radius={[4, 4, 0, 0]}
+                    radius={[6, 6, 0, 0]}
                     name="المحطات المنجزة"
                   />
                 </BarChart>
               </ResponsiveContainer>
             </div>
 
-            <div className="mt-3 pt-2.5 border-t border-[#1a1a1a] flex items-center justify-between text-[11px] text-[#777777]">
+            <div className="mt-3.5 pt-2.5 border-t border-[var(--border-color)] flex items-center justify-between text-xs text-[var(--text-muted)]">
               <span>💡 التركيز الحالي: الربع الأول Q1 (Build) هو الأساس الحاكم لكامل العام</span>
-              <span className="text-emerald-400 font-mono font-medium">على المسار الصحيح</span>
+              <span className="text-emerald-400 font-mono font-bold">على المسار الصحيح</span>
             </div>
           </div>
         )}

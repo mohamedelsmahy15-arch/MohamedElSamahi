@@ -63,6 +63,7 @@ export interface Task {
   title: string;
   lifeArea: LifeArea;
   estimatedMinutes: number;
+  actualMinutes?: number; // الوقت الفعلي المستغرق بالدقائق
   priority: TaskPriority;
   linkedGoalId?: string;
   linkedProjectId?: string;
@@ -100,6 +101,7 @@ export interface Habit {
   targetTime?: string;
   streak: number; // عدد الأيام المتتالية
   completedDates: string[]; // تواريخ بصيغة YYYY-MM-DD
+  linkedGoalId?: string; // ربط العادة بهدف سنوي
   createdAt: string;
 }
 
@@ -176,6 +178,13 @@ export interface Transaction {
 
 // تجارب مصادر الدخل (Income Experiments)
 export type ExperimentStatus =
+  | 'Idea'
+  | 'Research'
+  | 'Testing'
+  | 'First Customer'
+  | 'Validated'
+  | 'Profitable'
+  | 'Stopped'
   | 'فكرة'
   | 'بحث ودراسة'
   | 'اختبار جاري (14 يوم)'
@@ -200,7 +209,47 @@ export interface IncomeExperiment {
   status: ExperimentStatus;
   resultVerdict?: 'نجحت' | 'تحتاج تعديل' | 'أوقفها' | 'اختبر نسخة جديدة';
   learningsNotes: string;
+  nextStep?: string;
+  outcomeNotes?: string;
   createdAt: string;
+}
+
+// نظام التعلم والتطبيق (Learning & Practice Lab)
+export interface LearningSkill {
+  id: string;
+  name: string;
+  category: 'برمجة وذكاء اصطناعي' | 'تجارة وبزنس' | 'تسويق ومبيعات' | 'إنتاجية وفكر';
+  masteryPercentage: number; // 0 to 100
+  targetProject: string; // المشروع المباشر لتطبيق المهارة فوراً
+  status: 'active' | 'applied' | 'mastered';
+  hoursLogged: number;
+  notes: string;
+  linkedGoalId?: string; // ربط المهارة بهدف سنوي
+  linkedProjectId?: string; // ربط المهارة بمشروع حي
+  createdAt: string;
+}
+
+// رسائل وإجراءات المساعد الذكي (Intelligent Assistant)
+export interface AssistantActionItem {
+  type: 'goal' | 'project' | 'task' | 'habit' | 'skill' | 'experiment';
+  action: 'create' | 'update' | 'delete' | 'link';
+  id?: string;
+  title: string;
+  details?: string;
+  data?: any;
+}
+
+export interface AssistantMessage {
+  id: string;
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp: string;
+  actionsExecuted?: AssistantActionItem[];
+  pendingConfirmation?: {
+    actionType: string;
+    description: string;
+    payload: any;
+  };
 }
 
 export interface DailyScoreBreakdown {
@@ -210,6 +259,102 @@ export interface DailyScoreBreakdown {
   habitsRatio: string;
   verdict: string;
   advice: string;
+}
+
+// سلة المهملات وسجل التعديلات (Recycle Bin & Revision History)
+export type TrashItemType =
+  | 'task'
+  | 'project'
+  | 'goal'
+  | 'idea'
+  | 'timeLog'
+  | 'habit'
+  | 'transaction'
+  | 'experiment';
+
+export interface TrashItem {
+  id: string; // معرف فريد في السلة
+  originalId: string;
+  type: TrashItemType;
+  title: string;
+  deletedAt: string; // ISO timestamp
+  originalData: any; // النسخة الكاملة لاسترجاع العنصر بدقة
+  categoryOrArea?: string;
+  reason: 'deleted' | 'previous_version'; // هل هو عنصر محذوف أم نسخة سابقة قبل التعديل
+}
+
+// تقرير الإنتاجية اليومي والتقييم الذاتي
+export interface DailyReportItem {
+  id: string;
+  date: string; // YYYY-MM-DD
+  userStrengths: string; // نقاط القوة المكتوبة يدوياً أو المعتمدة
+  userImprovements: string; // مجالات التحسين والتطوير
+  userTomorrowFocus: string; // قرار وتركيز الغد
+  aiAnalysis?: string; // نص تحليل Gemini الشامل
+  aiStrengths?: string[];
+  aiImprovements?: string[];
+  overallRating: number; // 1-10
+  isManualOverride: boolean; // هل خضع للتعديل والاعتماد الذاتي
+  createdAt: string;
+  updatedAt: string;
+}
+
+// منبع العمليات والإنجازات وسجل الخطوات (Action History & Accomplishments Stream)
+export type ActionCategory =
+  | 'task'
+  | 'habit'
+  | 'project'
+  | 'goal'
+  | 'idea'
+  | 'timeLog'
+  | 'transaction'
+  | 'experiment'
+  | 'learning'
+  | 'review'
+  | 'dailyReport'
+  | 'system';
+
+export type ActionType =
+  | 'create'
+  | 'complete'
+  | 'uncomplete'
+  | 'update'
+  | 'delete'
+  | 'restore'
+  | 'move'
+  | 'focus';
+
+export interface ActionDetailField {
+  label: string;
+  oldValue?: string | number | boolean;
+  newValue?: string | number | boolean;
+}
+
+export interface ActionHistoryItem {
+  id: string;
+  timestamp: string; // ISO string
+  title: string; // عنوان الخطوة، مثال: "إكمال مهمة"، "إضافة عادة جديدة"
+  itemTitle: string; // اسم العنصر الفعلي، مثال: "برمجة واجهة التطبيق"
+  category: ActionCategory;
+  actionType: ActionType;
+  description: string; // شرح تفصيلي لما تم إنجازه
+  changes?: ActionDetailField[];
+  metadata?: {
+    lifeArea?: string;
+    priority?: string;
+    durationMinutes?: number;
+    streak?: number;
+    amount?: number;
+    status?: string;
+    progress?: number;
+    [key: string]: any;
+  };
+  previousSnapshot?: any; // لاسترجاع العنصر أو الحالة بدقة
+  newSnapshot?: any;
+  entityId?: string;
+  canUndo: boolean;
+  undone: boolean;
+  undoneAt?: string;
 }
 
 export interface AppState {
@@ -223,5 +368,11 @@ export interface AppState {
   timeLogs: TimeLog[];
   transactions: Transaction[];
   incomeExperiments: IncomeExperiment[];
+  trashItems: TrashItem[]; // سلة المهملات وسجل التعديلات
+  dailyReports: DailyReportItem[]; // تقارير الإنتاجية اليومية
+  actionHistory: ActionHistoryItem[]; // منبع الإنجازات والأنشطة وسجل الخطوات
+  skills?: LearningSkill[]; // مهارات التعلم والتطبيق
   lastReviewDate?: string;
 }
+
+
