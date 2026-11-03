@@ -1,0 +1,6 @@
+{
+  "name": "السماحي OS",
+  "description": "Personal Operating System لمحمد السماحي — 2027 سنة البناء وتحويل الرؤية إلى نظام تنفيذي يومي",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
