@@ -32,6 +32,7 @@ export interface Goal {
   progress: number; // 0 - 100
   status: 'not_started' | 'in_progress' | 'completed' | 'on_hold';
   resourceLink?: string;
+  executionGuide?: string;
   actionPlanNotes?: string;
   createdAt: string;
 }

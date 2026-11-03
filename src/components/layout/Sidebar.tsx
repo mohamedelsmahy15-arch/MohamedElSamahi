@@ -125,6 +125,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpenMobile, onCloseMobile })
       badge: learningSkills.length,
     },
     {
+      id: 'errors',
+      label: 'سجل الأخطاء والدروس',
+      icon: ShieldAlert,
+      badge: state.errorLogs?.length || null,
+      badgeHighlight: (state.errorLogs?.filter((e) => !e.isResolved).length || 0) > 0,
+    },
+    {
       id: 'review',
       label: 'المراجعة الأسبوعية',
       icon: FileCheck2,

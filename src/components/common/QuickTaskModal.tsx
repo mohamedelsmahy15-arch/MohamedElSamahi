@@ -174,6 +174,37 @@ export const QuickTaskModal: React.FC = () => {
             )}
           </div>
 
+                    {/* رابط المرجع والتحضير المسائي لمهام الغد */}
+          <div className="space-y-2.5 rounded-xl border border-[var(--accent-gold)]/25 bg-[var(--accent-gold)]/5 p-3.5">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-[var(--accent-gold)]">
+              <span>🌙 التحضير المسائي ورابط التعلم (Nightly Mission Prep)</span>
+            </div>
+            <div>
+              <label className="block text-[11px] text-[var(--text-secondary)] mb-1 font-medium">
+                🔗 رابط المرجع أو الكورس أو الفيديو (YouTube, GitHub, Documentation):
+              </label>
+              <input
+                type="url"
+                placeholder="https://youtube.com/watch?v=... أو https://github.com/..."
+                value={resourceLink}
+                onChange={(e) => setResourceLink(e.target.value)}
+                className="w-full rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] px-3 py-2 text-xs text-[var(--text-primary)] focus:border-[var(--accent-gold)] focus:outline-none font-mono"
+              />
+            </div>
+            <div>
+              <label className="block text-[11px] text-[var(--text-secondary)] mb-1 font-medium">
+                📝 خطة التنفيذ المباشرة (أول ما تفتح الصبح هتعمل إيه خطوة بخطوة؟):
+              </label>
+              <textarea
+                rows={2}
+                placeholder="مثال: سأفتح الفيديو عند الدقيقة 12 وأطبق كتابة الكود عملياً لتنفيذ شاشة تسجيل الدخول..."
+                value={executionGuide}
+                onChange={(e) => setExecutionGuide(e.target.value)}
+                className="w-full rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] px-3 py-2 text-xs text-[var(--text-primary)] focus:border-[var(--accent-gold)] focus:outline-none resize-none"
+              />
+            </div>
+          </div>
+
           <div className="flex items-center justify-end gap-2 pt-3 border-t border-[var(--border-color)]">
             <button
               type="button"

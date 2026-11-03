@@ -23,6 +23,7 @@ import {
   Target,
   Compass,
   ExternalLink,
+  Moon,
   Bot,
 } from 'lucide-react';
 
@@ -178,6 +179,16 @@ export const TodayView: React.FC = () => {
         />
 
         <button
+          type="button"
+          onClick={() => setIsQuickTaskModalOpen(true)}
+          className="flex h-8 items-center gap-1.5 rounded-xl border border-[var(--accent-gold)]/40 bg-[var(--accent-gold)]/10 px-3 text-xs font-semibold text-[var(--accent-gold)] hover:bg-[var(--accent-gold)] hover:text-black transition-all shrink-0"
+          title="تحضير مهمة ليلية مع رابط وخطة تنفيذ"
+        >
+          <Moon className="h-3.5 w-3.5" />
+          <span className="hidden sm:inline">+ مهمة مع رابط 🌙</span>
+        </button>
+
+        <button
           type="submit"
           disabled={!quickInput.trim()}
           className="flex h-8 items-center gap-1.5 rounded-xl bg-[var(--bg-elevated)] px-3.5 text-xs font-semibold text-[var(--text-primary)] hover:bg-[var(--accent-gold)] hover:text-black transition-all disabled:opacity-40 disabled:hover:bg-[var(--bg-elevated)] disabled:hover:text-[var(--text-primary)]"
@@ -186,6 +197,39 @@ export const TodayView: React.FC = () => {
           <Send className="h-3.5 w-3.5 stroke-[2.5]" />
         </button>
       </form>
+
+      {/* بطاقة المهمة النشطة المحضّرة لصباح اليوم مع رابطها المباشر */}
+      {todayFocusTasks.find((t) => t.status !== 'completed' && t.resourceLink) && (() => {
+        const missionTask = todayFocusTasks.find((t) => t.status !== 'completed' && t.resourceLink)!;
+        return (
+          <div className="rounded-2xl border-2 border-sky-500/50 bg-gradient-to-r from-sky-950/20 via-[var(--bg-surface)] to-[var(--bg-elevated)] p-4 md:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-md">
+            <div className="space-y-1.5 flex-1">
+              <div className="flex items-center gap-2 text-xs font-mono text-sky-400">
+                <span className="flex h-2.5 w-2.5 rounded-full bg-sky-400 animate-pulse"></span>
+                <span className="font-bold">المهمة النشطة المحضّرة لصباح اليوم (Active Morning Mission)</span>
+              </div>
+              <h3 className="text-sm md:text-base font-bold text-[var(--text-primary)]">
+                {missionTask.title}
+              </h3>
+              {missionTask.executionGuide && (
+                <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
+                  💡 <span className="font-semibold text-[var(--accent-gold)]">خطتك الصباحية:</span> {missionTask.executionGuide}
+                </p>
+              )}
+            </div>
+
+            <a
+              href={missionTask.resourceLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 rounded-xl bg-sky-500 hover:bg-sky-400 text-black px-5 py-2.5 text-xs font-bold transition-all shadow-md shrink-0"
+            >
+              <span>🚀 افتح رابط التعلم وابدأ الآن</span>
+              <ExternalLink className="h-4 w-4 stroke-[2.5]" />
+            </a>
+          </div>
+        );
+      })()}
 
       {/* 3. Morning Focus (Top 3 Priority Tasks) */}
       <section className="rounded-2xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-5 md:p-6 space-y-4 shadow-sm relative overflow-hidden">
