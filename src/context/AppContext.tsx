@@ -33,6 +33,7 @@ import {
   loadAppState,
   saveAppState,
   resetAppStateToSeed,
+  resetAppStateToCleanSlate,
   exportAppStateAsJSON,
   importAppStateFromJSON,
 } from '../lib/storage';
@@ -139,6 +140,7 @@ interface AppContextType {
 
   // التصدير والاستيراد
   resetToDefault: () => void;
+  resetToCleanSlate: () => void;
   exportBackup: () => void;
   importBackup: (jsonText: string) => boolean;
 
@@ -1851,6 +1853,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setState(res);
   };
 
+  const resetToCleanSlate = () => {
+    const res = resetAppStateToCleanSlate();
+    setState(res);
+  };
+
   const exportBackup = () => {
     exportAppStateAsJSON(state);
   };
@@ -2007,6 +2014,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         updateLearningSkill,
         deleteLearningSkill,
         resetToDefault,
+        resetToCleanSlate,
         exportBackup,
         importBackup,
         theme,

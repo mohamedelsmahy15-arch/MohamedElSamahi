@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 
 export const SettingsView: React.FC = () => {
-  const { exportBackup, importBackup, resetToDefault } = useApp();
+  const { exportBackup, importBackup, resetToDefault, resetToCleanSlate } = useApp();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [importStatus, setImportStatus] = useState<string | null>(null);
 
@@ -37,6 +37,19 @@ export const SettingsView: React.FC = () => {
       }
     };
     reader.readAsText(file);
+  };
+
+    const handleCleanSlate = () => {
+    if (
+      confirm(
+        'هل ترغب في تفريغ البيانات التجريبية والبدء بصفحة بيضاء نظيفة تماماً؟\n\n(سيقوم النظام تلقائياً بتحميل نسخة احتياطية من بياناتك الحالية قبل التفريغ للأمان التام)'
+      )
+    ) {
+      exportBackup();
+      resetToCleanSlate();
+      setImportStatus('تم تفريغ البيانات بنجاح! نظامك الآن نظيف 100% وجاهز لكتابة أهدافك وعاداتك الحقيقية.');
+      setTimeout(() => setImportStatus(null), 5000);
+    }
   };
 
   const handleReset = () => {
@@ -59,6 +72,28 @@ export const SettingsView: React.FC = () => {
         <p className="text-xs text-[var(--text-secondary)] mt-0.5">
           بياناتك مخزنة محلياً في متصفحك (LocalStorage) بسرعة وأمان تام.
         </p>
+      </div>
+
+            {/* قسم البدء الفعلي بصفحة بيضاء نظيفة */}
+      <div className="rounded-xl border-2 border-[var(--accent-gold)]/40 bg-[var(--bg-surface)] p-5 space-y-3 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <h2 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-[var(--accent-gold)]" />
+              <span>البدء الفعلي: تفريغ النظام وبدء صفحة بيضاء نظيفة (Clean Slate)</span>
+            </h2>
+            <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
+              تخلص من كل المهام والمشاريع الوهمية بنقرة واحدة، وابدأ فوراً في كتابة أهدافك وعاداتك الحقيقية بيدك دون أي كعبلة أو تشتت.
+            </p>
+          </div>
+          <button
+            onClick={handleCleanSlate}
+            className="shrink-0 flex items-center justify-center gap-2 rounded-lg bg-[var(--accent-gold)] px-4 py-2.5 text-xs font-bold text-black hover:bg-[#e0bc45] shadow transition-all self-start sm:self-auto"
+          >
+            <Sparkles className="h-4 w-4" />
+            <span>تفريغ وبدء نظامي الحقيقي الآن</span>
+          </button>
+        </div>
       </div>
 
       {/* قسم النسخ الاحتياطي والاستيراد */}

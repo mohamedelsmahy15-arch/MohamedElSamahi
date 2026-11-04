@@ -1,8 +1,8 @@
 /**
  * components/layout/Sidebar.tsx
  * شريط التنقل الجانبي الاحترافي لنظام "السماحي OS"
- * ينفذ معايير التصميم العالمية المستوحاة من Linear و Apple
- * يدعم الشاشات المكتبية (RTL ثابت على اليمين) والشاشات المتحركة
+ * ينفذ معايير التصميم الهرمي الواضح والمريح للعين
+ * مقسم إلى مسارات دقيقة لمنع التشتت والكعبلة
  */
 
 import React from 'react';
@@ -28,6 +28,7 @@ import {
   Flame,
   Lightbulb,
   X,
+  ChevronDown,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -42,6 +43,12 @@ interface NavItem {
   badge?: string | number | null;
   badgeHighlight?: boolean;
   isLive?: boolean;
+}
+
+interface NavSection {
+  title: string;
+  badge?: string;
+  items: NavItem[];
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ isOpenMobile, onCloseMobile }) => {
@@ -60,12 +67,74 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpenMobile, onCloseMobile })
   const todayStr = new Date().toISOString().split('T')[0];
   const habitsDoneToday = state.habits.filter((h) => h.completedDates.includes(todayStr)).length;
   const focusDoneCount = todayFocusTasks.filter((t) => t.status === 'completed').length;
+  const unresolvedErrors = state.errorLogs?.filter((e) => !e.isResolved).length || 0;
 
-  // The core navigation items per company-level dashboard specification
-  const primaryNavItems: NavItem[] = [
+  // 1. المسار اليومي الحاسم (القصوى - Daily Non-Negotiables)
+  const dailyCoreItems: NavItem[] = [
+    {
+      id: 'today',
+      label: 'تركيز اليوم والتحضير',
+      icon: CheckSquare,
+      badge: `${focusDoneCount}/${todayFocusTasks.length || 3}`,
+      badgeHighlight: todayFocusTasks.length > 0,
+    },
+    {
+      id: 'habits',
+      label: 'العادات والروتين',
+      icon: Flame,
+      badge: `${habitsDoneToday}/${state.habits.length}`,
+      badgeHighlight: habitsDoneToday > 0,
+    },
+    {
+      id: 'learning',
+      label: 'التعلم والتطبيق',
+      icon: GraduationCap,
+      badge: learningSkills.length ? learningSkills.length : null,
+    },
+    {
+      id: 'errors',
+      label: 'سجل الأخطاء والدروس',
+      icon: ShieldAlert,
+      badge: state.errorLogs?.length || null,
+      badgeHighlight: unresolvedErrors > 0,
+    },
+  ];
+
+  // 2. مسار التخطيط وبنك الأفكار (المهم - Growth & Future)
+  const planningItems: NavItem[] = [
+    {
+      id: 'goals',
+      label: 'الأهداف الكبرى',
+      icon: Target,
+      badge: state.goals.length ? state.goals.length : null,
+    },
+    {
+      id: 'projects',
+      label: 'المشاريع الفعالة',
+      icon: FolderGit2,
+      badge: `${activeProjects.length}/3`,
+      badgeHighlight: activeProjects.length >= 3,
+    },
+    {
+      id: 'ideas',
+      label: 'بنك الأفكار (Parking Lot)',
+      icon: Lightbulb,
+      badge: state.ideas.length ? state.ideas.length : null,
+      badgeHighlight: state.ideas.length > 0,
+    },
+    {
+      id: 'business',
+      label: 'العملاء وتجارب الدخل',
+      icon: Briefcase,
+      badge: state.incomeExperiments.length ? state.incomeExperiments.length : null,
+    },
+  ];
+
+  // 3. مسار التحليل والمتابعة (عند الحاجة - Strategic & Analytics)
+  const analyticsItems: NavItem[] = [
     {
       id: 'dashboard',
-      label: 'نظرة عامة',
+      label: 'لوحة القيادة والمؤشرات',
       icon: LayoutDashboard,
     },
     {
@@ -76,28 +145,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpenMobile, onCloseMobile })
       badgeHighlight: true,
     },
     {
-      id: 'today',
-      label: 'تركيز اليوم',
-      icon: CheckSquare,
-      badge: `${focusDoneCount}/${todayFocusTasks.length || 3}`,
-      badgeHighlight: todayFocusTasks.length > 0,
-    },
-    {
-      id: 'goals',
-      label: 'الأهداف',
-      icon: Target,
-      badge: state.goals.length,
-    },
-    {
-      id: 'projects',
-      label: 'المشاريع',
-      icon: FolderGit2,
-      badge: `${activeProjects.length}/3`,
-      badgeHighlight: activeProjects.length >= 3,
+      id: 'review',
+      label: 'المراجعة الأسبوعية',
+      icon: FileCheck2,
+      badge: state.weeklyReviews.length ? state.weeklyReviews.length : null,
     },
     {
       id: 'calendar',
-      label: 'التقويم',
+      label: 'التقويم الزمني',
       icon: CalendarDays,
     },
     {
@@ -108,34 +163,24 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpenMobile, onCloseMobile })
       isLive: activeTimer.isRunning,
     },
     {
-      id: 'business',
-      label: 'معمل الأعمال',
-      icon: Briefcase,
-      badge: state.incomeExperiments.length,
-    },
-    {
       id: 'money',
       label: 'المال والميزانية',
       icon: Wallet,
     },
+  ];
+
+  // 4. مسار النظام والدعم (System)
+  const systemItems: NavItem[] = [
     {
-      id: 'learning',
-      label: 'التعلم والتطبيق',
-      icon: GraduationCap,
-      badge: learningSkills.length,
+      id: 'settings',
+      label: 'الإعدادات وبدء صفحة بيضاء',
+      icon: Settings,
     },
     {
-      id: 'errors',
-      label: 'سجل الأخطاء والدروس',
-      icon: ShieldAlert,
-      badge: state.errorLogs?.length || null,
-      badgeHighlight: (state.errorLogs?.filter((e) => !e.isResolved).length || 0) > 0,
-    },
-    {
-      id: 'review',
-      label: 'المراجعة الأسبوعية',
-      icon: FileCheck2,
-      badge: state.weeklyReviews.length,
+      id: 'manba',
+      label: 'منبع الإنجازات والأنشطة',
+      icon: Sparkles,
+      badge: state.actionHistory?.length ? state.actionHistory.length : null,
     },
     {
       id: 'trash',
@@ -143,33 +188,26 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpenMobile, onCloseMobile })
       icon: Trash2,
       badge: trashItems.length ? trashItems.length : null,
     },
-    {
-      id: 'settings',
-      label: 'الإعدادات',
-      icon: Settings,
-    },
   ];
 
-  // Secondary tactical modules
-  const secondaryNavItems: NavItem[] = [
+  const sections: NavSection[] = [
     {
-      id: 'manba',
-      label: 'منبع الإنجازات والأنشطة',
-      icon: Sparkles,
-      badge: state.actionHistory?.length ? state.actionHistory.length : null,
-      badgeHighlight: (state.actionHistory?.length || 0) > 0,
+      title: 'الروتين والتركيز اليومي',
+      badge: 'القصوى',
+      items: dailyCoreItems,
     },
     {
-      id: 'habits',
-      label: 'العادات والروتين',
-      icon: Flame,
-      badge: `${habitsDoneToday}/${state.habits.length}`,
+      title: 'التخطيط وبنك الأفكار',
+      badge: 'المهم',
+      items: planningItems,
     },
     {
-      id: 'ideas',
-      label: 'بنك الأفكار (Parking Lot)',
-      icon: Lightbulb,
-      badge: state.ideas.length,
+      title: 'التحليل والمتابعة',
+      items: analyticsItems,
+    },
+    {
+      title: 'النظام والبيانات',
+      items: systemItems,
     },
   ];
 
@@ -178,9 +216,72 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpenMobile, onCloseMobile })
     onCloseMobile();
   };
 
+  const renderNavGroup = (section: NavSection) => (
+    <div key={section.title} className="space-y-1">
+      <div className="px-3 flex items-center justify-between text-[10px] font-mono uppercase tracking-wider text-[var(--text-muted)] pt-2 pb-0.5">
+        <span>{section.title}</span>
+        {section.badge && (
+          <span className="text-[9px] px-1.5 py-0.2 rounded bg-[var(--accent-gold)]/10 text-[var(--accent-gold)] font-bold">
+            {section.badge}
+          </span>
+        )}
+      </div>
+      <div className="space-y-0.5">
+        {section.items.map((item) => {
+          const Icon = item.icon;
+          const isActive = activeTab === item.id;
+
+          return (
+            <button
+              key={item.id}
+              onClick={() => handleSelectTab(item.id)}
+              className={`group relative flex w-full items-center justify-between rounded-lg px-3 py-2 text-xs font-medium transition-all ${
+                isActive
+                  ? 'bg-[var(--bg-elevated)] text-[var(--accent-gold)] border border-[var(--border-color)] font-semibold shadow-sm'
+                  : 'text-[var(--text-secondary)] hover:bg-[var(--bg-surface)] hover:text-[var(--text-primary)] border border-transparent'
+              }`}
+            >
+              {/* Subtle active indicator bar */}
+              {isActive && (
+                <span className="absolute right-0 top-1/2 -translate-y-1/2 h-4 w-1 rounded-l-full bg-[var(--accent-gold)]" />
+              )}
+
+              <div className="flex items-center gap-2.5 min-w-0">
+                <Icon
+                  className={`h-4 w-4 shrink-0 transition-colors ${
+                    isActive
+                      ? 'text-[var(--accent-gold)]'
+                      : item.isLive
+                      ? 'text-emerald-400 animate-pulse'
+                      : 'text-[var(--text-muted)] group-hover:text-[var(--text-primary)]'
+                  }`}
+                />
+                <span className="truncate">{item.label}</span>
+              </div>
+
+              {item.badge !== null && item.badge !== undefined && (
+                <span
+                  className={`font-mono text-[10px] tabular-nums px-1.5 py-0.5 rounded ${
+                    item.isLive
+                      ? 'bg-emerald-500/20 text-emerald-400 font-bold animate-pulse'
+                      : item.badgeHighlight
+                      ? 'bg-[var(--accent-gold)]/20 text-[var(--accent-gold)] font-semibold'
+                      : 'bg-[var(--bg-elevated)] text-[var(--text-muted)]'
+                  }`}
+                >
+                  {item.badge}
+                </span>
+              )}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+
   const sidebarContent = (
     <div className="flex flex-col h-full justify-between py-4 px-3 select-none">
-      <div className="space-y-6">
+      <div className="space-y-4">
         {/* Brand Header */}
         <div className="px-3 pt-1 pb-2 flex items-center justify-between border-b border-[var(--border-color)]">
           <div className="flex items-center gap-2.5">
@@ -198,114 +299,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpenMobile, onCloseMobile })
           </div>
         </div>
 
-        {/* Core Company-Level Navigation */}
-        <div className="space-y-1">
-          <div className="px-3 text-[10px] font-mono uppercase tracking-wider text-[var(--text-muted)]">
-            النظام الرئيسي
-          </div>
-          <div className="space-y-0.5 pt-1">
-            {primaryNavItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = activeTab === item.id;
-
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => handleSelectTab(item.id)}
-                  className={`group relative flex w-full items-center justify-between rounded-lg px-3 py-2 text-xs font-medium transition-all ${
-                    isActive
-                      ? 'bg-[var(--bg-elevated)] text-[var(--accent-gold)] border border-[var(--border-color)] font-semibold'
-                      : 'text-[var(--text-secondary)] hover:bg-[var(--bg-surface)] hover:text-[var(--text-primary)] border border-transparent'
-                  }`}
-                >
-                  {/* Subtle active indicator bar */}
-                  {isActive && (
-                    <span className="absolute right-0 top-1/2 -translate-y-1/2 h-4 w-1 rounded-l-full bg-[var(--accent-gold)]" />
-                  )}
-
-                  <div className="flex items-center gap-2.5 min-w-0">
-                    <Icon
-                      className={`h-4 w-4 shrink-0 transition-colors ${
-                        isActive
-                          ? 'text-[var(--accent-gold)]'
-                          : item.isLive
-                          ? 'text-emerald-400 animate-pulse'
-                          : 'text-[var(--text-muted)] group-hover:text-[var(--text-primary)]'
-                      }`}
-                    />
-                    <span className="truncate">{item.label}</span>
-                  </div>
-
-                  {item.badge !== null && item.badge !== undefined && (
-                    <span
-                      className={`font-mono text-[10px] tabular-nums px-1.5 py-0.5 rounded ${
-                        item.isLive
-                          ? 'bg-emerald-500/20 text-emerald-400 font-bold animate-pulse'
-                          : item.badgeHighlight
-                          ? 'bg-[var(--accent-gold)]/20 text-[var(--accent-gold)] font-semibold'
-                          : 'bg-[var(--bg-elevated)] text-[var(--text-muted)]'
-                      }`}
-                    >
-                      {item.badge}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Secondary Modules */}
-        <div className="space-y-1 pt-2 border-t border-[var(--border-color)]">
-          <div className="px-3 text-[10px] font-mono uppercase tracking-wider text-[var(--text-muted)]">
-            أدوات التركيز والأنشطة
-          </div>
-          <div className="space-y-0.5 pt-1">
-            {secondaryNavItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = activeTab === item.id;
-
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => handleSelectTab(item.id)}
-                  className={`group relative flex w-full items-center justify-between rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
-                    isActive
-                      ? 'bg-[var(--bg-elevated)] text-[var(--accent-gold)] border border-[var(--border-color)] font-semibold'
-                      : 'text-[var(--text-secondary)] hover:bg-[var(--bg-surface)] hover:text-[var(--text-primary)] border border-transparent'
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5 min-w-0">
-                    <Icon
-                      className={`h-3.5 w-3.5 shrink-0 transition-colors ${
-                        isActive
-                          ? 'text-[var(--accent-gold)]'
-                          : 'text-[var(--text-muted)] group-hover:text-[var(--text-primary)]'
-                      }`}
-                    />
-                    <span className="truncate">{item.label}</span>
-                  </div>
-
-                  {item.badge !== null && item.badge !== undefined && (
-                    <span
-                      className={`font-mono text-[10px] tabular-nums px-1.5 py-0.5 rounded ${
-                        item.badgeHighlight
-                          ? 'bg-[var(--accent-gold)]/20 text-[var(--accent-gold)]'
-                          : 'bg-[var(--bg-elevated)] text-[var(--text-muted)]'
-                      }`}
-                    >
-                      {item.badge}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
-          </div>
+        {/* Structured Sections */}
+        <div className="space-y-3">
+          {sections.map(renderNavGroup)}
         </div>
       </div>
 
       {/* Bottom Identity & Principle Card */}
-      <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-3 text-center space-y-1">
+      <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-3 text-center space-y-1 mt-4">
         <div className="text-[11px] font-semibold text-[var(--accent-gold)]">
           السماحي OS
         </div>
