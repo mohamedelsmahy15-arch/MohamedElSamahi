@@ -366,20 +366,32 @@ export interface ActionHistoryItem {
 
 // سجل الأخطاء والدروس المستفادة (Error & Bug Codex)
 export type ErrorSeverity = 'low' | 'medium' | 'high' | 'critical';
-export type ErrorCategory = 'برمجة وكود' | 'بيئة وتشغيل' | 'تصميم وواجهة' | 'قواعد بيانات وتخزين' | 'سيرفر وAPI' | 'أخرى';
+export type ErrorCategory =
+  | 'برمجة وكود'
+  | 'تواصل وعلاقات'
+  | 'انضباط وعادات وسلوك'
+  | 'قرارات عمل وتجارة'
+  | 'إدارة وقت وتركيز'
+  | 'بيئة وتشغيل'
+  | 'تصميم وواجهة'
+  | 'قواعد بيانات وتخزين'
+  | 'سيرفر وAPI'
+  | 'أخرى';
 
 export interface ErrorLogItem {
   id: string;
-  title: string;              // عنوان الخطأ أو المشكلة
-  category: ErrorCategory;    // التصنيف
-  severity: ErrorSeverity;    // درجة الخطورة
+  title: string;              // عنوان الخطأ أو الموقف
+  category: ErrorCategory;    // التصنيف (كود، علاقات، عادات، عمل...)
+  severity: ErrorSeverity;    // درجة التأثير
   date: string;               // تاريخ الحدوث YYYY-MM-DD
-  symptoms: string;           // ماذا حدث؟ (الأعراض أو رسالة الخطأ)
-  rootCause: string;          // ما السبب الجذري؟ (Root Cause)
-  solution: string;           // كيف تم الحل؟ (الخطوات البرمجية أو التقنية)
-  preventionRule: string;     // القاعدة الذهبية لعدم التكرار مستقبلاً
-  tags: string[];             // وسوم للبحث السريع (مثال: react, vite, build)
-  isResolved: boolean;        // هل تم حلها؟
+  symptoms: string;           // ماذا حدث بالتفصيل؟ (الموقف أو رسالة الخطأ أو التصرف)
+  rootCause: string;          // ما السبب الجذري؟ (لماذا حدث ذلك أو لماذا تصرفت هكذا؟)
+  solution: string;           // كيف تم الحل أو تدارك الموقف؟
+  betterAlternative?: string; // ما هو التصرف أو البديل الأفضل مستقبلاً؟
+  lessonLearned?: string;     // الدرس المستفاد الذهبي للمستقبل
+  preventionRule: string;     // القاعدة الذهبية لعدم التكرار نهائياً
+  tags: string[];             // وسوم للبحث السريع
+  isResolved: boolean;        // هل تم التدارك والحل؟
   createdAt: string;
 }
 

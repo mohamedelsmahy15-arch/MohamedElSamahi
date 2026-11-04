@@ -9,6 +9,7 @@ import { createServer as createViteServer } from 'vite';
 import { GoogleGenAI } from '@google/genai';
 import dotenv from 'dotenv';
 import path from 'path';
+import fs from 'fs';
 import { processAssistantMessage } from './server/assistantEngine.ts';
 
 dotenv.config();
@@ -148,7 +149,24 @@ async function startServer() {
     });
     app.use(vite.middlewares);
   } else {
-    const distPath = path.resolve(process.cwd(), 'dist');
+    const possibleDistPaths = [
+      process.env.DIST_PATH,
+      path.join(__dirname, '../dist'),
+      path.join(__dirname, 'dist'),
+      path.resolve(process.cwd(), 'dist'),
+      path.join((process as any).resourcesPath || '', 'dist'),
+      path.join((process as any).resourcesPath || '', 'app.asar/dist'),
+    ].filter(Boolean) as string[];
+
+    let distPath = path.resolve(process.cwd(), 'dist');
+    for (const p of possibleDistPaths) {
+      if (p && fs.existsSync(p)) {
+        distPath = p;
+        break;
+      }
+    }
+
+    console.log(`Serving static files from: ${distPath}`);
     app.use(express.static(distPath));
     app.get('*', (_req, res) => {
       res.sendFile(path.join(distPath, 'index.html'));

@@ -1,8 +1,9 @@
 /**
  * components/errors/ErrorCodexView.tsx
- * سجل الأخطاء والدروس المستفادة (Error & Bug Codex)
- * مساحة احترافية لتوثيق المشاكل البرمجية والتشغيلية، أسبابها الجذرية،
- * وطرق حلها، مع إمكانية التصدير كملف Markdown (MD) بضغطة زر واحدة.
+ * سجل الأخطاء والدروس المستفادة وتعديل المسار (Universal Life & Code Codex)
+ * مساحة شاملة لتوثيق أي خطأ يواجهك: سواء في الكود والبرمجة، أو تواصل وعلاقات،
+ * أو انضباط وعادات، أو قرارات عمل.. لتخرج منه بالبديل الأفضل والدرس الذهبي
+ * وتضمن عدم تكراره أبداً، مع تصدير Markdown (.md) بضغطة زر واحدة.
  */
 
 import React, { useState, useMemo } from 'react';
@@ -13,10 +14,7 @@ import {
   Plus,
   FileDown,
   Search,
-  Filter,
   CheckCircle2,
-  Clock,
-  Tag,
   AlertTriangle,
   Flame,
   Trash2,
@@ -29,15 +27,24 @@ import {
   ExternalLink,
   ChevronDown,
   ChevronUp,
+  RotateCcw,
+  Sparkles,
+  Users,
+  Code,
+  HeartHandshake,
 } from 'lucide-react';
 
-const CATEGORIES: ErrorCategory[] = [
-  'برمجة وكود',
-  'بيئة وتشغيل',
-  'تصميم وواجهة',
-  'قواعد بيانات وتخزين',
-  'سيرفر وAPI',
-  'أخرى',
+const CATEGORIES: { id: ErrorCategory; label: string }[] = [
+  { id: 'برمجة وكود', label: '💻 برمجة وكود' },
+  { id: 'تواصل وعلاقات', label: '🤝 تواصل وعلاقات (تعامل/رد فعل)' },
+  { id: 'انضباط وعادات وسلوك', label: '🧘 انضباط وعادات وسلوك' },
+  { id: 'قرارات عمل وتجارة', label: '💼 قرارات عمل وبزنس' },
+  { id: 'إدارة وقت وتركيز', label: '⏳ إدارة وقت وتشتت' },
+  { id: 'بيئة وتشغيل', label: '⚙️ بيئة وتشغيل ونظام' },
+  { id: 'تصميم وواجهة', label: '🎨 تصميم وواجهة' },
+  { id: 'قواعد بيانات وتخزين', label: '🗄️ قواعد بيانات وتخزين' },
+  { id: 'سيرفر وAPI', label: '🌐 سيرفر وAPI' },
+  { id: 'أخرى', label: '📌 أخرى' },
 ];
 
 const SEVERITIES: { id: ErrorSeverity; label: string; color: string }[] = [
@@ -71,6 +78,8 @@ export const ErrorCodexView: React.FC = () => {
   const [symptoms, setSymptoms] = useState('');
   const [rootCause, setRootCause] = useState('');
   const [solution, setSolution] = useState('');
+  const [betterAlternative, setBetterAlternative] = useState('');
+  const [lessonLearned, setLessonLearned] = useState('');
   const [preventionRule, setPreventionRule] = useState('');
   const [tagsInput, setTagsInput] = useState('');
 
@@ -85,6 +94,7 @@ export const ErrorCodexView: React.FC = () => {
         item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.symptoms.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.solution.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (item.lessonLearned && item.lessonLearned.toLowerCase().includes(searchQuery.toLowerCase())) ||
         item.tags.some((t: string) => t.toLowerCase().includes(searchQuery.toLowerCase()));
 
       const matchCategory = selectedCategory === 'all' || item.category === selectedCategory;
@@ -108,7 +118,7 @@ export const ErrorCodexView: React.FC = () => {
     const mdContent = exportErrorLogToMarkdown(id);
     const fileName = id
       ? `error-log-${id}.md`
-      : `samahy-os-error-codex-${new Date().toISOString().split('T')[0]}.md`;
+      : `samahy-os-wisdom-codex-${new Date().toISOString().split('T')[0]}.md`;
 
     const blob = new Blob([mdContent], { type: 'text/markdown;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
@@ -148,6 +158,8 @@ export const ErrorCodexView: React.FC = () => {
         symptoms: symptoms.trim(),
         rootCause: rootCause.trim(),
         solution: solution.trim(),
+        betterAlternative: betterAlternative.trim() || undefined,
+        lessonLearned: lessonLearned.trim() || undefined,
         preventionRule: preventionRule.trim(),
         tags,
       });
@@ -160,6 +172,8 @@ export const ErrorCodexView: React.FC = () => {
         symptoms: symptoms.trim(),
         rootCause: rootCause.trim(),
         solution: solution.trim(),
+        betterAlternative: betterAlternative.trim() || undefined,
+        lessonLearned: lessonLearned.trim() || undefined,
         preventionRule: preventionRule.trim(),
         tags,
         isResolved: true,
@@ -177,6 +191,8 @@ export const ErrorCodexView: React.FC = () => {
     setSymptoms('');
     setRootCause('');
     setSolution('');
+    setBetterAlternative('');
+    setLessonLearned('');
     setPreventionRule('');
     setTagsInput('');
     setIsAddModalOpen(true);
@@ -190,6 +206,8 @@ export const ErrorCodexView: React.FC = () => {
     setSymptoms(item.symptoms);
     setRootCause(item.rootCause);
     setSolution(item.solution);
+    setBetterAlternative(item.betterAlternative || '');
+    setLessonLearned(item.lessonLearned || '');
     setPreventionRule(item.preventionRule);
     setTagsInput(item.tags.join(' '));
     setIsAddModalOpen(true);
@@ -201,248 +219,253 @@ export const ErrorCodexView: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 pb-20">
-      {/* رأس الصفحة */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--border-color)] pb-5">
+    <div className="space-y-6 pb-16 max-w-6xl">
+      {/* 1. Header */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[var(--border-color)] pb-4">
         <div>
           <div className="flex items-center gap-2 text-xs font-mono text-[var(--accent-gold)]">
-            <ShieldAlert className="h-4 w-4" />
-            <span>السجل المعرفي للأخطاء والحلول</span>
+            <span>سجل الأخطاء والحكمة والدروس</span>
             <span>·</span>
-            <span>Bug & Error Codex</span>
+            <span>Universal Wisdom Codex</span>
           </div>
-          <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-[var(--text-primary)] mt-1">
-            سجل الأخطاء والدروس المستفادة
+          <h1 className="text-xl md:text-2xl font-bold tracking-tight text-[var(--text-primary)] mt-1">
+            سجل الأخطاء والدروس وتعديل المسار
           </h1>
-          <p className="text-xs text-[var(--text-secondary)] mt-1">
-            وثّق أي خطأ أو مشكلة واجهتك مع السبب والحل، لتصبح مرجعك الذهبي وتُصدّرها كملف Markdown (MD) فوراً.
+          <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+            "لا بأس أن تخطئ، لكن المحرم هو تكرار نفس الخطأ مرتين.. وثّق أي عثرة في الكود، أو التعامل مع الناس، أو العادات، واخرج منها بالحكمة والبديل الأفضل."
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5">
-          {/* زر تصدير الكل إلى MD */}
-          <button
-            onClick={() => handleDownloadMarkdown()}
-            disabled={errorLogs.length === 0}
-            className="flex items-center gap-2 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] px-4 py-2.5 text-xs font-semibold text-[var(--text-primary)] hover:border-[var(--accent-gold)]/50 hover:text-[var(--accent-gold)] transition-all shadow-sm disabled:opacity-50"
-            title="تصدير كامل سجل الأخطاء كملف Markdown"
-          >
-            <FileDown className="h-4 w-4 text-[var(--accent-gold)]" />
-            <span>تصدير الكل (.MD)</span>
-          </button>
+        <div className="flex flex-wrap items-center gap-2.5 self-start md:self-auto">
+          {errorLogs.length > 0 && (
+            <button
+              onClick={() => handleDownloadMarkdown()}
+              className="flex items-center gap-1.5 rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)] px-3 py-2 text-xs font-semibold text-[var(--text-primary)] hover:border-[var(--accent-gold)]/50 hover:text-[var(--accent-gold)] transition-colors shadow-sm"
+              title="تصدير السجل بالكامل كملف Markdown"
+            >
+              <FileDown className="h-4 w-4" />
+              <span>تصدير الكل (MD)</span>
+            </button>
+          )}
 
-          {/* زر إضافة خطأ جديد */}
           <button
             onClick={openAddModal}
-            className="flex items-center gap-2 rounded-xl bg-[var(--accent-gold)] px-4 py-2.5 text-xs font-bold text-black hover:opacity-95 active:scale-95 transition-all shadow-lg shadow-[var(--accent-gold)]/15"
+            className="flex items-center gap-2 rounded-lg bg-[var(--accent-gold)] px-4 py-2 text-xs font-bold text-black hover:bg-[#e0bc45] transition-all shadow-sm"
           >
             <Plus className="h-4 w-4 stroke-[3]" />
-            <span>توثيق خطأ جديد</span>
+            <span>+ توثيق خطأ / موقف جديد</span>
           </button>
         </div>
       </div>
 
-      {/* بطاقات الإحصاء السريعة */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-3.5">
-          <span className="text-[11px] text-[var(--text-muted)] block">إجمالي المشاكل الموثقة</span>
-          <span className="text-xl font-bold font-mono text-[var(--text-primary)] mt-1 block">
+      {/* 2. Stats Dashboard */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="rounded-2xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-4 shadow-sm">
+          <div className="text-[11px] font-mono text-[var(--text-muted)]">إجمالي الأخطاء والدروس</div>
+          <div className="text-xl font-extrabold text-[var(--text-primary)] font-mono mt-1">
             {stats.total}
-          </span>
+          </div>
         </div>
-        <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3.5">
-          <span className="text-[11px] text-emerald-400 block">تم حلها بنجاح ✓</span>
-          <span className="text-xl font-bold font-mono text-emerald-400 mt-1 block">
+
+        <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-4 shadow-sm">
+          <div className="text-[11px] font-mono text-emerald-800 dark:text-emerald-400">تم حلها وتداركها</div>
+          <div className="text-xl font-extrabold text-emerald-800 dark:text-emerald-400 font-mono mt-1">
             {stats.resolved}
-          </span>
+          </div>
         </div>
-        <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-3.5">
-          <span className="text-[11px] text-amber-400 block">قيد المتابعة أو التحسين</span>
-          <span className="text-xl font-bold font-mono text-amber-400 mt-1 block">
+
+        <div className="rounded-2xl border border-amber-500/20 bg-amber-500/5 p-4 shadow-sm">
+          <div className="text-[11px] font-mono text-amber-800 dark:text-amber-400">قيد المتابعة والتثبيت</div>
+          <div className="text-xl font-extrabold text-amber-800 dark:text-amber-400 font-mono mt-1">
             {stats.pending}
-          </span>
+          </div>
         </div>
-        <div className="rounded-xl border border-rose-500/20 bg-rose-500/5 p-3.5">
-          <span className="text-[11px] text-rose-400 block">أخطاء حرجة / عالية</span>
-          <span className="text-xl font-bold font-mono text-rose-400 mt-1 block">
+
+        <div className="rounded-2xl border border-rose-500/20 bg-rose-500/5 p-4 shadow-sm">
+          <div className="text-[11px] font-mono text-rose-800 dark:text-rose-400">عثرات حرجة / عالية التأثير</div>
+          <div className="text-xl font-extrabold text-rose-800 dark:text-rose-400 font-mono mt-1">
             {stats.critical}
-          </span>
+          </div>
         </div>
       </div>
 
-      {/* شريط البحث والتصفية */}
-      <div className="flex flex-col sm:flex-row items-center gap-3">
-        <div className="relative flex-1 w-full">
-          <Search className="absolute right-3.5 top-3 h-4 w-4 text-[var(--text-muted)]" />
+      {/* 3. Filter & Search Bar */}
+      <div className="rounded-2xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-3 flex flex-col md:flex-row items-center justify-between gap-3 shadow-sm">
+        <div className="relative w-full md:w-80">
+          <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[var(--text-muted)]" />
           <input
             type="text"
-            placeholder="ابحث في عنوان الخطأ، الأعراض، الحل، أو الوسوم (#vite #react)..."
+            placeholder="ابحث في الأخطاء، الدروس، أو الكلمات المفتاحية..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] py-2.5 pr-10 pl-4 text-xs text-[var(--text-primary)] outline-none focus:border-[var(--accent-gold)] transition-colors placeholder:text-[var(--text-muted)]"
+            className="w-full rounded-xl border border-[var(--border-color)] bg-[var(--bg-elevated)] pr-9 pl-3 py-2 text-xs text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--accent-gold)]"
           />
         </div>
 
-        {/* تصفية التصنيف */}
-        <select
-          value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
-          className="w-full sm:w-auto rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] px-3 py-2.5 text-xs text-[var(--text-primary)] outline-none focus:border-[var(--accent-gold)]"
-        >
-          <option value="all">كل التصنيفات</option>
-          {CATEGORIES.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
-          ))}
-        </select>
+        <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
+          {/* تصنيف */}
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-elevated)] px-3 py-2 text-xs text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent-gold)]"
+          >
+            <option value="all">كل المجالات</option>
+            {CATEGORIES.map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {cat.label}
+              </option>
+            ))}
+          </select>
 
-        {/* تصفية الخطورة */}
-        <select
-          value={selectedSeverity}
-          onChange={(e) => setSelectedSeverity(e.target.value)}
-          className="w-full sm:w-auto rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] px-3 py-2.5 text-xs text-[var(--text-primary)] outline-none focus:border-[var(--accent-gold)]"
-        >
-          <option value="all">كل درجات الخطورة</option>
-          {SEVERITIES.map((s) => (
-            <option key={s.id} value={s.id}>
-              {s.label}
-            </option>
-          ))}
-        </select>
+          {/* درجة الخطورة */}
+          <select
+            value={selectedSeverity}
+            onChange={(e) => setSelectedSeverity(e.target.value)}
+            className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-elevated)] px-3 py-2 text-xs text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent-gold)]"
+          >
+            <option value="all">كل درجات التأثير</option>
+            {SEVERITIES.map((sev) => (
+              <option key={sev.id} value={sev.id}>
+                {sev.label}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
-      {/* قائمة الأخطاء والتوثيق */}
+      {/* 4. List of Error & Lesson Items */}
       {filteredErrors.length === 0 ? (
-        <div className="rounded-2xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-12 text-center">
-          <ShieldAlert className="h-10 w-10 text-[var(--text-muted)] mx-auto mb-3 opacity-50" />
-          <h3 className="text-sm font-bold text-[var(--text-primary)]">لا توجد أخطاء مسجلة تطابق بحثك</h3>
-          <p className="text-xs text-[var(--text-muted)] mt-1">
-            اضغط على "توثيق خطأ جديد" لإضافة أول درس مستفاد في سجلك.
+        <div className="rounded-2xl border border-dashed border-[var(--border-color)] bg-[var(--bg-surface)] p-12 text-center text-xs text-[var(--text-muted)] space-y-3">
+          <BookOpen className="h-8 w-8 mx-auto text-[var(--accent-gold)]/60" />
+          <div className="font-semibold text-sm text-[var(--text-primary)]">
+            السجل نظيف ولا توجد عثرات مطابقة للبحث
+          </div>
+          <p className="max-w-md mx-auto text-[var(--text-secondary)]">
+            أي خطأ ترتكبه (كود ما اشتغلش، تعاملت بحدة مع شخص، تكاسلت عن عادة، أو تسرعت في قرار).. افتح واضغط "+ توثيق خطأ / موقف جديد" لتوثيقه ومعرفة الحل والبديل الأفضل.
           </p>
+          <button
+            onClick={openAddModal}
+            className="inline-flex items-center gap-1.5 rounded-lg bg-[var(--accent-gold)] px-4 py-2 text-xs font-bold text-black hover:bg-[#e0bc45] transition-all shadow-sm"
+          >
+            <Plus className="h-3.5 w-3.5" />
+            <span>توثيق أول تجربة / درس</span>
+          </button>
         </div>
       ) : (
         <div className="space-y-3">
           {filteredErrors.map((item) => {
             const isExpanded = expandedId === item.id;
-            const sevInfo = SEVERITIES.find((s) => s.id === item.severity) || SEVERITIES[1];
+            const sevConfig = SEVERITIES.find((s) => s.id === item.severity) || SEVERITIES[1];
 
             return (
               <div
                 key={item.id}
-                className="rounded-2xl border border-[var(--border-color)] bg-[var(--bg-surface)] shadow-md overflow-hidden transition-all duration-200 hover:border-[var(--accent-gold)]/40"
+                className="rounded-2xl border border-[var(--border-color)] bg-[var(--bg-surface)] overflow-hidden shadow-sm hover:border-[var(--border-color)] transition-all"
               >
-                {/* رأس العنصر */}
-                <div
-                  onClick={() => setExpandedId(isExpanded ? null : item.id)}
-                  className="flex items-center justify-between p-4 sm:p-5 cursor-pointer bg-[var(--bg-surface)] hover:bg-[var(--bg-elevated)]/50 transition-colors"
-                >
-                  <div className="flex items-start gap-3 min-w-0">
+                {/* Header Row */}
+                <div className="p-4 flex flex-col md:flex-row md:items-center justify-between gap-3">
+                  <div className="flex items-start gap-3 flex-1 min-w-0">
                     <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleErrorResolved(item.id);
-                      }}
-                      className="mt-0.5 text-xs shrink-0"
-                      title={item.isResolved ? 'تم الحل (اضغط للتبديل)' : 'قيد الحل (اضغط للتبديل)'}
+                      onClick={() => toggleErrorResolved(item.id)}
+                      className={`mt-0.5 shrink-0 rounded-lg p-1.5 transition-colors ${
+                        item.isResolved
+                          ? 'text-emerald-800 dark:text-emerald-400 bg-emerald-500/10'
+                          : 'text-[var(--text-muted)] hover:text-amber-800 dark:hover:text-amber-400 bg-[var(--bg-elevated)]'
+                      }`}
+                      title={item.isResolved ? 'تم الحل والتدارك (اضغط لتغيير الحالة)' : 'قيد المتابعة (اضغط للتعليم كمنتهي)'}
                     >
-                      {item.isResolved ? (
-                        <CheckCircle2 className="h-5 w-5 text-emerald-400" />
-                      ) : (
-                        <Clock className="h-5 w-5 text-amber-400 animate-pulse" />
-                      )}
+                      <CheckCircle2 className="h-4 w-4" />
                     </button>
 
-                    <div className="min-w-0">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <h3 className="text-sm font-bold text-[var(--text-primary)] truncate">
+                    <div className="space-y-1 min-w-0 flex-1">
+                      <div className="flex flex-wrap items-center gap-2 text-xs">
+                        <span className="font-bold text-sm text-[var(--text-primary)] hover:text-[var(--accent-gold)] transition-colors">
                           {item.title}
-                        </h3>
-                        <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full border ${sevInfo.color}`}>
-                          {sevInfo.label.split(' ')[0]}
                         </span>
-                        <span className="text-[10px] font-mono text-[var(--text-muted)] bg-[var(--bg-elevated)] px-2 py-0.5 rounded-md border border-[var(--border-color)]">
+
+                        <span className="rounded-md bg-[var(--bg-elevated)] border border-[var(--border-color)] px-2 py-0.5 text-[10px] font-mono text-[var(--accent-gold)]">
                           {item.category}
+                        </span>
+
+                        <span className={`rounded-md border px-2 py-0.5 text-[10px] font-mono font-semibold ${sevConfig.color}`}>
+                          {sevConfig.label}
+                        </span>
+
+                        <span className="text-[10px] font-mono text-[var(--text-muted)]">
+                          {item.date}
                         </span>
                       </div>
 
-                      <div className="flex flex-wrap items-center gap-3 mt-1.5 text-xs text-[var(--text-muted)]">
-                        <span className="font-mono text-[11px]">{item.date}</span>
-                        {item.tags.length > 0 && (
-                          <div className="flex items-center gap-1.5 flex-wrap">
-                            {item.tags.map((t: string, idx: number) => (
-                              <span
-                                key={idx}
-                                className="text-[10px] font-mono text-[var(--accent-gold)] bg-[var(--accent-gold)]/10 px-1.5 py-0.2 rounded"
-                              >
-                                #{t}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-                      </div>
+                      {/* Lesson Preview if exists */}
+                      {item.lessonLearned && (
+                        <p className="text-xs text-[var(--accent-gold)] font-medium line-clamp-1 flex items-center gap-1">
+                          <Lightbulb className="h-3 w-3 shrink-0" />
+                          <span>الدرس المستفاد: {item.lessonLearned}</span>
+                        </p>
+                      )}
                     </div>
                   </div>
 
-                  {/* أزرار الإجراءات السريعة */}
-                  <div className="flex items-center gap-1.5 shrink-0 mr-2" onClick={(e) => e.stopPropagation()}>
-                    {/* نسخ Markdown */}
+                  {/* Actions */}
+                  <div className="flex items-center gap-1.5 self-end md:self-auto shrink-0">
                     <button
                       onClick={() => handleCopyMarkdown(item.id)}
-                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:text-[var(--accent-gold)] transition-colors"
-                      title="نسخ محتوى المشكلة بصيغة Markdown"
+                      className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] p-1.5 text-xs text-[var(--text-muted)] hover:text-[var(--accent-gold)] transition-colors"
+                      title="نسخ التوثيق كـ Markdown"
                     >
-                      {copiedId === item.id ? <Check className="h-4 w-4 text-emerald-400" /> : <Copy className="h-4 w-4" />}
+                      {copiedId === item.id ? (
+                        <Check className="h-3.5 w-3.5 text-emerald-800 dark:text-emerald-400" />
+                      ) : (
+                        <Copy className="h-3.5 w-3.5" />
+                      )}
                     </button>
 
-                    {/* تحميل كملف MD */}
                     <button
                       onClick={() => handleDownloadMarkdown(item.id)}
-                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:text-[var(--accent-gold)] transition-colors"
-                      title="تحميل كملف .MD منفصل"
+                      className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] p-1.5 text-xs text-[var(--text-muted)] hover:text-[var(--accent-gold)] transition-colors"
+                      title="تحميل كملف .md"
                     >
-                      <FileDown className="h-4 w-4" />
+                      <FileDown className="h-3.5 w-3.5" />
                     </button>
 
-                    {/* تعديل */}
                     <button
                       onClick={() => openEditModal(item)}
-                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
-                      title="تعديل التوثيق"
+                      className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] p-1.5 text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
+                      title="تعديل"
                     >
-                      <Edit3 className="h-4 w-4" />
+                      <Edit3 className="h-3.5 w-3.5" />
                     </button>
 
-                    {/* حذف */}
                     <button
                       onClick={() => {
-                        if (confirm(`هل أنت متأكد من حذف توثيق الخطأ: "${item.title}"؟`)) {
+                        if (confirm('هل أنت متأكد من حذف هذا التوثيق؟')) {
                           deleteErrorLog(item.id);
                         }
                       }}
-                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] text-[var(--text-muted)] hover:text-rose-400 transition-colors"
+                      className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] p-1.5 text-xs text-[var(--text-muted)] hover:text-rose-400 transition-colors"
                       title="حذف"
                     >
-                      <Trash2 className="h-4 w-4" />
+                      <Trash2 className="h-3.5 w-3.5" />
                     </button>
 
                     <button
                       onClick={() => setExpandedId(isExpanded ? null : item.id)}
-                      className="flex h-8 w-8 items-center justify-center text-[var(--text-muted)]"
+                      className="flex items-center gap-1 rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] px-2.5 py-1.5 text-xs font-semibold text-[var(--text-primary)] hover:border-[var(--accent-gold)]/40 transition-colors"
                     >
-                      {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                      <span>{isExpanded ? 'طي التفاصيل' : 'عرض التفاصيل'}</span>
+                      {isExpanded ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
                     </button>
                   </div>
                 </div>
 
-                {/* التفاصيل القابلة للتوسيع (Expanded Section) */}
+                {/* Expanded Details Body */}
                 {isExpanded && (
                   <div className="border-t border-[var(--border-color)] bg-[var(--bg-elevated)]/40 p-5 space-y-4 text-xs animate-in fade-in duration-150">
-                    {/* الأعراض / المشكلة */}
+                    {/* ماذا حدث بالتفصيل */}
                     <div>
                       <h4 className="font-bold text-[var(--text-primary)] flex items-center gap-1.5 mb-1 text-xs">
                         <AlertTriangle className="h-3.5 w-3.5 text-rose-400" />
-                        <span>الأعراض ورسالة الخطأ (Symptoms & What Happened):</span>
+                        <span>ماذا حدث بالتفصيل؟ (الموقف أو الأعراض أو رسالة الخطأ):</span>
                       </h4>
                       <pre className="p-3 rounded-xl border border-[var(--border-color)] bg-[var(--bg-primary)] font-mono text-[11px] text-[var(--text-secondary)] whitespace-pre-wrap leading-relaxed">
                         {item.symptoms}
@@ -454,7 +477,7 @@ export const ErrorCodexView: React.FC = () => {
                       <div>
                         <h4 className="font-bold text-[var(--text-primary)] flex items-center gap-1.5 mb-1 text-xs">
                           <HelpCircle className="h-3.5 w-3.5 text-amber-400" />
-                          <span>السبب الجذري (Root Cause):</span>
+                          <span>السبب الجذري الحقيقي (Root Cause — لماذا حدث ذلك؟):</span>
                         </h4>
                         <div className="p-3 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] text-[var(--text-secondary)] leading-relaxed">
                           {item.rootCause}
@@ -462,12 +485,12 @@ export const ErrorCodexView: React.FC = () => {
                       </div>
                     )}
 
-                    {/* الحل المنفذ */}
+                    {/* الحل الفعلي أو كيف تداركت الأمر */}
                     {item.solution && (
                       <div>
                         <h4 className="font-bold text-[var(--text-primary)] flex items-center gap-1.5 mb-1 text-xs">
-                          <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
-                          <span>الحل الفعلي (Solution):</span>
+                          <CheckCircle2 className="h-3.5 w-3.5 text-emerald-800 dark:text-emerald-400" />
+                          <span>الحل الفعلي أو كيف تم التدارك:</span>
                         </h4>
                         <pre className="p-3 rounded-xl border border-emerald-500/20 bg-emerald-500/5 text-emerald-900 dark:text-emerald-300 font-mono text-[11px] whitespace-pre-wrap leading-relaxed">
                           {item.solution}
@@ -475,13 +498,53 @@ export const ErrorCodexView: React.FC = () => {
                       </div>
                     )}
 
+                    {/* البديل الأفضل مستقبلاً */}
+                    {item.betterAlternative && (
+                      <div className="p-3.5 rounded-xl border border-blue-500/30 bg-blue-500/5 space-y-1">
+                        <span className="font-bold text-blue-800 dark:text-blue-300 flex items-center gap-1.5">
+                          <RotateCcw className="h-3.5 w-3.5" />
+                          <span>🔄 التصرف أو البديل الأفضل مستقبلاً (لو تكرر الموقف ماذا سأفعل؟):</span>
+                        </span>
+                        <p className="text-[var(--text-primary)] font-medium leading-relaxed">
+                          {item.betterAlternative}
+                        </p>
+                      </div>
+                    )}
+
+                    {/* الدرس المستفاد الذهبي */}
+                    {item.lessonLearned && (
+                      <div className="p-3.5 rounded-xl border border-amber-500/30 bg-amber-500/5 space-y-1">
+                        <span className="font-bold text-amber-800 dark:text-amber-400 flex items-center gap-1.5">
+                          <Lightbulb className="h-3.5 w-3.5" />
+                          <span>🧠 الدرس المستفاد الذهبي (الحكمة التراكمية):</span>
+                        </span>
+                        <p className="text-[var(--text-primary)] font-medium leading-relaxed">
+                          {item.lessonLearned}
+                        </p>
+                      </div>
+                    )}
+
                     {/* القاعدة الذهبية للمستقبل */}
                     {item.preventionRule && (
-                      <div className="p-3 rounded-xl border border-[var(--accent-gold)]/30 bg-[var(--accent-gold)]/10 text-[var(--accent-gold)]">
-                        <span className="font-bold block mb-0.5">🏆 القاعدة الذهبية لعدم التكرار مستقبلاً:</span>
+                      <div className="p-3.5 rounded-xl border border-[var(--accent-gold)]/40 bg-[var(--accent-gold)]/10 text-[var(--accent-gold)] space-y-1">
+                        <span className="font-bold block">🏆 القاعدة الصارمة لعدم التكرار نهائياً (Commitment):</span>
                         <p className="text-[var(--text-primary)] font-medium leading-relaxed">
                           {item.preventionRule}
                         </p>
+                      </div>
+                    )}
+
+                    {/* الوسوم */}
+                    {item.tags.length > 0 && (
+                      <div className="flex flex-wrap items-center gap-1 pt-1">
+                        {item.tags.map((t, idx) => (
+                          <span
+                            key={idx}
+                            className="rounded bg-[var(--bg-surface)] border border-[var(--border-color)] px-2 py-0.5 text-[10px] text-[var(--text-muted)] font-mono"
+                          >
+                            #{t}
+                          </span>
+                        ))}
                       </div>
                     )}
                   </div>
@@ -492,7 +555,7 @@ export const ErrorCodexView: React.FC = () => {
         </div>
       )}
 
-      {/* نافذة التوثيق (إضافة / تعديل) */}
+      {/* 5. Modal: Add / Edit Item */}
       {isAddModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-150">
           <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl border border-[var(--border-color)] bg-[var(--bg-secondary)] p-6 shadow-2xl">
@@ -500,7 +563,7 @@ export const ErrorCodexView: React.FC = () => {
               <div className="flex items-center gap-2">
                 <ShieldAlert className="h-5 w-5 text-[var(--accent-gold)]" />
                 <h3 className="text-base font-bold text-[var(--text-primary)]">
-                  {editingItem ? 'تعديل توثيق الخطأ' : 'توثيق خطأ / مشكلة برمجية جديدة'}
+                  {editingItem ? 'تعديل توثيق الخطأ / الدرس' : 'توثيق خطأ أو موقف جديد لاستخلاص العبرة'}
                 </h3>
               </div>
               <button onClick={closeModal} className="text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)]">
@@ -511,129 +574,166 @@ export const ErrorCodexView: React.FC = () => {
             <form onSubmit={handleSave} className="space-y-4 text-xs">
               <div>
                 <label className="block text-[var(--text-primary)] font-semibold mb-1">
-                  عنوان المشكلة أو الخطأ: *
+                  عنوان المشكلة أو الموقف: *
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="مثال: تعارض حزم Vite مع esbuild، أو خطأ استدعاء دالة"
+                  placeholder="مثال: رد فعل متسرع أثناء مكالمة، أو خطأ في تعارض مكتبات Vite، أو كسر عادة النوم"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="w-full rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] px-3.5 py-2.5 text-xs text-[var(--text-primary)] outline-none focus:border-[var(--accent-gold)]"
+                  className="w-full rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] px-3 py-2 text-xs text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--accent-gold)]"
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[var(--text-primary)] font-semibold mb-1">التصنيف:</label>
+                  <label className="block text-[var(--text-primary)] font-semibold mb-1">
+                    تصنيف المجال:
+                  </label>
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value as ErrorCategory)}
-                    className="w-full rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] px-3 py-2 text-xs text-[var(--text-primary)] outline-none focus:border-[var(--accent-gold)]"
+                    className="w-full rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] px-3 py-2 text-xs text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent-gold)]"
                   >
-                    {CATEGORIES.map((c) => (
-                      <option key={c} value={c}>
-                        {c}
+                    {CATEGORIES.map((cat) => (
+                      <option key={cat.id} value={cat.id}>
+                        {cat.label}
                       </option>
                     ))}
                   </select>
                 </div>
 
                 <div>
-                  <label className="block text-[var(--text-primary)] font-semibold mb-1">درجة الخطورة:</label>
+                  <label className="block text-[var(--text-primary)] font-semibold mb-1">
+                    درجة التأثير / الخطورة:
+                  </label>
                   <select
                     value={severity}
                     onChange={(e) => setSeverity(e.target.value as ErrorSeverity)}
-                    className="w-full rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] px-3 py-2 text-xs text-[var(--text-primary)] outline-none focus:border-[var(--accent-gold)]"
+                    className="w-full rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] px-3 py-2 text-xs text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent-gold)]"
                   >
-                    {SEVERITIES.map((s) => (
-                      <option key={s.id} value={s.id}>
-                        {s.label}
+                    {SEVERITIES.map((sev) => (
+                      <option key={sev.id} value={sev.id}>
+                        {sev.label}
                       </option>
                     ))}
                   </select>
                 </div>
               </div>
 
+              {/* ما حدث بالتفصيل */}
               <div>
                 <label className="block text-[var(--text-primary)] font-semibold mb-1">
-                  الأعراض / ماذا حدث؟ (أو انسخ رسالة الخطأ هنا): *
+                  ماذا حدث بالتفصيل؟ (الأعراض / الموقف / رسالة الخطأ): *
                 </label>
                 <textarea
                   rows={3}
                   required
-                  placeholder="انسخ رسالة الخطأ من الـ Console أو اشرح ما ظهر لك على الشاشة..."
+                  placeholder="اوصف المشكلة بوضوح: ما الذي فعلته؟ ما الذي حدث نتيجة لذلك؟ ما رسالة الخطأ أو الموقف المحرج؟"
                   value={symptoms}
                   onChange={(e) => setSymptoms(e.target.value)}
-                  className="w-full rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-3 text-xs font-mono text-[var(--text-primary)] outline-none focus:border-[var(--accent-gold)]"
+                  className="w-full rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-3 text-xs text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--accent-gold)] font-mono"
                 />
               </div>
 
+              {/* السبب الجذري */}
               <div>
                 <label className="block text-[var(--text-primary)] font-semibold mb-1">
-                  السبب الجذري (Root Cause):
+                  السبب الجذري الحقيقي (Root Cause — لماذا تصرفت أو حدث ذلك؟):
                 </label>
                 <textarea
                   rows={2}
-                  placeholder="لماذا حدثت هذه المشكلة تقنياً؟"
+                  placeholder="مثال: غضب وتسرع، قلة نوم وإرهاق، عدم قراءة التوثيق الرسمي، أو التردد في الحسم..."
                   value={rootCause}
                   onChange={(e) => setRootCause(e.target.value)}
-                  className="w-full rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-3 text-xs text-[var(--text-primary)] outline-none focus:border-[var(--accent-gold)]"
+                  className="w-full rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-3 text-xs text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--accent-gold)]"
                 />
               </div>
 
+              {/* الحل الفعلي أو كيف تداركت الأمر */}
               <div>
                 <label className="block text-[var(--text-primary)] font-semibold mb-1">
-                  الحل المنفذ (Solution & Fix):
+                  الحل المباشر أو كيف تداركت الأمر:
                 </label>
                 <textarea
-                  rows={3}
-                  placeholder="كيف تم حل المشكلة بالضبط؟ الكود أو الأمر الذي قمت بتنفيذه..."
+                  rows={2}
+                  placeholder="كيف أصلحت الكود؟ أو كيف اعتذرت وتداركت الموقف؟ أو كيف أنقذت المهمة؟"
                   value={solution}
                   onChange={(e) => setSolution(e.target.value)}
-                  className="w-full rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-3 text-xs font-mono text-[var(--text-primary)] outline-none focus:border-[var(--accent-gold)]"
+                  className="w-full rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-3 text-xs text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--accent-gold)] font-mono"
                 />
               </div>
 
+              {/* البديل الأفضل مستقبلاً */}
               <div>
-                <label className="block text-[var(--text-primary)] font-semibold mb-1">
-                  القاعدة الذهبية لعدم التكرار (Prevention Rule):
+                <label className="block text-[var(--text-primary)] font-semibold mb-1 text-blue-800 dark:text-blue-300">
+                  🔄 التصرف أو البديل الأفضل مستقبلاً (لو تكرر نفس الموقف ماذا سأفعل بدلاً من ذلك؟):
+                </label>
+                <textarea
+                  rows={2}
+                  placeholder="مثال: سأتوقف 10 ثوانٍ للتنفس قبل الرد، أو سأختبر الكود في بيئة معزولة أولاً، أو سأسأل قبل أن أفتي..."
+                  value={betterAlternative}
+                  onChange={(e) => setBetterAlternative(e.target.value)}
+                  className="w-full rounded-xl border border-blue-500/30 bg-blue-500/5 p-3 text-xs text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-blue-500"
+                />
+              </div>
+
+              {/* الدرس المستفاد الذهبي */}
+              <div>
+                <label className="block text-[var(--text-primary)] font-semibold mb-1 text-amber-800 dark:text-amber-400">
+                  🧠 الدرس المستفاد الذهبي (الحكمة التراكمية التي خرجت بها):
                 </label>
                 <input
                   type="text"
-                  placeholder="ما هي القاعدة التي تتبعها مستقبلاً لتجنب هذا الخطأ؟"
+                  placeholder="مثال: الصمت عند الغضب قوة وليس ضعفاً، أو قراءة التوثيق توفر 5 ساعات تجارب عشوائية"
+                  value={lessonLearned}
+                  onChange={(e) => setLessonLearned(e.target.value)}
+                  className="w-full rounded-xl border border-amber-500/30 bg-amber-500/5 px-3 py-2 text-xs text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-amber-500 font-medium"
+                />
+              </div>
+
+              {/* القاعدة لعدم التكرار */}
+              <div>
+                <label className="block text-[var(--text-primary)] font-semibold mb-1 text-[var(--accent-gold)]">
+                  🏆 القاعدة الصارمة لعدم التكرار نهائياً (Commitment):
+                </label>
+                <input
+                  type="text"
+                  placeholder="مثال: لن أقوم بعمل git push قبل إجراء tsc build، أو لن أتحدث في موضوع حساس وأنا متعب"
                   value={preventionRule}
                   onChange={(e) => setPreventionRule(e.target.value)}
-                  className="w-full rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] px-3.5 py-2 text-xs text-[var(--text-primary)] outline-none focus:border-[var(--accent-gold)]"
+                  className="w-full rounded-xl border border-[var(--accent-gold)]/30 bg-[var(--accent-gold)]/5 px-3 py-2 text-xs text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--accent-gold)] font-medium"
                 />
               </div>
 
+              {/* الوسوم */}
               <div>
                 <label className="block text-[var(--text-primary)] font-semibold mb-1">
-                  الوسوم للبحث السريع (Tags):
+                  وسوم للبحث السريع (مفصولة بمسافة):
                 </label>
                 <input
                   type="text"
-                  placeholder="مثال: react vite build error (افصل بمسافة أو فاصلة)"
+                  placeholder="مثال: كود رياكت تواصل عادات عميل غضب"
                   value={tagsInput}
                   onChange={(e) => setTagsInput(e.target.value)}
-                  className="w-full rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] px-3.5 py-2 text-xs text-[var(--text-primary)] outline-none focus:border-[var(--accent-gold)]"
+                  className="w-full rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] px-3 py-2 text-xs text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--accent-gold)]"
                 />
               </div>
 
-              <div className="flex gap-2.5 pt-2 border-t border-[var(--border-color)]">
-                <button
-                  type="submit"
-                  className="flex-1 rounded-xl bg-[var(--accent-gold)] py-2.5 text-xs font-bold text-black hover:opacity-95 transition-opacity"
-                >
-                  {editingItem ? 'حفظ التعديلات' : 'توثيق المشكلة في السجل'}
-                </button>
+              <div className="flex items-center justify-end gap-2 pt-3 border-t border-[var(--border-color)]">
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] px-4 py-2.5 text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+                  className="rounded-xl border border-[var(--border-color)] px-4 py-2 text-xs font-semibold text-[var(--text-muted)] hover:text-[var(--text-primary)]"
                 >
                   إلغاء
+                </button>
+                <button
+                  type="submit"
+                  className="rounded-xl bg-[var(--accent-gold)] px-5 py-2 text-xs font-bold text-black hover:bg-[#e0bc45] transition-all shadow-sm"
+                >
+                  {editingItem ? 'حفظ التعديلات' : 'توثيق وحفظ الحكمة'}
                 </button>
               </div>
             </form>

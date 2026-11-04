@@ -1934,10 +1934,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       md += `- **الخطورة:** ${err.severity.toUpperCase()}\n`;
       md += `- **الحالة:** ${err.isResolved ? '✅ تم الحل' : '⏳ قيد المتابعة'}\n`;
       md += `- **الوسوم:** ${err.tags.map((t) => `#${t}`).join(' ')}\n\n`;
-      md += '### 🔍 الأعراض والمشكلة:\n' + err.symptoms + '\n\n';
-      md += '### 🎯 السبب الجذري (Root Cause):\n' + err.rootCause + '\n\n';
-      md += '### 💡 الحل المنفذ (Solution):\n' + err.solution + '\n\n';
-      md += '### 🏆 القاعدة الذهبية للمستقبل:\n> ' + err.preventionRule + '\n\n';
+      md += '### 🔍 ماذا حدث بالتفصيل (الموقف أو المشكلة):\n' + err.symptoms + '\n\n';
+      md += '### 🎯 السبب الجذري الحقيقي (Root Cause):\n' + err.rootCause + '\n\n';
+      md += '### 💡 الحل أو كيف تداركت الأمر:\n' + err.solution + '\n\n';
+      if (err.betterAlternative) {
+        md += '### 🔄 التصرف / البديل الأفضل مستقبلاً:\n' + err.betterAlternative + '\n\n';
+      }
+      if (err.lessonLearned) {
+        md += '### 🧠 الدرس المستفاد الذهبي:\n' + err.lessonLearned + '\n\n';
+      }
+      md += '### 🏆 القاعدة الذهبية لعدم التكرار نهائياً:\n> ' + err.preventionRule + '\n\n';
       md += '---\n\n';
     });
 
