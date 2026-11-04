@@ -514,18 +514,21 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     // العادات المنجزة لليوم
     const totalHabits = state.habits.length;
     const habitsDone = state.habits.filter((h) => h.completedDates.includes(todayStr)).length;
-    const habitsPercent = totalHabits > 0 ? (habitsDone / totalHabits) * 100 : 50;
+    const habitsPercent = totalHabits > 0 ? (habitsDone / totalHabits) * 100 : 0;
 
     // كتل الوقت
     const blocksTotal = state.timeBlocks.length;
     const blocksDone = state.timeBlocks.filter((b) => b.completed).length;
-    const blocksPercent = blocksTotal > 0 ? (blocksDone / blocksTotal) * 100 : 50;
+    const blocksPercent = blocksTotal > 0 ? (blocksDone / blocksTotal) * 100 : 0;
 
     // الوزن: 50% لمهام التركيز الثلاثية + 25% للعادات + 25% للكتل الزمنية
-    const finalScore = Math.round(focusPercent * 0.5 + habitsPercent * 0.25 + blocksPercent * 0.25);
+    // إذا لم ينجز أي شيء، يكون المؤشر صفراً حقيقياً
+    const finalScore = (focusDone === 0 && habitsDone === 0 && blocksDone === 0)
+      ? 0
+      : Math.round(focusPercent * 0.5 + habitsPercent * 0.25 + blocksPercent * 0.25);
 
-    let verdict = 'في بداية اليوم — حدد ونفّذ أول خطوة';
-    let advice = 'ركز على المهمة الاستراتيجية رقم 1 وعاداتك الأساسية.';
+    let verdict = 'في انتظار بدايتك اليوم ⏳';
+    let advice = 'نظامك نظيف وجاهز. ابدأ بتنفيذ أول عادة أو حدد مهمة تركيز لتفعيل مؤشر الإنجاز.';
 
     if (focusDone === 3 && habitsDone >= Math.min(3, totalHabits)) {
       verdict = 'يوم بناء حقيقي ومحكم ⚡';

@@ -34,18 +34,18 @@ export const NeuralBrainHub: React.FC = () => {
   const stats = useMemo(() => {
     // نسبة إنجاز مهام التركيز (Cal Newport: Deep Work Focus)
     const completedFocus = todayFocusTasks.filter(t => t.status === 'completed').length;
-    const focusRatio = todayFocusTasks.length > 0 ? (completedFocus / todayFocusTasks.length) * 100 : 100;
+    const focusRatio = todayFocusTasks.length > 0 ? (completedFocus / todayFocusTasks.length) * 100 : 0;
 
     // نسبة الالتزام بالعادات (James Clear: Atomic Habit Identity)
     const todayStr = new Date().toISOString().split('T')[0];
     const totalHabits = state.habits.length;
     const habitsDone = state.habits.filter(h => h.completedDates.includes(todayStr)).length;
-    const habitsRatio = totalHabits > 0 ? (habitsDone / totalHabits) * 100 : 100;
+    const habitsRatio = totalHabits > 0 ? (habitsDone / totalHabits) * 100 : 0;
 
     // ترابط المشاريع بالأهداف (Stephen Covey: First Things First & Quadrant II)
     const totalProjects = state.projects.length;
     const alignedProjects = state.projects.filter(p => p.linkedGoalId).length;
-    const alignmentRatio = totalProjects > 0 ? (alignedProjects / totalProjects) * 100 : 100;
+    const alignmentRatio = totalProjects > 0 ? (alignedProjects / totalProjects) * 100 : 0;
 
     // ساعات العمل العميق المسجلة (Cal Newport Metric)
     const deepWorkMinutes = state.timeLogs
@@ -57,9 +57,9 @@ export const NeuralBrainHub: React.FC = () => {
     const systemScore = Math.round((focusRatio * 0.4) + (habitsRatio * 0.3) + (alignmentRatio * 0.3));
 
     // استخلاص النصيحة الإدراكية من المبادئ العلمية
-    let insightTitle = 'مبدأ العمل العميق (Cal Newport)';
-    let insightText = 'عقلك في أفضل حالات التركيز الصباحي. احمِ أول 90 دقيقة من أي تشتت أو وسيلة تواصل.';
-    let bookRef = 'كتاب Deep Work';
+    let insightTitle = 'مبدأ البداية النظيفة (First Principles)';
+    let insightText = 'النظام جاهز ونظيف تماماً يا محمد. ابدأ الآن بتسجيل أول هدف أو تنفيذ أول عادة لبناء الزخم.';
+    let bookRef = 'دستور السماحي OS';
 
     if (habitsDone === 0 && totalHabits > 0) {
       insightTitle = 'مبدأ بناء الهوية اليومية (James Clear)';

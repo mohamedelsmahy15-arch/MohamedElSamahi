@@ -497,7 +497,7 @@ export const DashboardView: React.FC = () => {
             </div>
             <p className="text-[var(--text-primary)] font-medium leading-relaxed line-clamp-3">
               {latestWeeklyReview?.q1_biggestAchievement ||
-                'تثبيت هيكل نظام التشغيل الشخصي، وانضباط جلسة الفجر البرمجية (90 دقيقة).'}
+                'لا توجد مراجعة أسبوعية مسجلة بعد — عند إتمام أول أسبوع ستظهر إنجازاتك هنا.'}
             </p>
           </div>
 
@@ -509,7 +509,7 @@ export const DashboardView: React.FC = () => {
             </div>
             <p className="text-amber-900 dark:text-amber-200 font-medium leading-relaxed line-clamp-3">
               {latestWeeklyReview?.q4_biggestTimeWaster ||
-                'التردد في إرسال عروض الخدمات للمتاجر والبحث عن الكمال الزائد قبل الإطلاق.'}
+                'لم تسجل أي معوقات حتى الآن.'}
             </p>
           </div>
 
@@ -521,7 +521,7 @@ export const DashboardView: React.FC = () => {
             </div>
             <p className="text-blue-900 dark:text-blue-200 font-medium leading-relaxed line-clamp-3">
               {latestWeeklyReview?.q8_nextWeekTop3?.split('\n')[0] ||
-                'التواصل المباشر مع 10 عملاء محتملين لخدمة صفحات الهبوط خلال 48 ساعة.'}
+                'ستظهر أولوياتك الأسبوعية القادمة فور إجراء أول مراجعة.'}
             </p>
           </div>
         </div>
