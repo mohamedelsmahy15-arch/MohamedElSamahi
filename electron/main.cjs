@@ -1,13 +1,42 @@
 const { app, BrowserWindow, shell } = require('electron');
 const path = require('path');
 const http = require('http');
+const net = require('net');
 const fs = require('fs');
 
 let mainWindow = null;
 const PORT = 3000;
 
-// فحص جاهزية السيرفر المحلي
-function checkServer(port, callback) {
+// منع تعطل العملية الرئيسية في حال حدوث أي خطأ في المنفذ
+process.on('uncaughtException', (err) => {
+  if (err && err.code === 'EADDRINUSE') {
+    console.warn(`Port ${PORT} is already in use; reusing running instance.`);
+  } else {
+    console.error('Electron uncaughtException:', err);
+  }
+});
+
+// فحص دقيق ومباشر لما إذا كان المنفذ 3000 مشغولاً بالفعل
+function isPortInUse(port) {
+  return new Promise((resolve) => {
+    const tester = net
+      .createServer()
+      .once('error', (err) => {
+        if (err.code === 'EADDRINUSE') {
+          resolve(true); // المنفذ مشغول مسبقاً بسيرفر نشط
+        } else {
+          resolve(false);
+        }
+      })
+      .once('listening', () => {
+        tester.once('close', () => resolve(false)).close();
+      })
+      .listen(port, '0.0.0.0');
+  });
+}
+
+// فحص استجابة HTTP
+function checkHttpReady(port, callback) {
   const req = http.get(`http://127.0.0.1:${port}`, (res) => {
     callback(true);
   });
@@ -20,7 +49,7 @@ function checkServer(port, callback) {
   });
 }
 
-// تشغيل السيرفر الداخلي المدمج في الإنتاج
+// تشغيل السيرفر المدمج في حال لم يكن هناك سيرفر شغال مسبقاً
 function startEmbeddedServer() {
   process.env.NODE_ENV = 'production';
   process.env.PORT = String(PORT);
@@ -48,7 +77,11 @@ function startEmbeddedServer() {
       console.warn('Server bundle not found at', serverBundlePath);
     }
   } catch (err) {
-    console.error('Failed to start embedded server:', err);
+    if (err && err.code === 'EADDRINUSE') {
+      console.log(`Port ${PORT} in use, skipping bind.`);
+    } else {
+      console.error('Failed to start embedded server:', err);
+    }
   }
 }
 
@@ -73,7 +106,7 @@ function createWindow() {
     mainWindow.show();
   });
 
-  // فتح الروابط الخارجية (مثل روابط الدروس والتعلم) في متصفح النظام الافتراضي (Chrome / Edge)
+  // فتح الروابط الخارجية (مثل مقاطع الفيديو ومصادر التعلم) في المتصفح الخارجي
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
     if (url.startsWith('http:') || url.startsWith('https:')) {
       if (!url.includes('localhost:3000') && !url.includes('127.0.0.1:3000')) {
@@ -84,13 +117,13 @@ function createWindow() {
     return { action: 'allow' };
   });
 
-  // محاولة التحميل والاتصال
+  // محاولة الاتصال والتحميل
   const loadUrl = `http://localhost:${PORT}`;
   let attempts = 0;
   const maxAttempts = 40;
 
   function tryLoad() {
-    checkServer(PORT, (isReady) => {
+    checkHttpReady(PORT, (isReady) => {
       if (isReady) {
         mainWindow.loadURL(loadUrl);
       } else if (attempts < maxAttempts) {
@@ -125,13 +158,19 @@ if (!gotTheLock) {
     }
   });
 
-  app.whenReady().then(() => {
-    checkServer(PORT, (isRunning) => {
-      if (!isRunning) {
+  app.whenReady().then(async () => {
+    try {
+      const inUse = await isPortInUse(PORT);
+      if (!inUse) {
         startEmbeddedServer();
+      } else {
+        console.log('السماحي OS: المنفذ 3000 نشط بالفعل، سيتم الاتصال به مباشرة.');
       }
-      createWindow();
-    });
+    } catch (e) {
+      console.warn('Error checking port:', e);
+    }
+
+    createWindow();
 
     app.on('activate', () => {
       if (BrowserWindow.getAllWindows().length === 0) {
