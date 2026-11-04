@@ -469,7 +469,7 @@ export const ErrorCodexView: React.FC = () => {
                           <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
                           <span>الحل الفعلي (Solution):</span>
                         </h4>
-                        <pre className="p-3 rounded-xl border border-emerald-500/20 bg-emerald-500/5 text-emerald-300 font-mono text-[11px] whitespace-pre-wrap leading-relaxed">
+                        <pre className="p-3 rounded-xl border border-emerald-500/20 bg-emerald-500/5 text-emerald-900 dark:text-emerald-300 font-mono text-[11px] whitespace-pre-wrap leading-relaxed">
                           {item.solution}
                         </pre>
                       </div>

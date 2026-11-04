@@ -361,11 +361,17 @@ export const TodayView: React.FC = () => {
 
                   {/* اقتراح الذكاء الاصطناعي للخطوة التالية إذا كانت منجزة */}
                   {isDone && (
-                    <div className="mt-2 p-2 rounded-lg bg-sky-500/10 border border-sky-500/20 text-[11px] text-sky-300 flex items-start gap-1.5">
-                      <Bot className="h-3.5 w-3.5 shrink-0 mt-0.5 text-sky-400" />
-                      <div>
-                        <span className="font-bold block text-sky-200">الخطوة الذكية التالية:</span>
-                        <span>{task.aiNextSuggestion || 'أحسنت يا محمد! سجّل الآن ما تعلمته في معمل التعلم، أو وثّق أي خطأ واجهك في سجل الأخطاء.'}</span>
+                    <div className="mt-2.5 p-3 rounded-xl bg-sky-500/10 border border-sky-500/30 text-xs text-sky-950 dark:text-sky-200 flex items-start gap-2.5 shadow-sm">
+                      <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-sky-500/20 text-sky-700 dark:text-sky-300 mt-0.5">
+                        <Bot className="h-4 w-4" />
+                      </div>
+                      <div className="space-y-0.5">
+                        <span className="font-bold text-xs text-sky-950 dark:text-sky-100 block">
+                          الخطوة الذكية التالية:
+                        </span>
+                        <p className="text-[11px] text-sky-900 dark:text-sky-200 leading-relaxed font-medium">
+                          {task.aiNextSuggestion || 'أحسنت يا محمد! سجّل الآن ما تعلمته في معمل التعلم، أو وثّق أي خطأ واجهك في سجل الأخطاء.'}
+                        </p>
                       </div>
                     </div>
                   )}

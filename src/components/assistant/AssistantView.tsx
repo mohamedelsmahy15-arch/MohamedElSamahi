@@ -844,7 +844,7 @@ export const AssistantView: React.FC = () => {
 
                 {/* بطاقة تأكيد إجراء حساس إذا طلب */}
                 {msg.pendingConfirmation && (
-                  <div className="mt-4 rounded-xl border border-amber-500/30 bg-amber-500/10 p-3.5 text-xs text-amber-200">
+                  <div className="mt-4 rounded-xl border border-amber-500/30 bg-amber-500/10 p-3.5 text-xs text-amber-900 dark:text-amber-200">
                     <div className="flex items-center gap-2 font-bold mb-1.5">
                       <AlertTriangle className="h-4 w-4 text-amber-400" />
                       <span>تأكيد الإجراء الحساس:</span>
@@ -872,7 +872,7 @@ export const AssistantView: React.FC = () => {
                 {/* وقت الإرسال */}
                 <div
                   className={`mt-2 text-[10px] ${
-                    isUser ? 'text-blue-200 text-left' : 'text-[var(--text-muted)] text-right'
+                    isUser ? 'text-blue-900 dark:text-blue-200 text-left' : 'text-[var(--text-muted)] text-right'
                   }`}
                 >
                   {msg.timestamp}

@@ -59,7 +59,7 @@
   }
 }
 
-/* Light Mode Specific Enhancements for Eye Comfort and Visual Clarity */
+/* Light Mode Specific Enhancements for Eye Comfort, Sharp Clarity, and Anti-Glare */
 html.light input,
 html.light textarea,
 html.light select {
@@ -72,28 +72,70 @@ html.light textarea::placeholder {
   color: #94A3B8;
 }
 
+/* Ensure no pale/washed-out text in light mode */
+html.light .text-sky-100,
+html.light .text-sky-200,
+html.light .text-sky-300 {
+  color: #0369A1 !important;
+}
+
 html.light .text-sky-400 {
-  color: #0284C7;
+  color: #0284C7 !important;
 }
 
 html.light .hover\:text-sky-300:hover {
-  color: #0369A1;
+  color: #0369A1 !important;
+}
+
+html.light .text-blue-100,
+html.light .text-blue-200,
+html.light .text-blue-300 {
+  color: #1E40AF !important;
+}
+
+html.light .text-amber-100,
+html.light .text-amber-200,
+html.light .text-amber-300 {
+  color: #92400E !important;
 }
 
 html.light .text-amber-400 {
-  color: #B45309;
+  color: #B45309 !important;
+}
+
+html.light .text-emerald-100,
+html.light .text-emerald-200,
+html.light .text-emerald-300 {
+  color: #065F46 !important;
 }
 
 html.light .text-emerald-400 {
-  color: #059669;
+  color: #059669 !important;
 }
 
+html.light .text-purple-100,
+html.light .text-purple-200,
+html.light .text-purple-300 {
+  color: #6B21A8 !important;
+}
+
+/* Background tints and borders in light mode */
 html.light .border-amber-400\/30 {
   border-color: rgba(180, 83, 9, 0.25);
 }
 
-html.light .bg-amber-400\/10 {
+html.light .bg-amber-400\/10,
+html.light .bg-amber-500\/10 {
   background-color: rgba(180, 83, 9, 0.08);
+}
+
+html.light .bg-sky-500\/10 {
+  background-color: rgba(2, 132, 199, 0.08);
+}
+
+html.light .border-sky-500\/20,
+html.light .border-sky-500\/30 {
+  border-color: rgba(2, 132, 199, 0.25);
 }
 
 html.light .bg-emerald-500\/10 {

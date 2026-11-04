@@ -170,7 +170,7 @@ export const TopActionNotificationBar: React.FC = () => {
                   {getCategoryBadgeLabel(latestAction.category)}
                 </span>
                 {latestAction.undone && (
-                  <span className="text-[11px] text-amber-300 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20 font-medium">
+                  <span className="text-[11px] text-amber-900 dark:text-amber-300 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20 font-medium">
                     مُسترجع لمكانه
                   </span>
                 )}

@@ -92,7 +92,7 @@ export const DashboardView: React.FC = () => {
     <div className="space-y-6 pb-20">
       {/* تحذير مكافحة التشتت (إن وجد) */}
       {distractionAlert && (
-        <div className="flex items-start justify-between rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4 text-xs text-amber-200 animate-in fade-in shadow-md">
+        <div className="flex items-start justify-between rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4 text-xs text-amber-900 dark:text-amber-200 animate-in fade-in shadow-md">
           <div className="flex items-center gap-3">
             <AlertTriangle className="h-4 w-4 text-amber-400 shrink-0" />
             <p className="leading-relaxed">{distractionAlert}</p>
@@ -507,7 +507,7 @@ export const DashboardView: React.FC = () => {
               <AlertTriangle className="h-3.5 w-3.5" />
               <span>أكبر عائق / وقت ضائع</span>
             </div>
-            <p className="text-amber-200/90 font-medium leading-relaxed line-clamp-3">
+            <p className="text-amber-900 dark:text-amber-200 font-medium leading-relaxed line-clamp-3">
               {latestWeeklyReview?.q4_biggestTimeWaster ||
                 'التردد في إرسال عروض الخدمات للمتاجر والبحث عن الكمال الزائد قبل الإطلاق.'}
             </p>
@@ -519,7 +519,7 @@ export const DashboardView: React.FC = () => {
               <ArrowUpRight className="h-3.5 w-3.5" />
               <span>الخطوة القادمة المحسومة</span>
             </div>
-            <p className="text-blue-200/90 font-medium leading-relaxed line-clamp-3">
+            <p className="text-blue-900 dark:text-blue-200 font-medium leading-relaxed line-clamp-3">
               {latestWeeklyReview?.q8_nextWeekTop3?.split('\n')[0] ||
                 'التواصل المباشر مع 10 عملاء محتملين لخدمة صفحات الهبوط خلال 48 ساعة.'}
             </p>

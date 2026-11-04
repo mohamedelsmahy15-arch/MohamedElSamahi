@@ -162,7 +162,7 @@ export const ActionDetailsModal: React.FC = () => {
         <div className="max-h-[75vh] overflow-y-auto p-6 space-y-5">
           {/* إشعار حالة الاسترجاع */}
           {action.undone && (
-            <div className="flex items-center gap-3 rounded-xl border border-amber-500/30 bg-amber-500/10 p-3.5 text-xs text-amber-300">
+            <div className="flex items-center gap-3 rounded-xl border border-amber-500/30 bg-amber-500/10 p-3.5 text-xs text-amber-900 dark:text-amber-300">
               <RotateCcw className="h-4 w-4 shrink-0 text-amber-400" />
               <div>
                 <span className="font-bold">تم التراجع عن هذه الخطوة مسبقاً!</span>
