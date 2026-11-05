@@ -125,8 +125,8 @@ export const TodayView: React.FC = () => {
         {/* Daily Score Pill-free Meter */}
         <div className="flex items-center gap-3 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-surface)] px-4 py-2.5 self-start sm:self-auto shadow-sm">
           <div className="text-right">
-            <div className="text-[10px] text-[var(--text-muted)] font-mono font-medium">مؤشر الإنجاز اليومي</div>
-            <div className="text-xs font-bold text-[var(--text-primary)]">
+            <div className="text-xs text-[var(--text-secondary)] font-bold">مؤشر الإنجاز اليومي</div>
+            <div className="text-sm font-extrabold text-[var(--text-primary)]">
               {dailyScoreBreakdown.verdict}
             </div>
           </div>
@@ -313,14 +313,14 @@ export const TodayView: React.FC = () => {
                   </div>
 
                   <p
-                    className={`text-xs md:text-sm font-semibold leading-snug ${
+                    className={`text-sm md:text-base font-bold leading-normal ${
                       isDone ? 'line-through text-[var(--text-muted)]' : 'text-[var(--text-primary)]'
                     }`}
                   >
                     {task.title}
                   </p>
 
-                  <div className="flex items-center gap-2 text-[11px] text-[var(--text-muted)] pt-1">
+                  <div className="flex items-center gap-2 text-xs font-semibold text-[var(--text-secondary)] pt-1.5">
                     <Clock className="h-3 w-3 shrink-0" />
                     <span className="font-mono tabular-nums">{task.estimatedMinutes} دقيقة</span>
                     <span>·</span>
@@ -434,14 +434,14 @@ export const TodayView: React.FC = () => {
             >
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <span className="font-mono text-xs text-[var(--accent-gold)] font-bold">
+                  <span className="font-mono text-xs text-[var(--accent-gold)] font-extrabold">
                     {block.timeRange}
                   </span>
-                  <span className="text-[10px] text-[var(--text-muted)]">
+                  <span className="text-xs font-semibold text-[var(--text-secondary)]">
                     · {block.category}
                   </span>
                 </div>
-                <div className={`text-xs font-medium ${block.completed ? 'line-through text-[var(--text-muted)]' : ''}`}>
+                <div className={`text-sm font-bold ${block.completed ? 'line-through text-[var(--text-muted)]' : 'text-[var(--text-primary)]'}`}>
                   {block.title}
                 </div>
               </div>

@@ -218,15 +218,15 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpenMobile, onCloseMobile })
 
   const renderNavGroup = (section: NavSection) => (
     <div key={section.title} className="space-y-1">
-      <div className="px-3 flex items-center justify-between text-[10px] font-mono uppercase tracking-wider text-[var(--text-muted)] pt-2 pb-0.5">
+      <div className="px-3 flex items-center justify-between text-[11px] font-mono uppercase tracking-wider text-[var(--accent-gold)] font-bold pt-2.5 pb-1">
         <span>{section.title}</span>
         {section.badge && (
-          <span className="text-[9px] px-1.5 py-0.2 rounded bg-[var(--accent-gold)]/10 text-[var(--accent-gold)] font-bold">
+          <span className="text-[10px] px-2 py-0.5 rounded-md bg-[var(--accent-gold)]/15 text-[var(--accent-gold)] font-extrabold">
             {section.badge}
           </span>
         )}
       </div>
-      <div className="space-y-0.5">
+      <div className="space-y-1">
         {section.items.map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
@@ -235,20 +235,20 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpenMobile, onCloseMobile })
             <button
               key={item.id}
               onClick={() => handleSelectTab(item.id)}
-              className={`group relative flex w-full items-center justify-between rounded-lg px-3 py-2 text-xs font-medium transition-all ${
+              className={`group relative flex w-full items-center justify-between rounded-xl px-3.5 py-2.5 text-[13px] transition-all ${
                 isActive
-                  ? 'bg-[var(--bg-elevated)] text-[var(--accent-gold)] border border-[var(--border-color)] font-semibold shadow-sm'
-                  : 'text-[var(--text-secondary)] hover:bg-[var(--bg-surface)] hover:text-[var(--text-primary)] border border-transparent'
+                  ? 'bg-[var(--bg-elevated)] text-[var(--accent-gold)] border border-[var(--border-color)] font-bold shadow-sm'
+                  : 'text-[var(--text-secondary)] hover:bg-[var(--bg-surface)] hover:text-[var(--text-primary)] border border-transparent font-semibold'
               }`}
             >
               {/* Subtle active indicator bar */}
               {isActive && (
-                <span className="absolute right-0 top-1/2 -translate-y-1/2 h-4 w-1 rounded-l-full bg-[var(--accent-gold)]" />
+                <span className="absolute right-0 top-1/2 -translate-y-1/2 h-5 w-1.5 rounded-l-full bg-[var(--accent-gold)]" />
               )}
 
-              <div className="flex items-center gap-2.5 min-w-0">
+              <div className="flex items-center gap-3 min-w-0">
                 <Icon
-                  className={`h-4 w-4 shrink-0 transition-colors ${
+                  className={`h-4.5 w-4.5 shrink-0 stroke-[2.2] transition-colors ${
                     isActive
                       ? 'text-[var(--accent-gold)]'
                       : item.isLive
@@ -261,12 +261,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpenMobile, onCloseMobile })
 
               {item.badge !== null && item.badge !== undefined && (
                 <span
-                  className={`font-mono text-[10px] tabular-nums px-1.5 py-0.5 rounded ${
+                  className={`font-mono text-[11px] font-bold tabular-nums px-2 py-0.5 rounded-lg ${
                     item.isLive
-                      ? 'bg-emerald-500/20 text-emerald-400 font-bold animate-pulse'
+                      ? 'bg-emerald-500/20 text-emerald-400 font-extrabold animate-pulse'
                       : item.badgeHighlight
-                      ? 'bg-[var(--accent-gold)]/20 text-[var(--accent-gold)] font-semibold'
-                      : 'bg-[var(--bg-elevated)] text-[var(--text-muted)]'
+                      ? 'bg-[var(--accent-gold)]/20 text-[var(--accent-gold)] font-bold'
+                      : 'bg-[var(--bg-elevated)] text-[var(--text-secondary)] font-semibold'
                   }`}
                 >
                   {item.badge}
@@ -285,14 +285,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpenMobile, onCloseMobile })
         {/* Brand Header */}
         <div className="px-3 pt-1 pb-2 flex items-center justify-between border-b border-[var(--border-color)]">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-7 w-7 items-center justify-center rounded-md bg-[var(--accent-gold)] text-black font-bold font-mono text-xs shadow-sm">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--accent-gold)] text-black font-extrabold font-mono text-sm shadow-sm">
               OS
             </div>
             <div className="flex flex-col">
-              <span className="text-sm font-bold tracking-tight text-[var(--text-primary)]">
+              <span className="text-base font-extrabold tracking-tight text-[var(--text-primary)]">
                 السماحي OS
               </span>
-              <span className="text-[10px] font-mono text-[var(--text-muted)]">
+              <span className="text-xs font-mono font-semibold text-[var(--accent-gold)]">
                 2027 · سنة البناء
               </span>
             </div>
@@ -306,18 +306,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpenMobile, onCloseMobile })
       </div>
 
       {/* Bottom Identity & Principle Card */}
-      <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-3 text-center space-y-1 mt-4">
-        <div className="text-[11px] font-semibold text-[var(--accent-gold)]">
+      <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-3 text-center space-y-1.5 mt-4">
+        <div className="text-xs font-bold text-[var(--accent-gold)]">
           السماحي OS
         </div>
-        <div className="text-[10px] font-mono text-[var(--text-muted)]">
+        <div className="text-xs font-mono font-medium text-[var(--text-secondary)]">
           Build · Learn · Earn
         </div>
         <button
           onClick={logout}
-          className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-lg border border-[var(--border-color)] bg-[var(--bg-elevated)] py-1.5 text-xs text-[var(--text-muted)] hover:text-amber-400 hover:border-amber-400/30 transition-colors"
+          className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl border border-[var(--border-color)] bg-[var(--bg-elevated)] py-2 text-xs font-bold text-[var(--text-secondary)] hover:text-amber-400 hover:border-amber-400/40 transition-colors"
         >
-          <Lock className="h-3.5 w-3.5" />
+          <Lock className="h-4 w-4" />
           <span>قفل النظام</span>
         </button>
       </div>

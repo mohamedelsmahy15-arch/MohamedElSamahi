@@ -119,11 +119,11 @@ export const DashboardView: React.FC = () => {
             </span>
           </div>
 
-          <p className="text-sm text-[var(--text-secondary)] font-medium">
+          <p className="text-base text-[var(--text-secondary)] font-semibold">
             كل يوم خطوة. كل خطوة تبني المستقبل.
           </p>
 
-          <div className="flex items-center gap-2 text-xs text-[var(--text-muted)] pt-0.5 font-mono">
+          <div className="flex items-center gap-2 text-xs text-[var(--text-secondary)] pt-1 font-mono font-bold">
             <Calendar className="h-3.5 w-3.5 text-[var(--accent-gold)]" />
             <span>{formattedArabicDate}</span>
             <span>·</span>

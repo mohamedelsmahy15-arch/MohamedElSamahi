@@ -153,14 +153,14 @@ export const GoalsView: React.FC = () => {
           <h1 className="text-xl md:text-2xl font-bold tracking-tight text-[var(--text-primary)] mt-1">
             أهداف سنة 2027 — سنة البناء
           </h1>
-          <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+          <p className="text-sm font-semibold text-[var(--text-secondary)] mt-1">
             ربط الرؤية الكبرى بروابط التعلم اليومية وخطة التنفيذ الصباحية المباشرة.
           </p>
         </div>
 
         <button
           onClick={() => setIsAddModalOpen(true)}
-          className="flex items-center gap-2 rounded bg-[var(--accent-gold)] px-4 py-2 text-xs font-semibold text-black hover:bg-[#e0bc45] transition-all self-start sm:self-auto"
+          className="flex items-center gap-2 rounded-xl bg-[var(--accent-gold)] px-4 py-2.5 text-xs font-bold text-black hover:bg-[#e0bc45] transition-all self-start sm:self-auto shadow-sm"
         >
           <Plus className="h-4 w-4 stroke-[3]" />
           <span>+ إضافة هدف سنوي</span>

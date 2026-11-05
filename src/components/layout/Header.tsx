@@ -129,12 +129,12 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileNav, isMobileNavOp
           <nav className="flex items-center gap-1.5 text-xs text-[var(--text-muted)] min-w-0">
             <span
               onClick={() => setActiveTab('dashboard')}
-              className="cursor-pointer hover:text-[var(--text-primary)] transition-colors font-medium hidden sm:inline"
+              className="cursor-pointer hover:text-[var(--text-primary)] transition-colors font-bold hidden sm:inline"
             >
               السماحي OS
             </span>
             <ChevronLeft className="h-3.5 w-3.5 shrink-0 hidden sm:inline" />
-            <span className="font-semibold text-[var(--text-primary)] truncate">
+            <span className="font-extrabold text-sm text-[var(--text-primary)] truncate">
               {breadcrumbTitle}
             </span>
           </nav>
@@ -142,7 +142,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileNav, isMobileNavOp
           <span className="text-[var(--border-color)] hidden md:inline">|</span>
 
           {/* Dynamic Arabic Date */}
-          <div className="hidden md:flex items-center text-xs text-[var(--text-secondary)] font-medium">
+          <div className="hidden md:flex items-center text-xs text-[var(--text-secondary)] font-bold">
             <span>{formattedArabicDate}</span>
           </div>
         </div>
