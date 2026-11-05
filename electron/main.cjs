@@ -13,12 +13,6 @@ const fs = require('fs');
 
 // ضبط استهلاك الذاكرة لـ V8 على الأجهزة ذات الرامات المحدودة (~8GB)
 app.commandLine.appendSwitch('js-flags', '--max-old-space-size=512');
-// تسريع الأداء الرسومي وعتاد المعالج (Hardware Acceleration)
-app.commandLine.appendSwitch('enable-gpu-rasterization');
-app.commandLine.appendSwitch('enable-zero-copy');
-app.commandLine.appendSwitch('ignore-gpu-blocklist');
-// منع مشاكل GPU في بعض بيئات Windows
-app.commandLine.appendSwitch('disable-gpu-sandbox');
 
 let mainWindow = null;
 let activeServerPort = 3000;
@@ -53,17 +47,28 @@ function findFreePort(startPort) {
   });
 }
 
-// فحص جاهزية الخادم عبر HTTP
+// فحص جاهزية الخادم عبر HTTP — محمي من الاستدعاء المتكرر
 function checkHttpReady(port, callback) {
+  let done = false;
+  const finish = (val) => {
+    if (!done) {
+      done = true;
+      callback(val);
+    }
+  };
+
   const req = http.get(`http://127.0.0.1:${port}`, (res) => {
-    callback(res.statusCode < 500);
+    res.resume(); // استهلاك البيانات فوراً لتحرير السوكيت
+    finish(res.statusCode < 500);
   });
+
   req.on('error', () => {
-    callback(false);
+    finish(false);
   });
-  req.setTimeout(800, () => {
+
+  req.setTimeout(500, () => {
     req.destroy();
-    callback(false);
+    finish(false);
   });
 }
 
@@ -173,15 +178,21 @@ function createWindow(port, useServerMode) {
   });
 
   if (useServerMode) {
-    // وضع الخادم HTTP: انتظار الخادم ثم التحميل عبر 127.0.0.1 المباشر بدون تأخير DNS
+    // وضع الخادم HTTP: انتظار الخادم ثم التحميل مرة واحدة فقط دون إعادة تحميل متكررة
     const loadUrl = `http://127.0.0.1:${port}`;
     let attempts = 0;
-    const maxAttempts = 40; // 40 × 150ms = 6 ثوانٍ كحد أقصى
+    const maxAttempts = 30; // 30 × 150ms = 4.5 ثانية كحد أقصى
+    let pageLoaded = false;
 
     function tryLoad() {
+      if (pageLoaded || !mainWindow) return;
+
       checkHttpReady(port, (isReady) => {
-        if (isReady && mainWindow) {
-          console.log(`[السماحي OS] الخادم جاهز، تحميل: ${loadUrl}`);
+        if (pageLoaded || !mainWindow) return;
+
+        if (isReady) {
+          pageLoaded = true;
+          console.log(`[السماحي OS] الخادم جاهز، جاري تحميل الصفحة: ${loadUrl}`);
           mainWindow.loadURL(loadUrl).catch((err) => {
             console.error('[السماحي OS] خطأ في loadURL:', err);
             loadFallback();
@@ -190,7 +201,8 @@ function createWindow(port, useServerMode) {
           attempts++;
           setTimeout(tryLoad, 150);
         } else {
-          console.warn('[السماحي OS] الخادم لم يستجب، تفعيل وضع loadFile...');
+          pageLoaded = true;
+          console.warn('[السماحي OS] الخادم لم يستجب في الوقت المحدد، تفعيل loadFile...');
           loadFallback();
         }
       });
