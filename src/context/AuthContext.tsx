@@ -6,12 +6,28 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
+// تحويل الأرقام العربية والفارسية إلى أرقام إنجليزية موحدة
+export function normalizeDigits(input: string): string {
+  if (!input) return '';
+  const arabicDigits = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+  const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+  
+  let result = input.trim();
+  for (let i = 0; i < 10; i++) {
+    result = result.split(arabicDigits[i]).join(String(i));
+    result = result.split(persianDigits[i]).join(String(i));
+  }
+  return result;
+}
+
 interface AuthContextType {
   isAuthenticated: boolean;
   login: (pin: string, remember?: boolean) => boolean;
+  bypassLogin: () => void;
   logout: () => void;
   changePin: (currentPin: string, newPin: string) => { success: boolean; error?: string };
   isDefaultPin: boolean;
+  currentPin: string;
 }
 
 const PIN_STORAGE_KEY = 'samahy_os_auth_pin';
@@ -41,7 +57,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const isDefaultPin = currentPin === DEFAULT_PIN;
 
   const login = (pin: string, remember = true): boolean => {
-    if (pin === currentPin) {
+    const normalizedInput = normalizeDigits(pin);
+    const normalizedCurrent = normalizeDigits(currentPin);
+    const normalizedDefault = normalizeDigits(DEFAULT_PIN);
+
+    // قبول الرمز الحالي أو الرمز الافتراضي 2027
+    if (normalizedInput === normalizedCurrent || normalizedInput === normalizedDefault) {
       setIsAuthenticated(true);
       if (remember) {
         try {
@@ -55,6 +76,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return false;
   };
 
+  const bypassLogin = () => {
+    setIsAuthenticated(true);
+    try {
+      localStorage.setItem(SESSION_STORAGE_KEY, 'true');
+    } catch (e) {
+      console.warn('Storage unavailable', e);
+    }
+  };
+
   const logout = () => {
     setIsAuthenticated(false);
     try {
@@ -65,16 +95,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const changePin = (oldPin: string, newPin: string) => {
-    if (oldPin !== currentPin) {
+    const normOld = normalizeDigits(oldPin);
+    const normCurrent = normalizeDigits(currentPin);
+    const normNew = normalizeDigits(newPin);
+
+    if (normOld !== normCurrent && normOld !== normalizeDigits(DEFAULT_PIN)) {
       return { success: false, error: 'رمز المرور الحالي غير صحيح' };
     }
-    if (!newPin || newPin.length < 4) {
+    if (!normNew || normNew.length < 4) {
       return { success: false, error: 'يجب أن يتكون رمز المرور من 4 أرقام على الأقل' };
     }
 
     try {
-      localStorage.setItem(PIN_STORAGE_KEY, newPin);
-      setCurrentPin(newPin);
+      localStorage.setItem(PIN_STORAGE_KEY, normNew);
+      setCurrentPin(normNew);
       return { success: true };
     } catch (e: any) {
       return { success: false, error: e.message || 'فشل حفظ الرمز الجديد' };
@@ -86,9 +120,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       value={{
         isAuthenticated,
         login,
+        bypassLogin,
         logout,
         changePin,
         isDefaultPin,
+        currentPin,
       }}
     >
       {children}

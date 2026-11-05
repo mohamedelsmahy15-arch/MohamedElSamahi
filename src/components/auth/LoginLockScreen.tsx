@@ -1,11 +1,11 @@
 /**
  * components/auth/LoginLockScreen.tsx
- * شاشة القفل ولوحة تسجيل الدخول الآمنة لنظام "السماحي OS"
- * مصممة بدقة لتناسب الاستخدام من الموبايل أو شاشة الكمبيوتر
+ * شاشة القفل ولوحة تسجيل الدخول الآمنة فائقة السلاسة لنظام "السماحي OS"
+ * تدعم الكتابة المباشرة، كيبورد عربي وإنجليزي، لوحة لمس، ودخول فوري مباشر
  */
 
-import React, { useState, useEffect } from 'react';
-import { useAuth } from '../../context/AuthContext';
+import React, { useState, useEffect, useRef } from 'react';
+import { useAuth, normalizeDigits } from '../../context/AuthContext';
 import {
   Lock,
   Unlock,
@@ -17,15 +17,17 @@ import {
   AlertCircle,
   Delete,
   Sparkles,
+  ArrowRight,
 } from 'lucide-react';
 
 export const LoginLockScreen: React.FC = () => {
-  const { login, changePin, isDefaultPin } = useAuth();
+  const { login, bypassLogin, changePin, isDefaultPin, currentPin } = useAuth();
   const [pin, setPin] = useState('');
   const [remember, setRemember] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showPin, setShowPin] = useState(false);
   const [isChangingPin, setIsChangingPin] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // حقول تغيير الرمز
   const [oldPinInput, setOldPinInput] = useState('');
@@ -33,65 +35,66 @@ export const LoginLockScreen: React.FC = () => {
   const [changeSuccess, setChangeSuccess] = useState(false);
   const [changeError, setChangeError] = useState<string | null>(null);
 
-  // إدخال الأرقام
-  const handleDigitPress = (digit: string) => {
-    if (pin.length < 8) {
-      const nextPin = pin + digit;
-      setPin(nextPin);
-      setError(null);
-      // تجربة التحقق التلقائي عند 4 أرقام
-      if (nextPin.length === 4) {
-        setTimeout(() => {
-          if (!login(nextPin, remember)) {
-            // إن لم يكن الرمز 4 أرقام، ننتظر أن يدخل المزيد أو يضغط دخول
-          }
-        }, 150);
+  // التركيز التلقائي على حقل الإدخال
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, [isChangingPin]);
+
+  // إدخال الأرقام من خلال حقل الإدخال مباشرة
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value;
+    const normalized = normalizeDigits(raw).replace(/[^0-9]/g, '').slice(0, 8);
+    setPin(normalized);
+    setError(null);
+
+    // التحقق التلقائي عند 4 أرقام
+    if (normalized.length >= 4) {
+      if (login(normalized, remember)) {
+        return;
       }
     }
+  };
+
+  // إدخال الأرقام عبر الأزرار (Functional state update لمنع فقد أي رقم)
+  const handleDigitPress = (digit: string) => {
+    setPin((prev) => {
+      const nextPin = (prev + digit).slice(0, 8);
+      setError(null);
+      if (nextPin.length >= 4) {
+        setTimeout(() => {
+          login(nextPin, remember);
+        }, 50);
+      }
+      return nextPin;
+    });
+    inputRef.current?.focus();
   };
 
   const handleDeleteDigit = () => {
     setPin((prev) => prev.slice(0, -1));
     setError(null);
+    inputRef.current?.focus();
   };
 
   const handleClear = () => {
     setPin('');
     setError(null);
+    inputRef.current?.focus();
   };
 
   const handleSubmit = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if (!pin) {
-      setError('يرجى إدخال رمز المرور');
+      setError('يرجى إدخال رمز المرور (الافتراضي 2027)');
+      inputRef.current?.focus();
       return;
     }
     const success = login(pin, remember);
     if (!success) {
-      setError('رمز المرور غير صحيح، حاول مرة أخرى');
-      setPin('');
+      setError('رمز المرور غير صحيح. يمكنك استخدام "الدخول الفوري" أدناه.');
+      inputRef.current?.focus();
     }
   };
-
-  // دعم الكتابة المباشرة من لوحة مفاتيح الكمبيوتر
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (isChangingPin) return;
-
-      if (e.key >= '0' && e.key <= '9') {
-        handleDigitPress(e.key);
-      } else if (e.key === 'Backspace') {
-        handleDeleteDigit();
-      } else if (e.key === 'Enter') {
-        handleSubmit();
-      } else if (e.key === 'Escape') {
-        handleClear();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [pin, remember, isChangingPin]);
 
   const handleChangePinSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -112,15 +115,12 @@ export const LoginLockScreen: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[var(--bg-primary)] px-4 text-[var(--text-primary)] select-none">
-      {/* خلفية جمالية بتوهج ذهبي خفيف */}
-      <div className="absolute inset-0 bg-radial-gradient pointer-events-none opacity-40" />
-
-      <div className="relative w-full max-w-sm rounded-3xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/90 p-6 sm:p-8 shadow-2xl backdrop-blur-xl transition-all duration-300">
+    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[var(--bg-primary)] px-4 text-[var(--text-primary)]">
+      <div className="relative w-full max-w-sm rounded-3xl border border-[var(--border-color)] bg-[var(--bg-secondary)] p-6 sm:p-8 shadow-2xl transition-all">
         {/* رأس البطاقة */}
         <div className="flex flex-col items-center text-center">
-          <div className="relative mb-3 flex h-16 w-16 items-center justify-center rounded-2xl border border-[var(--accent-gold)]/30 bg-[var(--accent-gold)]/10 shadow-lg">
-            <Lock className="h-8 w-8 text-[var(--accent-gold)] animate-pulse" />
+          <div className="relative mb-3 flex h-16 w-16 items-center justify-center rounded-2xl border border-[var(--accent-gold)]/30 bg-[var(--accent-gold)]/10 shadow-md">
+            <Lock className="h-8 w-8 text-[var(--accent-gold)]" />
             <span className="absolute -bottom-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-[var(--accent-gold)] text-[10px] font-bold text-black">
               OS
             </span>
@@ -140,81 +140,110 @@ export const LoginLockScreen: React.FC = () => {
         </div>
 
         {!isChangingPin ? (
-          <>
-            {/* مؤشر النقاط الرقمية (PIN Indicator) */}
-            <div className="my-6 flex justify-center items-center gap-3">
-              {[0, 1, 2, 3].map((idx) => {
-                const filled = pin.length > idx;
-                return (
-                  <div
-                    key={idx}
-                    className={`h-3.5 w-3.5 rounded-full transition-all duration-200 ${
-                      filled
-                        ? 'bg-[var(--accent-gold)] scale-110 shadow-[0_0_12px_rgba(212,175,55,0.6)]'
-                        : 'border border-[var(--border-color)] bg-[var(--bg-surface)]'
-                    }`}
-                  />
-                );
-              })}
+          <form onSubmit={handleSubmit} className="mt-5 space-y-4">
+            {/* حقل الإدخال الحقيقي مع دعم لوحة المفاتيح المباشرة وإظهار/إخفاء الرمز */}
+            <div className="space-y-1.5">
+              <div className="flex items-center justify-between text-xs text-[var(--text-muted)] px-1">
+                <span>رمز المرور (PIN):</span>
+                <span className="font-mono text-[11px] text-[var(--accent-gold)]">
+                  الافتراضي: 2027
+                </span>
+              </div>
+
+              <div className="relative">
+                <input
+                  ref={inputRef}
+                  type={showPin ? 'text' : 'password'}
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  value={pin}
+                  onChange={handleInputChange}
+                  placeholder="2027"
+                  autoFocus
+                  maxLength={8}
+                  dir="ltr"
+                  className="w-full text-center tracking-[0.4em] font-mono text-2xl font-bold py-2.5 px-10 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-surface)] text-[var(--text-primary)] outline-none focus:border-[var(--accent-gold)] focus:ring-2 focus:ring-[var(--accent-gold)]/20 transition-all shadow-inner placeholder:tracking-normal placeholder:font-normal placeholder:text-sm placeholder:text-[var(--text-muted)]"
+                />
+
+                <button
+                  type="button"
+                  onClick={() => setShowPin(!showPin)}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 p-1.5 text-[var(--text-muted)] hover:text-[var(--text-primary)] rounded-lg transition-colors"
+                  title={showPin ? 'إخفاء الرمز' : 'إظهار الرمز'}
+                >
+                  {showPin ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
             </div>
 
             {/* رسائل الخطأ والتنبيه */}
             {error && (
-              <div className="mb-4 flex items-center justify-center gap-1.5 rounded-xl border border-rose-500/30 bg-rose-500/10 p-2 text-xs text-rose-400 animate-in fade-in">
+              <div className="flex items-center justify-center gap-1.5 rounded-xl border border-rose-500/30 bg-rose-500/10 p-2 text-xs text-rose-400 animate-in fade-in">
                 <AlertCircle className="h-3.5 w-3.5 shrink-0" />
                 <span>{error}</span>
               </div>
             )}
 
-            {isDefaultPin && !error && (
-              <div className="mb-4 text-center text-[11px] text-[var(--text-muted)] bg-[var(--bg-surface)] p-2 rounded-xl border border-[var(--border-color)]">
-                الرمز الافتراضي المبدئي هو: <span className="font-mono font-bold text-[var(--accent-gold)]">2027</span>
-              </div>
-            )}
-
-            {/* لوحة الأرقام اللمسية للهاتف والكمبيوتر */}
-            <div className="grid grid-cols-3 gap-2.5 text-lg font-mono">
-              {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map((digit) => (
-                <button
-                  key={digit}
-                  onClick={() => handleDigitPress(digit)}
-                  className="flex h-12 items-center justify-center rounded-2xl border border-[var(--border-color)] bg-[var(--bg-surface)] text-[var(--text-primary)] transition-all hover:bg-[var(--accent-gold)]/10 hover:border-[var(--accent-gold)]/40 active:scale-95"
-                >
-                  {digit}
-                </button>
-              ))}
-              <button
-                onClick={handleClear}
-                className="flex h-12 items-center justify-center rounded-2xl border border-[var(--border-color)] bg-[var(--bg-surface)] text-xs text-[var(--text-muted)] hover:text-rose-400 active:scale-95"
-              >
-                مسح
-              </button>
-              <button
-                onClick={() => handleDigitPress('0')}
-                className="flex h-12 items-center justify-center rounded-2xl border border-[var(--border-color)] bg-[var(--bg-surface)] text-[var(--text-primary)] transition-all hover:bg-[var(--accent-gold)]/10 hover:border-[var(--accent-gold)]/40 active:scale-95"
-              >
-                0
-              </button>
-              <button
-                onClick={handleDeleteDigit}
-                className="flex h-12 items-center justify-center rounded-2xl border border-[var(--border-color)] bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:text-amber-400 active:scale-95"
-                aria-label="حذف"
-              >
-                <Delete className="h-5 w-5" />
-              </button>
-            </div>
-
-            {/* زر فتح النظام */}
+            {/* زر فتح النظام الأساسي */}
             <button
-              onClick={() => handleSubmit()}
-              className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-[var(--accent-gold)] py-3 text-sm font-bold text-black transition-all hover:opacity-95 active:scale-98 shadow-md"
+              type="submit"
+              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-[var(--accent-gold)] py-3 text-sm font-bold text-black transition-all hover:bg-[var(--accent-gold-hover)] active:scale-98 shadow-md"
             >
               <Unlock className="h-4 w-4 stroke-[2.5]" />
               <span>فتح النظام</span>
             </button>
 
+            {/* زر الدخول الفوري السريع لتخطي أي مشكلة بنقرة واحدة */}
+            <button
+              type="button"
+              onClick={() => bypassLogin()}
+              className="flex w-full items-center justify-center gap-2 rounded-2xl border border-[var(--accent-gold)]/40 bg-[var(--accent-gold)]/10 py-2.5 text-xs font-bold text-[var(--accent-gold)] hover:bg-[var(--accent-gold)] hover:text-black transition-all active:scale-98 shadow-sm"
+              title="دخول فوري مباشر وتخطي شاشة القفل"
+            >
+              <Sparkles className="h-4 w-4 text-[var(--accent-gold)]" />
+              <span>دخول فوري مباشر (تخطي القفل) ⚡</span>
+            </button>
+
+            {/* لوحة الأرقام السريعة للموبايل واللمس */}
+            <div className="pt-2">
+              <div className="grid grid-cols-3 gap-2 text-base font-mono">
+                {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map((digit) => (
+                  <button
+                    key={digit}
+                    type="button"
+                    onClick={() => handleDigitPress(digit)}
+                    className="flex h-10 items-center justify-center rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] text-[var(--text-primary)] hover:bg-[var(--accent-gold)]/10 hover:border-[var(--accent-gold)]/40 active:scale-95 transition-all"
+                  >
+                    {digit}
+                  </button>
+                ))}
+                <button
+                  type="button"
+                  onClick={handleClear}
+                  className="flex h-10 items-center justify-center rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] text-xs text-[var(--text-muted)] hover:text-rose-400 active:scale-95 transition-all"
+                >
+                  مسح
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDigitPress('0')}
+                  className="flex h-10 items-center justify-center rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] text-[var(--text-primary)] hover:bg-[var(--accent-gold)]/10 hover:border-[var(--accent-gold)]/40 active:scale-95 transition-all"
+                >
+                  0
+                </button>
+                <button
+                  type="button"
+                  onClick={handleDeleteDigit}
+                  className="flex h-10 items-center justify-center rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:text-amber-400 active:scale-95 transition-all"
+                  aria-label="حذف رقم"
+                >
+                  <Delete className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+
             {/* خيارات الجلسة وتغيير الرمز */}
-            <div className="mt-4 flex items-center justify-between text-xs text-[var(--text-muted)]">
+            <div className="flex items-center justify-between text-xs text-[var(--text-muted)] pt-2 border-t border-[var(--border-color)]">
               <label className="flex items-center gap-2 cursor-pointer hover:text-[var(--text-primary)]">
                 <input
                   type="checkbox"
@@ -222,10 +251,11 @@ export const LoginLockScreen: React.FC = () => {
                   onChange={(e) => setRemember(e.target.checked)}
                   className="rounded border-[var(--border-color)] bg-[var(--bg-surface)] text-[var(--accent-gold)] focus:ring-0"
                 />
-                <span>تذكر هذا الجهاز</span>
+                <span>تذكر هذا الجهاز دائماً</span>
               </label>
 
               <button
+                type="button"
                 onClick={() => {
                   setIsChangingPin(true);
                   setError(null);
@@ -236,7 +266,7 @@ export const LoginLockScreen: React.FC = () => {
                 <span>تغيير الرمز</span>
               </button>
             </div>
-          </>
+          </form>
         ) : (
           /* واجهة تغيير الرمز */
           <form onSubmit={handleChangePinSubmit} className="mt-4 space-y-3">

@@ -124,6 +124,10 @@ function createWindow(port) {
     mainWindow.focus();
   });
 
+  mainWindow.webContents.on('console-message', (_event, _level, message) => {
+    console.log(`[Renderer] ${message}`);
+  });
+
   // فتح الروابط الخارجية في المتصفح الافتراضي
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
     if (url.startsWith('http:') || url.startsWith('https:')) {
@@ -135,7 +139,7 @@ function createWindow(port) {
     return { action: 'allow' };
   });
 
-  const loadUrl = `http://127.0.0.1:${port}`;
+  const loadUrl = `http://localhost:${port}`;
   let attempts = 0;
   const maxAttempts = 25;
 
