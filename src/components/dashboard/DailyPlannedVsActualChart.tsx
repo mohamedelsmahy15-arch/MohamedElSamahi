@@ -197,7 +197,7 @@ export const DailyPlannedVsActualChart: React.FC<DailyPlannedVsActualChartProps>
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       return (
-        <div className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)]/95 p-3 text-xs shadow-2xl backdrop-blur-md">
+        <div className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)] p-3 text-xs shadow-2xl">
           <div className="font-semibold text-[var(--text-primary)] border-b border-[var(--border-color)] pb-1 mb-2">
             المجال: {label}
           </div>
@@ -234,7 +234,7 @@ export const DailyPlannedVsActualChart: React.FC<DailyPlannedVsActualChartProps>
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       return (
-        <div className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)]/95 p-3 text-xs shadow-2xl backdrop-blur-md max-w-xs">
+        <div className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-surface)] p-3 text-xs shadow-2xl max-w-xs">
           <div className="font-semibold text-[var(--text-primary)] border-b border-[var(--border-color)] pb-1 mb-1.5">
             <span className="text-xs text-[var(--text-primary)]">{data.fullName || label}</span>
           </div>

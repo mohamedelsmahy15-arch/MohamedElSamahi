@@ -114,7 +114,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileNav, isMobileNavOp
 
   return (
     <>
-      <header className="sticky top-0 z-30 flex items-center justify-between border-b border-[var(--border-color)] bg-[var(--bg-secondary)]/95 px-4 py-2.5 backdrop-blur-md md:px-8 transition-colors duration-150">
+      <header className="sticky top-0 z-30 flex items-center justify-between border-b border-[var(--border-color)] bg-[var(--bg-secondary)]/95 px-4 py-2.5 md:px-8 transition-colors duration-150">
         {/* Left Side (in RTL): Mobile toggle, Breadcrumbs & Dynamic Date */}
         <div className="flex items-center gap-3 min-w-0">
           <button
@@ -297,7 +297,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileNav, isMobileNavOp
 
       {/* Quick Search Modal */}
       {isSearchOpen && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 bg-black/75 backdrop-blur-sm p-4">
+        <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 bg-black/75 p-4">
           <div className="w-full max-w-lg rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] shadow-2xl animate-in fade-in zoom-in-95 duration-150 overflow-hidden">
             <div className="flex items-center gap-2.5 border-b border-[var(--border-color)] px-4 py-3">
               <Search className="h-4 w-4 text-[var(--accent-gold)] shrink-0" />

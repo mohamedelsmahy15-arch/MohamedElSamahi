@@ -19,6 +19,7 @@ export default defineConfig(() => {
           '**/dist/**',
           '**/dist-electron/**',
           '**/dist-desktop/**',
+          '**/release/**',
           '**/dist-server/**',
           '**/.git/**',
           '**/node_modules/**',

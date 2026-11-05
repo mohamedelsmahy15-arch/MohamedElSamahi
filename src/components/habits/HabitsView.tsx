@@ -248,7 +248,7 @@ export const HabitsView: React.FC = () => {
 
       {/* نافذة إضافة عادة جديدة */}
       {isAddModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
           <div className="w-full max-w-md rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-6 space-y-4">
             <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-3">
               <h2 className="text-sm font-bold text-[var(--text-primary)]">إضافة عادة يومية جديدة</h2>
@@ -319,7 +319,7 @@ export const HabitsView: React.FC = () => {
 
       {/* نافذة تعديل عادة موجودة */}
       {editingHabitLocal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
           <div className="w-full max-w-md rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-6 space-y-4">
             <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-3">
               <h2 className="text-sm font-bold text-[var(--text-primary)]">تعديل العادة</h2>

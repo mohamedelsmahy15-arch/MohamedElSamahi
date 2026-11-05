@@ -63,7 +63,7 @@ export const QuickTaskModal: React.FC = () => {
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
       <div className="w-full max-w-md rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-6 space-y-4 shadow-2xl">
         <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-3">
           <h2 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">

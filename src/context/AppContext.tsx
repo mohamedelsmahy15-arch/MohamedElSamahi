@@ -4,7 +4,7 @@
  * يدعم كامل وحدات السماحي OS مع سهولة فائقة في تعديل أي مدخلات
  */
 
-import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import {
   AppState,
   Task,
@@ -472,9 +472,20 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     description: 'كتابة كود في السماحي OS',
   });
 
-  // حفظ الحالة في LocalStorage عند كل تغيير
+  // حفظ الحالة في LocalStorage عند كل تغيير — مع debounce لتقليل الضغط على الذاكرة
+  const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
-    saveAppState(state);
+    if (saveTimerRef.current) {
+      clearTimeout(saveTimerRef.current);
+    }
+    saveTimerRef.current = setTimeout(() => {
+      saveAppState(state);
+    }, 1500); // ينتظر 1.5 ثانية بعد آخر تغيير قبل ما يحفظ
+    return () => {
+      if (saveTimerRef.current) {
+        clearTimeout(saveTimerRef.current);
+      }
+    };
   }, [state]);
 
   // تشغيل عداد المؤقت

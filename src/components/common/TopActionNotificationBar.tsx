@@ -142,7 +142,7 @@ export const TopActionNotificationBar: React.FC = () => {
       className="fixed top-2 left-1/2 z-50 w-[95%] max-w-4xl -translate-x-1/2 transform transition-all duration-300 ease-out"
       role="alert"
     >
-      <div className="relative overflow-hidden rounded-xl border border-[var(--accent-gold)]/40 bg-[var(--bg-elevated)]/95 px-4 py-3 shadow-[0_10px_35px_rgba(0,0,0,0.8)] backdrop-blur-xl md:px-5 md:py-3.5">
+      <div className="relative overflow-hidden rounded-xl border border-[var(--accent-gold)]/40 bg-[#1a1a2e]/95 px-4 py-3 shadow-[0_10px_35px_rgba(0,0,0,0.8)] md:px-5 md:py-3.5">
         {/* شريط التقدم الزمني للإغلاق التلقائي */}
         {!latestAction.undone && (
           <div className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-[var(--bg-elevated)]">

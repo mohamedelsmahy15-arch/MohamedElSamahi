@@ -122,7 +122,7 @@ ${userManualNotes ? `ملاحظات وانطباع محمد الشخصي: "${use
       },
     });
     const response = await ai.models.generateContent({
-      model: 'gemini-3.8-flash',
+      model: 'gemini-2.0-flash',
       contents: prompt,
     });
 
@@ -173,16 +173,20 @@ async function startServer() {
     });
   }
 
-  const server = app.listen(PORT, '0.0.0.0', () => {
-    console.log(`السماحي OS Server running on http://0.0.0.0:${PORT}`);
-  });
+  // استخدام createServer وتسجيل مستمع الخطأ قبل listen لمنع أي Uncaught Exception
+  const httpModule = await import('http');
+  const server = httpModule.createServer(app);
 
   server.on('error', (err: any) => {
     if (err.code === 'EADDRINUSE') {
-      console.log(`Port ${PORT} is already in use by an existing instance. Reusing active server.`);
+      console.warn(`[السماحي OS] المنفذ ${PORT} مستخدم بالفعل — سيتم استخدام الخادم القائم بسلاسة.`);
     } else {
-      console.error('Server error:', err);
+      console.error('[السماحي OS] خطأ في تشغيل السيرفر:', err);
     }
+  });
+
+  server.listen(PORT, '127.0.0.1', () => {
+    console.log(`السماحي OS Server running on http://127.0.0.1:${PORT}`);
   });
 }
 

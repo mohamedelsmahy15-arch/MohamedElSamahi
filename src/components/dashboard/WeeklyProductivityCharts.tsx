@@ -30,7 +30,7 @@ const CustomProductivityTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
     return (
-      <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-3.5 text-xs shadow-2xl backdrop-blur-md">
+      <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-3.5 text-xs shadow-2xl">
         <div className="font-semibold text-[var(--text-primary)] border-b border-[var(--border-color)] pb-1 mb-2 flex items-center justify-between gap-3">
           <span>{label}</span>
           <span className="font-mono text-[10px] text-[var(--text-muted)]">{data.date}</span>
@@ -66,7 +66,7 @@ const CustomGoalsTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
     return (
-      <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-3.5 text-xs shadow-2xl backdrop-blur-md max-w-xs">
+      <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-3.5 text-xs shadow-2xl max-w-xs">
         <div className="font-semibold text-[var(--text-primary)] border-b border-[var(--border-color)] pb-1 mb-1.5">
           <div className="text-[10px] text-[var(--accent-gold)] font-mono font-bold">{data.quarter} — {data.theme}</div>
           <div className="line-clamp-2 text-xs text-[var(--text-primary)] mt-0.5">{data.fullName}</div>

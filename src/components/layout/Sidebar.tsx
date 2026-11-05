@@ -333,7 +333,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpenMobile, onCloseMobile })
 
       {/* Mobile Drawer */}
       {isOpenMobile && (
-        <div className="fixed inset-0 z-50 flex lg:hidden bg-black/70 backdrop-blur-sm animate-in fade-in duration-150">
+        <div className="fixed inset-0 z-50 flex lg:hidden bg-black/70 animate-in fade-in duration-150">
           <div className="w-72 bg-[var(--bg-secondary)] border-l border-[var(--border-color)] flex flex-col h-full animate-in slide-in-from-right duration-200">
             <div className="flex items-center justify-between p-4 border-b border-[var(--border-color)]">
               <span className="text-xs font-mono text-[var(--accent-gold)] font-bold">

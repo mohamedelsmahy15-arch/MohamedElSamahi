@@ -3,6 +3,7 @@ build/
 dist/
 dist-electron/
 dist-desktop/
+release/
 dist-server/
 coverage/
 .DS_Store
