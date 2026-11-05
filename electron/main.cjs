@@ -1,58 +1,64 @@
+/**
+ * electron/main.cjs
+ * نقطة انطلاق تطبيق سطح المكتب لنظام "السماحي OS"
+ * معالجة فائقة للأداء، عزل العمليات، منع تعارض المنافذ، وتسريع الرندرة
+ */
+
 const { app, BrowserWindow, shell } = require('electron');
 const path = require('path');
 const http = require('http');
 const net = require('net');
 const fs = require('fs');
 
-let mainWindow = null;
-const PORT = 3000;
+// تسريع الأداء الرسومي وعتاد المعالج (Hardware Acceleration)
+app.commandLine.appendSwitch('enable-gpu-rasterization');
+app.commandLine.appendSwitch('enable-zero-copy');
+app.commandLine.appendSwitch('ignore-gpu-blocklist');
 
-// منع تعطل العملية الرئيسية في حال حدوث أي خطأ في المنفذ
+let mainWindow = null;
+let activeServerPort = 3000;
+
+// حماية العملية الرئيسية من التعطل
 process.on('uncaughtException', (err) => {
   if (err && err.code === 'EADDRINUSE') {
-    console.warn(`Port ${PORT} is already in use; reusing running instance.`);
+    console.warn(`Port already in use, handling gracefully.`);
   } else {
     console.error('Electron uncaughtException:', err);
   }
 });
 
-// فحص دقيق ومباشر لما إذا كان المنفذ 3000 مشغولاً بالفعل
-function isPortInUse(port) {
+// العثور على منفذ متاح تلقائياً لضمان عدم حدوث أي تصادم
+function findFreePort(startPort) {
   return new Promise((resolve) => {
-    const tester = net
-      .createServer()
-      .once('error', (err) => {
-        if (err.code === 'EADDRINUSE') {
-          resolve(true); // المنفذ مشغول مسبقاً بسيرفر نشط
-        } else {
-          resolve(false);
-        }
-      })
-      .once('listening', () => {
-        tester.once('close', () => resolve(false)).close();
-      })
-      .listen(port, '0.0.0.0');
+    const server = net.createServer();
+    server.listen(startPort, '127.0.0.1', () => {
+      const port = server.address().port;
+      server.close(() => resolve(port));
+    });
+    server.on('error', () => {
+      resolve(findFreePort(startPort + 1));
+    });
   });
 }
 
-// فحص استجابة HTTP
+// فحص جاهزية الخادم عبر HTTP
 function checkHttpReady(port, callback) {
   const req = http.get(`http://127.0.0.1:${port}`, (res) => {
-    callback(true);
+    callback(res.statusCode < 500);
   });
   req.on('error', () => {
     callback(false);
   });
-  req.setTimeout(800, () => {
+  req.setTimeout(600, () => {
     req.destroy();
     callback(false);
   });
 }
 
-// تشغيل السيرفر المدمج في حال لم يكن هناك سيرفر شغال مسبقاً
-function startEmbeddedServer() {
+// تشغيل الخادم الخلفي المدمج بأمان
+function startEmbeddedServer(port) {
   process.env.NODE_ENV = 'production';
-  process.env.PORT = String(PORT);
+  process.env.PORT = String(port);
 
   const possibleDist = [
     path.join(__dirname, '../dist'),
@@ -68,48 +74,60 @@ function startEmbeddedServer() {
     }
   }
 
-  try {
-    const serverBundlePath = path.join(__dirname, '../dist-server/server.cjs');
-    if (fs.existsSync(serverBundlePath)) {
-      require(serverBundlePath);
-      console.log('السماحي OS Embedded Server Started on Port 3000');
-    } else {
-      console.warn('Server bundle not found at', serverBundlePath);
+  const possibleServerPaths = [
+    path.join(__dirname, '../dist-server/server.cjs'),
+    path.join(process.resourcesPath || '', 'dist-server/server.cjs'),
+    path.join(process.resourcesPath || '', 'app.asar/dist-server/server.cjs'),
+    path.resolve(process.cwd(), 'dist-server/server.cjs'),
+  ];
+
+  let serverLoaded = false;
+  for (const sp of possibleServerPaths) {
+    if (fs.existsSync(sp)) {
+      try {
+        require(sp);
+        console.log(`السماحي OS: الخادم المدمج يعمل بنجاح على المنفذ ${port}`);
+        serverLoaded = true;
+        break;
+      } catch (err) {
+        console.error('خطأ أثناء تشغيل حزمة السيرفر:', err);
+      }
     }
-  } catch (err) {
-    if (err && err.code === 'EADDRINUSE') {
-      console.log(`Port ${PORT} in use, skipping bind.`);
-    } else {
-      console.error('Failed to start embedded server:', err);
-    }
+  }
+
+  if (!serverLoaded) {
+    console.warn('لم يتم العثور على حزمة السيرفر، سيتم الاعتماد على العرض المحلي للملفات.');
   }
 }
 
-function createWindow() {
+function createWindow(port) {
   mainWindow = new BrowserWindow({
-    width: 1360,
-    height: 880,
-    minWidth: 960,
-    minHeight: 640,
+    width: 1400,
+    height: 900,
+    minWidth: 1024,
+    minHeight: 700,
     title: 'السماحي OS — سنة البناء 2027',
-    backgroundColor: '#0a0a0a',
+    backgroundColor: '#07090E',
     autoHideMenuBar: true,
     show: false,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      spellcheck: true,
+      spellcheck: false,
+      backgroundThrottling: false,
+      devTools: !app.isPackaged,
     },
   });
 
   mainWindow.once('ready-to-show', () => {
     mainWindow.show();
+    mainWindow.focus();
   });
 
-  // فتح الروابط الخارجية (مثل مقاطع الفيديو ومصادر التعلم) في المتصفح الخارجي
+  // فتح الروابط الخارجية في المتصفح الافتراضي
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
     if (url.startsWith('http:') || url.startsWith('https:')) {
-      if (!url.includes('localhost:3000') && !url.includes('127.0.0.1:3000')) {
+      if (!url.includes(`127.0.0.1:${port}`) && !url.includes(`localhost:${port}`)) {
         shell.openExternal(url);
         return { action: 'deny' };
       }
@@ -117,22 +135,30 @@ function createWindow() {
     return { action: 'allow' };
   });
 
-  // محاولة الاتصال والتحميل
-  const loadUrl = `http://localhost:${PORT}`;
+  const loadUrl = `http://127.0.0.1:${port}`;
   let attempts = 0;
-  const maxAttempts = 40;
+  const maxAttempts = 25;
 
   function tryLoad() {
-    checkHttpReady(PORT, (isReady) => {
-      if (isReady) {
+    checkHttpReady(port, (isReady) => {
+      if (isReady && mainWindow) {
         mainWindow.loadURL(loadUrl);
       } else if (attempts < maxAttempts) {
         attempts++;
-        setTimeout(tryLoad, 250);
+        setTimeout(tryLoad, 150);
       } else {
-        const localFile = path.join(__dirname, '../dist/index.html');
-        if (fs.existsSync(localFile)) {
-          mainWindow.loadFile(localFile);
+        // بديل الطوارئ: تحميل الملف المحلي مباشرة (يعمل بنجاح تام بفضل المسارات النسبية)
+        const possibleIndex = [
+          path.join(__dirname, '../dist/index.html'),
+          path.join(process.resourcesPath || '', 'dist/index.html'),
+          path.join(process.resourcesPath || '', 'app.asar/dist/index.html'),
+          path.resolve(process.cwd(), 'dist/index.html'),
+        ];
+        for (const p of possibleIndex) {
+          if (fs.existsSync(p) && mainWindow) {
+            mainWindow.loadFile(p);
+            break;
+          }
         }
       }
     });
@@ -145,7 +171,7 @@ function createWindow() {
   });
 }
 
-// قفل التشغيل الأحادي لمنع فتح نسختين في نفس الوقت
+// قفل التشغيل الأحادي
 const gotTheLock = app.requestSingleInstanceLock();
 
 if (!gotTheLock) {
@@ -160,21 +186,34 @@ if (!gotTheLock) {
 
   app.whenReady().then(async () => {
     try {
-      const inUse = await isPortInUse(PORT);
-      if (!inUse) {
-        startEmbeddedServer();
+      // في وضع التطوير: إذا كان منفذ 3000 يعمل، اتصل به لدعم HMR
+      if (!app.isPackaged) {
+        const port3000Busy = await new Promise((res) => {
+          const s = net.createServer().once('error', () => res(true)).once('listening', () => s.close(() => res(false))).listen(3000, '127.0.0.1');
+        });
+
+        if (port3000Busy) {
+          activeServerPort = 3000;
+          console.log('السماحي OS (وضع التطوير): تم العثور على خادم نشط على 3000.');
+        } else {
+          activeServerPort = await findFreePort(3000);
+          startEmbeddedServer(activeServerPort);
+        }
       } else {
-        console.log('السماحي OS: المنفذ 3000 نشط بالفعل، سيتم الاتصال به مباشرة.');
+        // في تطبيق .exe الإنتاجي: احجز منفذاً متاحاً وشغّل الخادم المدمج الخاص بالتطبيق
+        activeServerPort = await findFreePort(3000);
+        startEmbeddedServer(activeServerPort);
       }
     } catch (e) {
-      console.warn('Error checking port:', e);
+      console.warn('تهيئة المنفذ واجهت تحذيراً:', e);
+      activeServerPort = 3000;
     }
 
-    createWindow();
+    createWindow(activeServerPort);
 
     app.on('activate', () => {
       if (BrowserWindow.getAllWindows().length === 0) {
-        createWindow();
+        createWindow(activeServerPort);
       }
     });
   });

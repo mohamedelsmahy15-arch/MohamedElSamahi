@@ -25,6 +25,72 @@ interface WeeklyProductivityChartsProps {
   state: AppState;
 }
 
+// Custom Universal Tooltip للإنتاجية
+const CustomProductivityTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    const data = payload[0].payload;
+    return (
+      <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-3.5 text-xs shadow-2xl backdrop-blur-md">
+        <div className="font-semibold text-[var(--text-primary)] border-b border-[var(--border-color)] pb-1 mb-2 flex items-center justify-between gap-3">
+          <span>{label}</span>
+          <span className="font-mono text-[10px] text-[var(--text-muted)]">{data.date}</span>
+        </div>
+        <div className="space-y-1.5 font-mono">
+          <div className="flex items-center justify-between gap-4">
+            <span className="flex items-center gap-1.5 text-[var(--accent-gold)]">
+              <span className="h-2 w-2 rounded-full bg-[var(--accent-gold)]" />
+              <span>عمل عميق (Deep Work):</span>
+            </span>
+            <span className="font-bold text-[var(--text-primary)]">{data.deepWorkHours} س</span>
+          </div>
+          <div className="flex items-center justify-between gap-4">
+            <span className="flex items-center gap-1.5 text-sky-400">
+              <span className="h-2 w-2 rounded-full bg-sky-400" />
+              <span>تعلم وتطبيق:</span>
+            </span>
+            <span className="font-bold text-[var(--text-primary)]">{data.regularHours} س</span>
+          </div>
+          <div className="flex items-center justify-between gap-4 pt-1 border-t border-[var(--border-color)] text-[11px]">
+            <span className="text-[var(--text-muted)]">مؤشر الإنتاجية:</span>
+            <span className="text-emerald-400 font-bold">{data.score}%</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  return null;
+};
+
+// Custom Universal Tooltip للأهداف
+const CustomGoalsTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    const data = payload[0].payload;
+    return (
+      <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-3.5 text-xs shadow-2xl backdrop-blur-md max-w-xs">
+        <div className="font-semibold text-[var(--text-primary)] border-b border-[var(--border-color)] pb-1 mb-1.5">
+          <div className="text-[10px] text-[var(--accent-gold)] font-mono font-bold">{data.quarter} — {data.theme}</div>
+          <div className="line-clamp-2 text-xs text-[var(--text-primary)] mt-0.5">{data.fullName}</div>
+        </div>
+        <div className="space-y-1 font-mono pt-1 text-xs">
+          <div className="flex items-center justify-between gap-3 text-[var(--accent-gold)] font-semibold">
+            <span>نسبة الإنجاز الفعلية:</span>
+            <span>{data.progress}%</span>
+          </div>
+          <div className="flex items-center justify-between gap-3 text-emerald-400 font-semibold">
+            <span>إنجاز المحطات:</span>
+            <span>{data.milestones}%</span>
+          </div>
+          <div className="flex items-center justify-between gap-3 text-[var(--text-muted)] text-[11px] pt-1 border-t border-[var(--border-color)]">
+            <span>الهدف المستهدف للربع:</span>
+            <span>{data.target}%</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  return null;
+};
+
 export const WeeklyProductivityCharts: React.FC<WeeklyProductivityChartsProps> = ({ state }) => {
   const [chartView, setChartView] = useState<'both' | 'productivity' | 'goals'>('both');
 
@@ -123,71 +189,7 @@ export const WeeklyProductivityCharts: React.FC<WeeklyProductivityChartsProps> =
     return Math.round(total / weeklyProductivityData.length);
   }, [weeklyProductivityData]);
 
-  // Custom Universal Tooltip للإنتاجية
-  const CustomProductivityTooltip = ({ active, payload, label }: any) => {
-    if (active && payload && payload.length) {
-      const data = payload[0].payload;
-      return (
-        <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-3.5 text-xs shadow-2xl backdrop-blur-md">
-          <div className="font-semibold text-[var(--text-primary)] border-b border-[var(--border-color)] pb-1 mb-2 flex items-center justify-between gap-3">
-            <span>{label}</span>
-            <span className="font-mono text-[10px] text-[var(--text-muted)]">{data.date}</span>
-          </div>
-          <div className="space-y-1.5 font-mono">
-            <div className="flex items-center justify-between gap-4">
-              <span className="flex items-center gap-1.5 text-[var(--accent-gold)]">
-                <span className="h-2 w-2 rounded-full bg-[var(--accent-gold)]" />
-                <span>عمل عميق (Deep Work):</span>
-              </span>
-              <span className="font-bold text-[var(--text-primary)]">{data.deepWorkHours} س</span>
-            </div>
-            <div className="flex items-center justify-between gap-4">
-              <span className="flex items-center gap-1.5 text-sky-400">
-                <span className="h-2 w-2 rounded-full bg-sky-400" />
-                <span>تعلم وتطبيق:</span>
-              </span>
-              <span className="font-bold text-[var(--text-primary)]">{data.regularHours} س</span>
-            </div>
-            <div className="flex items-center justify-between gap-4 pt-1 border-t border-[var(--border-color)] text-[11px]">
-              <span className="text-[var(--text-muted)]">مؤشر الإنتاجية:</span>
-              <span className="text-emerald-400 font-bold">{data.score}%</span>
-            </div>
-          </div>
-        </div>
-      );
-    }
-    return null;
-  };
 
-  // Custom Universal Tooltip للأهداف
-  const CustomGoalsTooltip = ({ active, payload, label }: any) => {
-    if (active && payload && payload.length) {
-      const data = payload[0].payload;
-      return (
-        <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-3.5 text-xs shadow-2xl backdrop-blur-md max-w-xs">
-          <div className="font-semibold text-[var(--text-primary)] border-b border-[var(--border-color)] pb-1 mb-1.5">
-            <div className="text-[10px] text-[var(--accent-gold)] font-mono font-bold">{data.quarter} — {data.theme}</div>
-            <div className="line-clamp-2 text-xs text-[var(--text-primary)] mt-0.5">{data.fullName}</div>
-          </div>
-          <div className="space-y-1 font-mono pt-1 text-xs">
-            <div className="flex items-center justify-between gap-3 text-[var(--accent-gold)] font-semibold">
-              <span>نسبة الإنجاز الفعلية:</span>
-              <span>{data.progress}%</span>
-            </div>
-            <div className="flex items-center justify-between gap-3 text-emerald-400 font-semibold">
-              <span>إنجاز المحطات:</span>
-              <span>{data.milestones}%</span>
-            </div>
-            <div className="flex items-center justify-between gap-3 text-[var(--text-muted)] text-[11px] pt-1 border-t border-[var(--border-color)]">
-              <span>الهدف المستهدف للربع:</span>
-              <span>{data.target}%</span>
-            </div>
-          </div>
-        </div>
-      );
-    }
-    return null;
-  };
 
   return (
     <section className="space-y-4 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-5 md:p-6 shadow-sm">
